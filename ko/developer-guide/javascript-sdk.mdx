@@ -1,0 +1,521 @@
+---
+title: "JavaScript 연동하기"
+---
+
+노티플라이 JavaScript SDK는 웹 앱에 노티플라이 서비스를 연동하기 위한 SDK입니다.  
+다음 기능을 지원합니다:
+
+- 기기 정보를 노티플라이에 등록하여 웹 푸시 알림 수신 및 웹 팝업 노출
+- 이벤트 및 유저 정보를 노티플라이와 연동하여 캠페인 타깃팅 및 분석 활용
+- 유저 행동 데이터를 기반으로 한 이벤트 로깅 및 성과 측정
+
+## 시작하기 전에
+
+1. **VAPID 키 생성**: 
+  웹 푸시 발송/수신을 위해 VAPID Key를 생성합니다. 콘솔 **설정 → SDK 설정 → 웹사이트 설정**에서 생성할 수 있습니다.
+  *(웹 푸시를 사용할 경우에만 필요한 단계입니다.)*
+  
+2. **HTTPS 환경 권장(브라우저 권한 정책)**
+  권장 환경: 최신 Chrome/Edge/Safari, ES2017+, 빌드 툴(Webpack/Vite/Rollup 등) 사용 시 Service Worker 파일이 번들에 의해 누락되지 않도록 설정
+
+---
+
+## 1. 기본 설정
+
+### 1. Service Worker 등록
+
+브라우저 백그라운드에서 푸시 수신을 처리할 수 있도록, 루트 디렉토리에 Service Worker 파일을 생성합니다.
+
+<Tabs>
+<Tab title="React">
+```text highlight={5}
+my-react-project/
+├── src/
+├── public/
+│   ├── index.html
+│   ├── notifly-service-worker.js
+│   └── ...
+└── ...
+
+```
+</Tab>
+<Tab title="Vanilla JS">
+```text highlight={5}
+my-project/
+├── css/
+├── js/
+├── index.html
+├── notifly-service-worker.js
+└── ...
+
+```
+</Tab>
+</Tabs>
+
+`notifly-service-worker.js` 내용:
+
+```JavaScript
+self.importScripts(
+  "https://cdn.jsdelivr.net/npm/notifly-js-sdk@2/dist/NotiflyServiceWorker.js"
+);
+```
+
+<Info> Service Worker의 파일명/경로는 임의 지정 가능합니다. 대신 초기화 옵션의 `serviceWorkerPath`와 반드시 일치시켜야 합니다. </Info>
+
+<Warning> 번들러 사용 시 Webpack/Rollup/Parcel 등을 쓰는 경우, `notifly-service-worker.js`가 번들에 흡수되거나 제거되지 않도록 복사(assets copy) 설정을 해주세요. </Warning>
+
+웹 환경에 따라 패키지 설치(npm/yarn/pnpm) 또는 CDN 스크립트 중 하나를 선택하세요.
+
+### 2. SDK 초기화
+
+<ParamField path="projectId" type="string" required>
+  노티플라이 프로젝트 ID
+</ParamField>
+
+<ParamField path="username" type="string" required>
+  프로젝트 유저 이름
+</ParamField>
+
+<ParamField path="password" type="string" required>
+  프로젝트 유저 비밀번호
+</ParamField>
+
+<ParamField path="sessionDuration" type="number" deprecated>
+  세션 유지시간(초). 최소 300, 기본 1800. **2.5.0 이상은 콘솔에서 설정값이 반영**
+</ParamField>
+
+<ParamField path="pushSubscriptionOptions" type="NotiflyPushSubscriptionOptions" deprecated>
+  웹 푸시 옵션. **2.5.0 이상은 콘솔 설정값 사용**
+
+  <Expandable title="properties">
+    <ParamField path="vapidPublicKey" type="string" required deprecated>
+      VAPID 키. **2.5.0 이상은 콘솔 설정값 사용**
+    </ParamField>
+
+    <ParamField path="askPermission" type="boolean" deprecated>
+      권한 요청 자동 팝업. **2.5.0 이상은 콘솔 설정값 사용**
+    </ParamField>
+
+    <ParamField path="serviceWorkerPath" type="string" deprecated>
+      SW 경로. **2.5.0 이상은 콘솔 설정값 사용**
+    </ParamField>
+
+    <ParamField path="promptDelayMillis" type="number" deprecated>
+      권한 팝업 지연(ms). **2.5.0 이상은 콘솔 설정값 사용**
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<Warning> SDK 2.5.0 이상에서는 `projectId`, `username`, `password` 외 모든 초기화 필드가 콘솔 설정값으로 대체됩니다. (세션/권한 팝업/SW 경로/지연시간/VAPID 키) ![](./image/javascript-sdk/javascript_sdk_configuration_ui.png) </Warning>
+
+### 3. 푸시 알림 권한 요청
+
+콘솔의 권한 요청 팝업(askPermission)을 켜면, 방문 시 상단 안내 → 브라우저 권한 요청 순서로 동작합니다.
+
+권한 요청은 다음 규칙을 따릅니다.
+
+- 유저가 아직 알림 권한을 설정하지 않은 경우 → 안내 팝업을 보여준 뒤 브라우저 권한을 요청합니다.
+
+- 유저가 이미 “허용”한 경우 → 더 이상 팝업을 띄우거나 권한을 다시 묻지 않습니다.
+
+- 유저가 “차단(거부)”한 경우 → 다시 요청하지 않습니다. 팝업도 노출되지 않습니다.
+
+![](./image/javascript-sdk/web-push/web_push_permission_prompt.png)
+
+특정 타이밍(예: “가입 완료 직후에만 묻기”)에만 권한을 요청하고 싶다면 수동 요청으로 권한 팝업 띄우기
+를 참고하세요.
+
+- 팝업의 스타일(텍스트, 색상 등)을 브랜드에 맞게 바꾸고 싶다면 권한 팝업 커스터마이징
+을 참고하세요.
+
+- 완전히 커스텀 UI를 쓰고 싶다면:
+
+  - SDK 2.5.0 이상: 노티플라이 콘솔에서 “자동 노출”을 꺼주세요.
+  - SDK 2.5.0 미만: SDK 초기화 시 askPermission: false로 설정하세요.
+  - 그 후 원하는 UI에서 직접 권한 요청을 구현할 수 있습니다. 
+  - [MDN Web Docs - Notification: `requestPermission`](https://developer.mozilla.org/en-US/docs/Web/API/Notification/requestPermission_static) 을 참고해 주세요.
+
+
+#### 지원 언어
+
+SDK가 표시하는 권한 요청 팝업은 다음 언어를 지원합니다.
+
+- SDK 버전 2.8.0 이상
+
+    - ko (한국어)
+    - en (영어)
+    - ja (일본어)
+    - zh (중국어)
+
+- SDK 버전 2.8.0 미만
+
+    - 한국어, 영어만 지원됩니다.
+
+#### 수동 호출
+
+<Info> 
+- SDK 버전은 2.7.0 이상이어야 합니다.
+- 콘솔에서 “권한 팝업 자동 노출”이 비활성화되어 있어야 합니다. (노티플라이 콘솔 → 설정 → SDK 설정 → 웹사이트)
+</Info>
+
+```
+notifly.requestPermission();        // 브라우저 언어 기반
+notifly.requestPermission("en");    // 강제 언어(≥ 2.8.0)
+```
+
+언어 동작 규칙:
+
+1. language 파라미터를 전달한 경우 → 그 언어 코드로 팝업을 시도합니다.
+
+2. 전달하지 않았거나 지원되지 않는 언어 코드인 경우 →
+  a. 브라우저 언어가 지원 언어에 포함되면 그 언어를 사용합니다.
+  b. 브라우저 언어도 지원되지 않으면 “기본 노출 언어”를 사용합니다. (아래 참고)
+
+#### 기본 노출 언어
+
+<Note> 이 설정은 **노티플라이 JavaScript SDK 2.8.0 이상**에서 지원됩니다. 2.8.0 미만 버전에서는 기본 언어가 항상 한국어(`ko`)입니다. </Note>
+
+“기본 노출 언어”는 다음 상황에서 사용됩니다.
+
+- 브라우저에 선호 언어가 설정되어 있지 않은 경우
+
+- 브라우저 언어가 SDK에서 지원하지 않는 경우
+
+해당 언어는 노티플라이 콘솔의 설정 → SDK 설정 → 웹사이트 설정 → 권한 요청 팝업 언어 설정에서 변경할 수 있습니다.
+
+#### 팝업 커스터마이즈
+
+<Warning> 
+- 이 커스터마이징 기능은 **노티플라이 JavaScript SDK 2.7.0 이상**에서 지원됩니다. 더 낮은 버전에서는 SDK 기본 팝업이 노출됩니다. 
+![](./image/javascript-sdk/web-push/web_push_permission_prompt.png)
+- 콘솔에서 수정한 디자인이 실제 유저 환경에 반영되기까지 최대 몇 분 정도 지연될 수 있습니다. 
+</Warning>
+
+노티플라이 콘솔에서 설정 → SDK 설정 → 웹사이트 설정 → 권한 요청 팝업 설정 으로 이동합니다.
+
+“디자인 설정”을 클릭해 팝업의 텍스트/스타일을 수정합니다.
+
+![](./image/javascript-sdk/web-push/web_push_permission_prompt_customizing-1.png)
+
+적용하면, 수정된 스타일이 유저에게 노출됩니다.
+
+![](./image/javascript-sdk/web-push/web_push_permission_prompt_customizing-2.png)
+
+---
+
+## 2. SDK 설치 & 초기화
+
+최신 버전은 아래와 같습니다:
+
+![npm](https://img.shields.io/npm/v/notifly-js-sdk)![Downloads](https://img.shields.io/npm/dt/notifly-js-sdk)
+
+### 1. 패키지 매니저 (npm/yarn/pnpm)
+
+<Tabs>
+<Tab title="npm">
+
+```bash
+npm install notifly-js-sdk@latest --save
+```
+
+</Tab>
+<Tab title="yarn">
+
+```yarn
+yarn add notifly-js-sdk@latest
+```
+
+</Tab>
+<Tab title="pnpm">
+
+```pnpm
+pnpm add notifly-js-sdk@latest
+```
+
+</Tab>
+</Tabs>
+
+
+
+#### 초기화 예시 (v2.5.0 이상)
+
+`projectId`, `username`, `password`만 코드에서 지정합니다. 그 외 웹 푸시 관련 옵션은 콘솔 설정값을 자동 반영합니다.
+
+<Tabs>
+<Tab title="v2.5.0 이상">
+```JavaScript
+import notifly from 'notifly-js-sdk';
+
+useEffect(() => {
+  if (typeof window !== 'undefined') {
+    notifly.initialize({
+      projectId: process.env.NEXT_PUBLIC_NOTIFLY_PROJECT_ID,
+      username: process.env.NEXT_PUBLIC_NOTIFLY_PROJECT_USERNAME,
+      password: process.env.NEXT_PUBLIC_NOTIFLY_PROJECT_PASSWORD,
+    });
+  }
+}, []);
+```
+</Tab>
+<Tab title="v2.4.0 이하">
+
+웹 푸시를 쓸 경우에만 `pushSubscriptionOptions`를 지정합니다.
+
+```JavaScript
+import notifly from 'notifly-js-sdk';
+
+useEffect(() => {
+  if (typeof window !== 'undefined') {
+    notifly.initialize({
+      projectId: '<PROJECT_ID>',
+      username: '<USERNAME>',
+      password: '<PASSWORD>',
+      // You don't need below options if you don't need a web push service
+      pushSubscriptionOptions: {
+        vapidPublicKey: '<VAPID_PUBLIC_KEY>',
+        askPermission: true,
+        promptDelayMillis: 5000,
+        serviceWorkerPath: '/notifly-service-worker.js',
+      },
+    });
+  }
+}, []);
+```
+</Tab>
+</Tabs>
+
+### 2. CDN
+
+`<body>` 내에 스크립트를 추가합니다. 로드 후 `window.notifly`로 접근합니다.
+
+<Tabs> 
+<Tab title="IIFE (v2.7.4+ 권장)">
+
+
+```JavaScript
+<script src="https://cdn.jsdelivr.net/npm/notifly-js-sdk@<SDK_VERSION>/dist/index.global.min.js"></script>
+<script>
+  window.notifly.initialize({
+    projectId: "<PROJECT_ID>",
+    username: "<USERNAME>",
+    password: "<PASSWORD>",
+  });
+</script>
+```
+</Tab> 
+<Tab title="UMD (v2.5.0+)">
+
+```JavaScript highlight={4-6}
+<script src="https://cdn.jsdelivr.net/npm/notifly-js-sdk@<SDK_VERSION>/dist/index.min.js"></script>
+<script>
+  window.notifly.initialize({
+    projectId: "<PROJECT_ID>",
+    username: "<USERNAME>",
+    password: "<PASSWORD>",
+  });
+</script>
+```
+
+</Tab> 
+<Tab title="UMD (v2.4.0 이하)">
+
+```JavaScript highlight={4-6}
+<script src="https://cdn.jsdelivr.net/npm/notifly-js-sdk@<SDK_VERSION>/dist/index.min.js"></script>
+<script>
+  window.notifly.initialize({
+    projectId: "<PROJECT_ID>",
+    username: "<USERNAME>",
+    password: "<PASSWORD>",
+    //웹 푸시를 쓸 경우에만 `pushSubscriptionOptions`를 지정합니다.
+    pushSubscriptionOptions: {
+      vapidPublicKey: "<VAPID_PUBLIC_KEY>",
+      askPermission: true
+    }
+  });
+</script>
+```
+</Tab>
+</Tabs> 
+
+<Warning> 
+- AMD 로더 사용 시 `<script>`가 충돌할 수 있습니다. **v2.7.4+ IIFE(`index.global.min.js`)** 사용을 권장합니다.
+- SDK는 브라우저 환경(= window 존재)에서만 동작합니다. 렌더링 전 반드시 typeof window !== 'undefined'를 확인하세요.
+</Warning>
+
+## 3. 유저 정보 등록
+
+노티플라이는 유저 식별자(`userId`)와 유저 프로퍼티(`userProperties`)를 기반으로 개인화 마케팅 캠페인을 수행합니다.  
+등록된 유저 정보는 세그먼트 분류, 푸시 발송, 이메일 및 카카오 알림톡 등의 타깃팅에 활용됩니다.
+
+### 1. 유저 ID 등록
+
+```JavaScript
+notifly.setUserId(userId?: string | null);
+```
+
+#### Parameters
+
+<ParamField path="userId" type="String">
+  로그인 유저 ID. 로그아웃 시 `null`로 설정하여 해제
+</ParamField>
+
+<Tabs>
+<Tab title="React">
+
+```JavaScript
+const handleLogin = () => {
+    ...
+    notifly.setUserId('example_user_id');
+    ...
+}
+
+const handleLogout = () => {
+    ...
+    notifly.setUserId(null); // unregister user id (notifly.setUserId(); works too!)
+    ...
+}
+```
+</Tab>
+<Tab title="Vanilla JS">
+
+```JavaScript
+userIdSaveButton.addEventListener("click", function () {
+  window.notifly.setUserId(userIdInput.value);
+});
+```
+</Tab>
+</Tabs>
+
+### 2. 유저 속성 설정
+
+```js
+notifly.setUserProperties(userProperties);
+```
+
+#### Parameters
+
+<ParamField path="userProperties" type="Record<string, any>" required>
+  업데이트 할 유저 속성값들
+</ParamField>
+
+<Tabs>
+<Tab title="React">
+
+```JavaScript title="setUserProperties"
+const handleRejectPushNotification = () => {
+    ...
+    notifly.setUserProperties({
+        "paid_membership": true,
+        "subscriptions": ["astro_boy", "x-men"],
+    });
+    ...
+}
+```
+</Tab>
+<Tab title="Vanilla JS">
+
+```JavaScript title="setUserProperties"
+subscribeButton.addEventListener('click', function () {
+    ...
+    window.notifly.setUserProperties({
+        "subscribed": true,
+    });
+});
+```
+</Tab>
+</Tabs> 
+
+<Info> **예약/표준 속성 키(Reserved Keys)**: `$email`, `$phone_number` 등 채널 발송/개인화에 사용되는 키는 반드시 지정된 이름으로 설정하세요. </Info> <Warning> `setUserId(null)`로 등록 해지 시, 유저 속성/피로도 등 **모든 유저 데이터가 삭제**됩니다. </Warning>
+
+## 4. 이벤트 로깅
+
+유저 행동을 기록하여 **캠페인 트리거**, **세그먼트 조건**, **성과 분석** 등에 활용할 수 있습니다.  
+예를 들어 버튼 클릭, 페이지 진입, 구매 완료 같은 유저 행동을 이벤트로 수집합니다.
+
+```JavaScript
+notifly.trackEvent(eventName, eventParams, segmentationEventParamKeys);
+```
+
+#### Parameters
+
+<ParamField path="eventName" type="string" required>
+  이벤트 이름 (예: "click_button", "purchase_completed")
+</ParamField>
+<ParamField path="eventParams" type="Record<string, any>">
+  이벤트에 대한 추가 속성. 예: "plan": "premium", "duration": 120
+</ParamField>
+<ParamField path="segmentationEventParamKeys" type="string[]">
+  세그먼트 분류 시 기준으로 사용할 키 목록 (최대 1개까지 지원)
+</ParamField>
+
+<Info>
+`segmentationEventParamKeys`를 활용하여 이벤트 변수 (eventParams)를 발송 대상 설정 등에 활용할 수 있습니다. **최대 1개의 Key**만 지정할 수 있습니다.
+</Info>
+
+
+<Tabs>
+<Tab title="React">
+
+```JavaScript title="trackEvent"
+const handleContentView = () => {
+    ...
+    notifly.trackEvent("view_content", {
+        "content_name": "mickey_mouse",
+    });
+    ...
+}
+
+// 세그먼트 키 지정(최대 1개)
+const handlePurchaseTicket = () => {
+    ...
+    notifly.trackEvent("ticket_purchase", {
+        "show_id": "sample_show_id",
+        "performance_start_time": 1674104659
+    }, ["show_id"]);
+    ...
+}
+```
+</Tab>
+<Tab title="Vanilla JS">
+
+```JavaScript title="trackEvent"
+event1Button.addEventListener('click', function () {
+    ...
+    window.notifly.trackEvent('event1');
+});
+```
+</Tab>
+</Tabs> 
+
+<Warning> **호출 순서 중요**: 로그인 등 **userId 변경 직후**에는 `setUserId → setUserProperties → trackEvent` 순서로 호출하는 것을 권장합니다. </Warning>
+
+```JavaScript
+const handleLogin = (userId) => {
+  notifly.setUserId(userId);
+  notifly.setUserProperties({
+    '$phone_number': '01012345678',
+    'paid_membership': true,
+  });
+  notifly.trackEvent("login");
+};
+```
+
+## 6. 웹 팝업에서 커스텀 이벤트 로깅 (선택)
+
+웹 팝업 HTML에서 유저 정의 이벤트를 기록하려면 ≥ 2.17.2 및 다음 옵션이 필요합니다.
+
+```
+notifly.initialize({
+  projectId,
+  username,
+  password,
+  allowUserSuppliedLogEvent: true, // 팝업 내 유저 JS 이벤트 허용
+});
+```
+
+팝업 템플릿에서 로깅 코드 삽입 방식은 노티플라이 팀에 문의하세요.
+
+## 7. 연동 테스트
+
+SDK 설치 후 아래 페이지에서 실제 이벤트 및 푸시 수신 여부를 테스트하세요.  
+👉 [SDK 연동 Test](/ko/integration-test)

@@ -1,0 +1,2795 @@
+openapi: 3.0.3
+info:
+  title: Notifly API
+  version: 1.0.0
+  contact:
+    email: contact@notifly.tech
+servers:
+  - url: https://api.notifly.tech
+    description: 노티플라이 API 서버입니다
+paths:
+  /authenticate:
+    post:
+      summary: authenticate
+      operationId: authenticate
+      x-mint:
+        metadata:
+          title: "API 인증 토큰 발급"
+          description: "Access Key와 Secret Key를 사용하여 1시간 유효한 인증 토큰을 발급받습니다. 모든 API 요청 시 Authorization 헤더에 포함해주시기 바랍니다. 과도한 호출을 방지하기 위해 1시간 이내의 재호출은 기존 토큰을 재활용하는 것을 권장합니다."
+          og:title: "노티플라이 인증 API"
+          og:description: "안전하고 빠르게 API 인증 토큰 발급하기"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accessKey
+                - secretKey
+              properties:
+                accessKey:
+                  type: string
+                  description: 노티플라이 프로젝트 설정 페이지에서 확인하실 수 있습니다. 각 프로젝트별로 1개의 Access Key가 존재합니다.
+                  example: example1234567890abcdef1234567890ab
+                secretKey:
+                  type: string
+                  description: 노티플라이 프로젝트 설정 페이지에서 확인하실 수 있습니다. 각 프로젝트별로 1개의 Secret Key가 존재합니다.
+                  example: EXAMPLEabc9%
+      responses:
+        "200":
+          description: 성공적인 인증입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: 클라이언트 오류입니다 (잘못된 요청, 인증 실패 등)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /track-event:
+    post:
+      summary: track-event
+      operationId: trackEvent
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Info>
+            **다중 이벤트 트래킹**
+            
+            한번에 여러 이벤트를 트래킹할 수도 있습니다. 같은 형식의 Object들을 Array 형태로 호출해주시면 됩니다.
+          </Info>
+        metadata:
+          title: "이벤트 트래킹"
+          description: "유저 행동 이벤트나 전역 이벤트를 노티플라이 엔진으로 전송합니다. 수집된 이벤트 데이터는 캠페인 트리거, 세그먼트 설정, 메시지 개인화 등에 사용됩니다."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - projectId
+                - eventName
+                - userId
+              properties:
+                projectId:
+                  type: string
+                  description: 노티플라이 팀에서 제공하는 프로젝트 ID입니다. 설정 > 프로젝트 정보에서 확인하실 수 있습니다.
+                eventName:
+                  type: string
+                  description: 이벤트 이름
+                eventParams:
+                  type: object
+                  description: 이벤트와 관련된 추가 파라미터
+                segmentationEventParamKeys:
+                  type: array
+                  items:
+                    type: string
+                  description: 세그먼트 분류 시 특별 처리되는 파라미터 키 목록 (최대 1개만 허용)
+                userId:
+                  type: string
+                  description: 유저 식별자
+            example:
+              projectId: "example_project_1234567890abcdef"
+              eventName: "product_view"
+              userId: "user_abc123"
+      responses:
+        "200":
+          description: 성공적인 이벤트 전송입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 성공 메시지
+              example:
+                message: "Successfully tracked events 3 events"
+        "400":
+          description: 요청 본문 형식 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: 인증 실패입니다 (만료 또는 잘못된 토큰)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /set-user-properties:
+    post:
+      summary: set-user-properties
+      operationId: setUserProperties
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Info>
+            **다중 사용자 업데이트**
+            
+            한번에 여러 사용자의 정보를 업데이트할 수도 있습니다. 같은 형식의 Object들을 Array 형태로 호출해주시면 됩니다.
+          </Info>
+        metadata:
+          title: "유저 속성 설정"
+          description: "유저 속성을 노티플라이 엔진에 등록하거나 업데이트합니다. 등록된 속성은 세그먼트 분류 및 개인화 메시지에 활용됩니다."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - projectId
+                - userProperties
+                - userId
+              properties:
+                projectId:
+                  type: string
+                  description: 노티플라이 팀에서 제공하는 프로젝트 ID입니다. 설정 > 프로젝트 정보에서 확인하실 수 있습니다.
+                userProperties:
+                  type: object
+                  description: 유저 속성(key-value)
+                userId:
+                  type: string
+                  description: 유저 식별자
+            example:
+              projectId: "example_project_1234567890abcdef"
+              userId: "user_abc123"
+      responses:
+        "200":
+          description: 성공적인 속성 업데이트입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: integer
+                    description: 업데이트된 행 수
+              example:
+                data: 3
+        "400":
+          description: 요청 본문 형식 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: 인증 실패입니다 (만료 또는 잘못된 토큰)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "413":
+          description: 요청 크기 초과입니다 (1,000명 이상 요청)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /users:
+    delete:
+      summary: delete-users
+      operationId: deleteUsers
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Info>
+            **다중 유저 삭제**
+            
+            한번에 여러 유저를 삭제할 수도 있습니다. 같은 형식의 Object들을 Array 형태로 호출해주시면 됩니다.
+            
+            - **최대 삭제 수**: 1회 호출당 최대 1,000명의 사용자까지만 삭제 가능합니다.
+            - **삭제 기준**: 유저 ID, 이메일, 전화번호를 기준으로 삭제할 수 있습니다.
+            - **전화번호 형식**: 전화번호는 정확히 일치해야 합니다. (010-1234-1234 != 01012341234)
+          </Info>
+        metadata:
+          title: "유저 삭제"
+          description: "노티플라이에 등록된 유저를 삭제합니다. 유저 ID, 이메일, 전화번호 중 하나를 기준으로 단일 또는 다중 삭제를 지원합니다."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - projectId
+              properties:
+                projectId:
+                  type: string
+                  description: 노티플라이 팀에서 제공하는 프로젝트 ID입니다. 설정 > 프로젝트 정보에서 확인하실 수 있습니다.
+                userId:
+                  type: string
+                  description: 삭제할 유저의 ID
+                userProperties:
+                  type: object
+                  description: 삭제할 유저 속성 (이메일, 전화번호 기반 삭제 지원)
+                  properties:
+                    email:
+                      type: string
+                      description: 삭제할 유저의 이메일 주소
+                    phone_number:
+                      type: string
+                      description: 삭제할 유저의 전화번호
+            example:
+              projectId: "example_project_1234567890abcdef"
+              userId: "user_abc123"
+              userProperties:
+                email: "delete@example.com"
+                phone_number: "+821012345678"
+      responses:
+        "200":
+          description: 성공적인 유저 삭제입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: integer
+                    description: 삭제된 행 수
+              example:
+                data: 1
+        "400":
+          description: 요청 본문 형식 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: 인증 실패입니다 (만료 또는 잘못된 토큰)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "413":
+          description: 요청 크기 초과입니다 (1,000명 이상 요청)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /projects/{projectId}/campaigns/{campaignId}/send:
+    post:
+      summary: trigger-campaign
+      operationId: triggerCampaign
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Info>
+            **API 기반 발송 지원 채널**
+            
+            현재 API 기반 발송은 다음 채널에 대해 지원됩니다.
+            
+            - 푸시 알림
+            - 웹 푸시 알림
+            - 카카오 알림톡
+            - 카카오 친구톡
+            - 문자 메시지
+            - 이메일
+          </Info>
+
+          <Warning>
+            **수신자 유형 지원 범위와 메시지 개인화**
+            
+            설정된 캠페인의 발송 채널마다 지원되는 수신자 유형이 다를 수 있습니다. 만약 캠페인의 발송 채널이 지원하지 않는 수신자 유형을 사용하면, API 응답으로 400 Bad Request가 반환됩니다.
+            
+            - 푸시 알림: `user-id` 유형의 수신자만 지원됩니다.
+            - 웹 푸시 알림: `user-id` 유형의 수신자만 지원됩니다.
+            - 카카오 알림톡: `user-id` 및 `phone-number` 유형의 수신자를 지원합니다.
+            - 카카오 친구톡: `user-id` 및 `phone-number` 유형의 수신자를 지원합니다.
+            - 문자 메시지: `user-id` 및 `phone-number` 유형의 수신자를 지원합니다.
+            - 이메일: `user-id`, `email` 유형의 수신자만 지원됩니다.
+            
+            수신자 유형이 `user-id`가 아닌 경우, 노티플라이 서버는 유저 데이터베이스에서 해당 유저에 대한 정보를 받아오지 않고, 요청 payload에 명시되어있는 정보로만 발송을 시도합니다.
+            
+            따라서, 수신자 유형이 `user-id`가 아닌 경우 **유저 기반 메시지 개인화 기능**을 사용하실 수 없습니다. 예를 들어, 이 경우 캠페인의 메시지 내용에 `{{ user["name"] }} 님 안녕하세요`라는 구문이 들어있다면, 개인화는 실패하고 `님 안녕하세요`라는 메시지가 발송됩니다.
+            
+            이벤트 파라미터는 모든 유형에 대해 사용 가능합니다.
+          </Warning>
+
+          <Info>
+            **중복 제거**
+            
+            API 기반 발송은 중복 발송을 방지하기 위해 수신자의 중복 여부를 체크합니다. 동일한 수신자가 여러 번 포함되어 있는 경우, 중복된 수신자는 한 번만 발송됩니다. 다음은 채널 별 중복 제거 규칙입니다.
+            
+            - 푸시 알림: 동일한 디바이스 토큰일 경우, 하나의 디바이스 토큰에만 메시지를 발송합니다.
+            - 웹 푸시 알림: 동일한 디바이스 토큰일 경우, 하나의 디바이스 토큰에만 메시지를 발송합니다.
+            - 카카오 알림톡: 동일한 전화번호일 경우, 하나의 전화번호에만 메시지를 발송합니다.
+            - 카카오 친구톡: 동일한 전화번호일 경우, 하나의 전화번호에만 메시지를 발송합니다.
+            - 문자 메시지: 동일한 전화번호일 경우, 하나의 전화번호에만 메시지를 발송합니다.
+            - 이메일: 동일한 이메일 주소일 경우, 하나의 이메일 주소에만 메시지를 발송합니다.
+          </Info>
+        metadata:
+          title: "캠페인 트리거"
+          description: "특정 캠페인을 API를 통해 직접 트리거하여 지정된 수신자에게 발송합니다."
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+        - name: campaignId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 캠페인 ID (콘솔에서 확인)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - recipients
+              properties:
+                recipients:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        description: 수신자 유형 (기본값 user-id). user-id, phone-number, email 지원
+                        enum:
+                          - user-id
+                          - phone-number
+                          - email
+                      userId:
+                        type: string
+                        description: 유저 ID (type이 user-id인 경우 필수)
+                      phoneNumber:
+                        type: string
+                        description: 전화번호 (type이 phone-number인 경우 필수)
+                      email:
+                        type: string
+                        description: 이메일 주소 (type이 email인 경우 필수)
+                      eventParams:
+                        type: object
+                        description: 메시지 개인화를 위한 이벤트 파라미터
+                  description: 수신자 목록 (최대 1,000명)
+            example:
+              recipients:
+                - type: "phone-number"
+                  phoneNumber: "010-1234-5678"
+
+      responses:
+        "200":
+          description: The campaign was triggered successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                    nullable: true
+              example:
+                code: 200
+                success: true
+                error: null
+        "400":
+          description: The request is incorrect.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              example:
+                code: 400
+                success: false
+                error: "Bad request: some-error-message"
+        "401":
+          description: The token has expired, or the authentication information is invalid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              example:
+                code: 401
+                success: false
+                error: "Unauthorized: Invalid token"
+        "405":
+          description: Unsupported HTTP Method.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              example:
+                code: 405
+                success: false
+                error: "Method not allowed: some-error-message"
+        "413":
+          description: The request payload is too large.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              example:
+                code: 413
+                success: false
+                error: "Payload too large: some-error-message"
+        "500":
+          description: Notifly server error. If 500 errors persist, please contact the Notifly team.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              example:
+                code: 500
+                success: false
+                error: "some-error-message"
+        "501":
+          description: The feature is not yet supported.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              example:
+                code: 501
+                success: false
+                error: "Not implemented: some-error-message"
+  /projects/{projectId}/user-journeys/{userJourneyId}/enter:
+    post:
+      summary: trigger-user-journey
+      operationId: triggerUserJourney
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Warning>
+            **주의 사항**
+            
+            HTTP API를 이용한 유저 여정 진입의 경우, 유저 여정의 진입 시점 유형이 **API 기반 진입**으로 설정되어있는 경우에만 사용 가능합니다.
+          </Warning>
+        metadata:
+          title: "유저 여정 트리거"
+          description: "유저 여정을 API로 직접 트리거합니다. 개별 유저에게 유저 여정 시작 이벤트를 발행할 때 사용합니다."
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+        - name: userJourneyId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 유저 여정 ID (콘솔에서 확인)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - users
+              properties:
+                users:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - userId
+                    properties:
+                      userId:
+                        type: string
+                        description: 유저 여정에 진입할 유저의 ID
+                      eventParams:
+                        type: object
+                        description: 이벤트 파라미터를 포함하는 객체. 해당 파라미터로 메시지를 개인화시킬 수 있습니다.
+                  description: 유저 여정에 진입할 유저 목록 (최대 1,000명)
+            example:
+              users:
+                - userId: "alice"
+      responses:
+        "200":
+          description: 성공적인 유저 여정 트리거입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                    nullable: true
+              example:
+                code: 200
+                success: true
+                error: null
+        "400":
+          description: 요청 본문 형식 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CampaignErrorResponse"
+        "401":
+          description: 인증 실패입니다 (만료 또는 잘못된 토큰)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CampaignErrorResponse"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CampaignErrorResponse"
+  /v1/projects/{projectId}/statistics:
+    post:
+      summary: get-campaign-statistics
+      operationId: getCampaignStatistics
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Note>
+            **조회 조건**
+            
+            전일 데이터는 매일 오전 7시(KST)에 집계가 완료됩니다. 정확한 전일 데이터 조회를 위해서는 오전 7시 이후에 API를 호출하시기를 권장합니다.
+          </Note>
+
+          <Info>
+            **집계 표기 일자**
+            
+            일자별 데이터는 발생 일자 기준으로 집계 및 표기됩니다. 예를 들어 7월 23일 발송한 캠페인의 클릭이 24일에 발생했다면, 23일에 발송, 24일에 클릭 이벤트가 집계됩니다.
+          </Info>
+
+          <Info>
+            **메시지 통계 상세 조회와 차이점**
+            
+            [메시지 통계 상세 조회](/api-reference/get-campaign-statistics-retrieval)는 캠페인을 특정해야 하지만 메시지 통계 조회는 요청한 기간 동안 집계된 모든 캠페인/유저여정에 대해 일자별 집계 수를 제공합니다.
+          </Info>
+        metadata:
+          title: "메시지 통계 조회"
+          description: "일자, 캠페인, 채널 별로 발송 성공, 실패, 도달, 클릭, 전환 수를 조회합니다. (조회 당일 제외)"
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - start
+                - end
+              properties:
+                start:
+                  type: string
+                  format: date
+                  description: 조회 시작일자 (yyyy-MM-dd, KST 기준)
+                end:
+                  type: string
+                  format: date
+                  description: 조회 종료일자 (yyyy-MM-dd, KST 기준, 조회 당일 제외)
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: 필터링 하고자 하는 캠페인 태그 (복수 개의 태그인 경우, 배열 내의 모든 태그를 포함하는 캠페인만 반환, OR 연산)
+            example:
+              start: "2025-06-01"
+              end: "2025-06-07"
+              tags:
+                - "exampleTag"
+      responses:
+        "200":
+          description: 성공적인 통계 조회입니다
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CampaignStatistics"
+              example:
+                - date: "2025-06-01"
+                  resource_type: "campaign"
+                  message:
+                    title: "여름 할인 이벤트"
+                    body: "최대 50% 할인 혜택을 놓치지 마세요!"
+                  campaign_id: "xyz123"
+                  campaign_name: "2025 여름 할인 캠페인"
+                  variant_id: "xyz123"
+                  variant_name: "할인율 50%"
+                  tags:
+                    - "summer"
+                    - "discount"
+                    - "mobile"
+                  user_journey_id: null
+                  user_journey_name: null
+                  user_journey_node_id: null
+                  user_journey_node_name: null
+                  channel: "push-notification"
+                  message_sent: 1500
+                  message_failed: 23
+                  delivered: 1477
+                  click: 234
+                  conversion:
+                    - name: "구매완료"
+                      type: "total_count_conversion"
+                      count: 45
+                    - name: "구매완료"
+                      type: "direct_count_conversion"
+                      count: 45
+                - date: "2025-06-01"
+                  resource_type: "user-journey"
+                  message:
+                    subject: "온보딩 완료 축하"
+                    content: "회원가입을 축하드립니다!"
+                  campaign_id: null
+                  campaign_name: null
+                  variant_id: null
+                  variant_name: null
+                  tags: []
+                  user_journey_id: "xyz123"
+                  user_journey_name: "신규 회원 온보딩"
+                  user_journey_node_id: "xyz123"
+                  user_journey_node_name: "환영 메시지"
+                  channel: "email"
+                  message_sent: 892
+                  message_failed: 5
+                  delivered: 887
+                  click: 156
+                  conversion:
+                    - name: "프로필완성"
+                      type: "total_count_conversion"
+                      count: 78
+        "400":
+          description: 요청 파라미터 오류입니다 (날짜 형식, 범위 오류 등)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+              example:
+                error: "InvalidRequest"
+                message: "..."
+        "401":
+          description: 인증 실패입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Unauthorized"
+        "408":
+          description: 타임아웃입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Timeout"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+              example:
+                error: "InternalServerError"
+                message: "..."
+
+  /projects/{projectId}/campaigns/{campaignId}/stats:
+    get:
+      summary: get-campaign-statistics-retrieval
+      operationId: getCampaignStatisticsRetrieval
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Note>
+            **조회 조건**
+            
+            전일 데이터는 매일 오전 7시(KST)에 집계가 완료됩니다. 정확한 전일 데이터 조회를 위해서는 오전 7시 이후에 API를 호출하시기를 권장합니다.
+          </Note>
+
+          <Note>
+            **Campaign Statistics API 변경 사항**
+            
+            2025-07-06 부터, conversionType 필드가 추가되었습니다.
+          </Note>
+        metadata:
+          title: "메시지 통계 상세 조회"
+          description: "특정 메시지의 발송 현황을 조회합니다."
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+        - name: campaignId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 캠페인 ID
+        - name: start
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: 조회 시작일자 (yyyy-MM-ddTHH:mm:ss.sssZ 형식, UTC 기준)
+          example: "2024-10-27T15:00:00.000Z"
+        - name: end
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: 조회 종료일자 (yyyy-MM-ddTHH:mm:ss.sssZ 형식, UTC 기준)
+          example: "2024-10-29T15:00:00.000Z"
+      responses:
+        "200":
+          description: 성공적인 메시지 통계 조회입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      lastCollectedAt:
+                        type: string
+                        description: 최종 집계 시간 (yyyy-MM-dd HH:mm:ss 형식, KST 기준)
+                      stats:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/CampaignStatsMetric"
+                  error:
+                    type: string
+                    nullable: true
+              example:
+                data:
+                  lastCollectedAt: "2024-10-29 04:00:00"
+                  stats:
+                    - metricName: "구매_이벤트"
+                      metricType: "conversion"
+                      conversionType: "sales_conversion"
+                      totalSum: 930832
+                      dailySums:
+                        - date: "2024-09-30"
+                          sum: 0
+                          dimensionSums:
+                            - dimensionKey: "이름"
+                              dimensionValue: "이름1"
+                              sum: 0
+                    - metricName: "send_success"
+                      metricType: "standard"
+                      totalCount: 550
+                      dailyCounts:
+                        - date: "2024-10-28"
+                          count: 250
+                          dimensionCounts:
+                            - dimensionKey: "region"
+                              dimensionValue: "us-east"
+                              count: 100
+                            - dimensionKey: "region"
+                              dimensionValue: "us-west"
+                              count: 150
+                        - date: "2024-10-29"
+                          count: 300
+                          dimensionCounts:
+                            - dimensionKey: "region"
+                              dimensionValue: "us-east"
+                              count: 200
+                            - dimensionKey: "region"
+                              dimensionValue: "us-west"
+                              count: 100
+                error: null
+        "400":
+          description: 요청 파라미터 오류입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    nullable: true
+                  error:
+                    type: string
+              example:
+                data: null
+                error: "Invalid project ID"
+        "401":
+          description: 인증 실패입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    nullable: true
+                  error:
+                    type: string
+              example:
+                data: null
+                error: "Unauthorized: Invalid Authorization Token"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    nullable: true
+                  error:
+                    type: string
+              example:
+                data: null
+                error: "Internal Server Error: some-error-message"
+
+  /projects/{projectId}/campaign-event-data/exports:
+    post:
+      summary: create-campaign-event-export
+      operationId: createCampaignEventExport
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Warning>
+            **유료 API**
+            
+            이 요청은 요청 데이터당 과금이 되는 유료 API입니다. 가격은 노티플라이에 문의해주세요.
+          </Warning>
+        metadata:
+          title: "캠페인 이벤트 데이터 내보내기 요청"
+          description: "캠페인/유저 여정 이벤트 데이터를 비동기적으로 추출 요청합니다. Response로 받은 export_id를 사용하여 요청 결과를 조회할 수 있습니다."
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - start
+                - end
+              properties:
+                start:
+                  type: string
+                  format: date-time
+                  description: 조회 시작일자 (yyyy-MM-ddTHH:mm:ss.sssZ, UTC 기준)
+                end:
+                  type: string
+                  format: date-time
+                  description: 조회 종료일자 (yyyy-MM-ddTHH:mm:ss.sssZ, UTC 기준, 조회 시작일자로부터 최대 일주일 이내)
+                isMessageDataIncluded:
+                  type: boolean
+                  description: message data 포함 여부 (기본값 false)
+            example:
+              start: "2025-06-01T00:00:00.000Z"
+              end: "2025-06-07T23:59:59.999Z"
+              isMessageDataIncluded: true
+      responses:
+        "200":
+          description: Export 요청 성공입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  export_id:
+                    type: string
+                    description: Export 작업 ID
+              example:
+                export_id: "xyz123"
+        "400":
+          description: 요청 파라미터 오류입니다 (날짜 형식, 범위 오류 등)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+              example:
+                error: "InvalidRequest"
+                message: "..."
+        "401":
+          description: 인증 실패입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Unauthorized"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+              example:
+                error: "InternalServerError"
+                message: "..."
+
+  /projects/{projectId}/campaign-event-data/exports/{exportId}/result:
+    get:
+      summary: get-campaign-event-export-result
+      operationId: getCampaignEventExportResult
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Info>
+            **페이지네이션 방식**
+            
+            이 API는 페이지 기반 페이지네이션을 사용합니다:
+            - **페이지 번호**: 0부터 시작하는 정수 값
+            - **페이지 크기**: 각 페이지당 최대 1,000개의 이벤트 데이터
+            - **전체 페이지 수**: `total_page_count` 필드로 제공
+            - **유효한 페이지 범위**: 0 ~ (total_page_count - 1)
+          </Info>
+
+          <Note>
+            **Message Data 채널 별 지원 조건**
+            
+            push-notification을 제외한 다른 채널의 message_data 컬럼은 2025-07-18 이후의 데이터만 지원합니다.
+            
+            또한, in-app-message와 in-web-message 채널은 아래의 SDK 버전 이후부터 지원됩니다:
+            - iOS SDK: 1.17.2
+            - Android SDK: 1.18.1
+            - React Native SDK: 3.10.1
+            - JavaScript SDK: 2.17.4
+          </Note>
+
+          ### 메시지 데이터 예시
+
+          <Tabs>
+            <Tab title="text-message">
+              ```json
+              {
+                "requestId": "요청 ID",
+                "requestDate": "YYYY-MM-DD HH:mm:ss",
+                "templateId": "템플릿 ID",
+                "title": "메시지 제목",
+                "body": "본문 내용",
+                "sendNo": "07000000000",
+                "recipientNo": "01012345678",
+                "messageType": "MMS",
+                "countryCode": "82",
+                "adYn": "N",
+                "attachFileList": [
+                  {
+                    "fileId": 123456789,
+                    "fileName": "image.jpg",
+                    "filePath": "/path/to/image/",
+                    "saveFileName": "saved.jpg",
+                    "uploadType": "TEMPORARY"
+                  }
+                ]
+              }
+              ```
+            </Tab>
+            
+            <Tab title="email">
+              ```json
+              {
+                "title": "메일 제목",
+                "body": {
+                  "html": "<html><body><p>메일 본문</p></body></html>",
+                  "text": "내용"
+                }
+              }
+              ```
+            </Tab>
+            
+            <Tab title="kakao-friendtalk">
+              ```json
+              {
+                "plusFriendId": "@채널명",
+                "senderKey": "발신 키",
+                "recipientNo": "01012345678",
+                "content": "메시지 내용",
+                "buttons": [
+                  {
+                    "ordering": 1,
+                    "type": "WL",
+                    "name": "버튼명",
+                    "linkMo": "https://m.example.com",
+                    "linkPc": "https://example.com",
+                    "schemeIos": "",
+                    "schemeAndroid": ""
+                  }
+                ],
+                "isAd": true
+              }
+              ```
+            </Tab>
+            
+            <Tab title="kakao-alimtalk">
+              ```json
+              {
+                "plusFriendId": "@채널명",
+                "senderKey": "발신 키",
+                "recipientNo": "01012345678",
+                "templateCode": "템플릿 코드",
+                "content": "[브랜드] 메시지 본문",
+                "templateExtra": "추가 안내",
+                "buttons": [
+                  {
+                    "ordering": 1,
+                    "type": "WL",
+                    "name": "버튼명",
+                    "linkMo": "https://m.example.com",
+                    "linkPc": "https://example.com"
+                  }
+                ]
+              }
+              ```
+            </Tab>
+            
+            <Tab title="in-app-message">
+              ```json
+              {
+                "templateName": "템플릿 이름"
+              }
+              ```
+            </Tab>
+            
+            <Tab title="in-web-message">
+              ```json
+              {
+                "templateName": "템플릿 이름"
+              }
+              ```
+            </Tab>
+            
+            <Tab title="web-push-notification">
+              ```json
+              {
+                "notifly": {
+                  "ti": "제목",
+                  "bd": "본문",
+                  "cid": "캠페인 ID",
+                  "mid": "메시지 ID",
+                  "u": "https://your-link.com",
+                  "ic": "https://your-icon.png",
+                  "bg": "#ffffff",
+                  "im": "https://your-image.jpg",
+                  "sd": "/push-sound.mp3",
+                  "tg": "notifly-push-notification",
+                  "vb": [200, 100, 200],
+                  "ri": false,
+                  "data": {},
+                  "ac": [
+                    { "action": "click", "title": "Go to Link" },
+                    { "action": "close", "title": "Close" }
+                  ]
+                }
+              }
+              ```
+            </Tab>
+            
+            <Tab title="webhook">
+              ```json
+              {
+                "url": "https://your.webhook.endpoint",
+                "method": "POST",
+                "headers": {
+                  "Content-Type": "application/json"
+                },
+                "data": "{ \"key\": \"value\" }"
+              }
+              ```
+            </Tab>
+          </Tabs>
+        metadata:
+          title: "캠페인 이벤트 데이터 내보내기 결과 조회"
+          description: "Export 요청으로 얻은 export_id를 활용해 비동기로 생성된 데이터를 페이지 당 최대 1,000개 단위로 조회합니다."
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+        - name: exportId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Export 요청 시 발급된 ID
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+          description: 0부터 시작하는 페이지 번호 (범위 0 ~ total_page_count - 1)
+      responses:
+        "200":
+          description: 해당 페이지 데이터 조회 성공입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CampaignEventData"
+                  total_page_count:
+                    type: integer
+              example:
+                status: "success"
+                data:
+                  - id: "E252EB67-48E3-49DC-866D-F8C26161230D"
+                    user_id: "user_12345"
+                    notifly_user_id: "notifly_user_abcde"
+                    device_id: "ios_device_98765"
+                    notifly_device_id: "notifly_device_xyz"
+                    channel: "push_notification"
+                    event_name: "send_success"
+                    failure_reason: null
+                    resource_title: "6월 신규 혜택 안내"
+                    resource_type: "campaign"
+                    campaign_id: "camp_202406_promo"
+                    experiment_group_name: "A"
+                    user_journey_id: null
+                    user_journey_node_id: null
+                    time: "1749373994000000"
+                    message_data:
+                      title: "지금 확인하고 혜택 받기!"
+                      body: "6월 신규 회원님만을 위한 특별 이벤트 🎁"
+                      link: "link://link/feed?id=1243"
+                total_page_count: 1
+        "202":
+          description: 데이터 생성 중입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: "processing"
+                message: "Data is being generated."
+        "404":
+          description: 존재하지 않는 projectId나 exportId입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: "not_found"
+                message: "The specified project_id and export_id could not be found."
+        "408":
+          description: 타임아웃입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Timeout"
+        "416":
+          description: 잘못된 page 요청입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: "invalid_page"
+                message: "The requested page does not exist."
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: "error"
+                message: "An error occurred while processing the data."
+
+  /messages/text-message:
+    post:
+      summary: send-text-message
+      operationId: sendTextMessage
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Warning>
+            **주의 사항**
+            
+            - API를 이용한 문자 발송은 노티플라이 문자 자체 발송 설정이 되어있을 경우에만 가능합니다.
+            - 발신 번호는 자체 발송 설정에 입력된 번호가 사용됩니다.
+            - 아직 API를 이용한 발송 결과에 대한 통계는 UI로 제공되지 않습니다. 정보가 필요하실 경우 contact@notifly.tech으로 문의해주세요.
+          </Warning>
+        metadata:
+          title: "문자 메시지 발송"
+          description: "문자 메시지(SMS, LMS, MMS)를 발송합니다."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - projectId
+                - type
+                - body
+                - recipientList
+              properties:
+                projectId:
+                  type: string
+                  description: 노티플라이 설정 페이지에서 확인 가능
+                type:
+                  type: string
+                  enum:
+                    - sms
+                    - lms
+                    - mms
+                  description: 메시지 유형
+                title:
+                  type: string
+                  description: 본문 제목 (lms, mms에만 사용)
+                body:
+                  type: string
+                  description: 본문 내용
+                sendNo:
+                  type: string
+                  description: 여러 발신 번호가 등록되어 있을 경우 발송할 번호
+                recipientList:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - recipientNo
+                    properties:
+                      recipientNo:
+                        type: string
+                        description: 수신 번호
+                  description: 수신자 목록 (최대 1,000명)
+            example:
+              projectId: "example_project_1234567890abcdef"
+              type: "sms"
+              body: "Message Body"
+              recipientList:
+                - recipientNo: "01012345678"
+      responses:
+        "200":
+          description: 성공적인 메시지 발송입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              example:
+                success: true
+        "400":
+          description: 발신자 정보가 등록되지 않았습니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    nullable: true
+                  error:
+                    type: string
+              example:
+                data: null
+                error: "Sender info is not registered."
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              example:
+                success: false
+                error: "Internal Server Error"
+
+  /messages/kakao-alimtalk:
+    post:
+      summary: send-kakao-alimtalk
+      operationId: sendKakaoAlimtalk
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Warning>
+            **주의 사항**
+            
+            API를 이용한 발송 결과에 대한 통계는 별도 페이지를 통해 제공하고 있습니다. 정보가 필요하실 경우 contact@notifly.tech으로 문의해주세요.
+          </Warning>
+        metadata:
+          title: "카카오 알림톡 발송"
+          description: "알림톡 템플릿 코드와 수신자 리스트를 사용하여 카카오 알림톡 메시지를 발송합니다."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - projectId
+                - templateId
+                - recipientList
+              properties:
+                projectId:
+                  type: string
+                  description: 노티플라이 설정 페이지에서 확인 가능
+                templateId:
+                  type: string
+                  description: 등록한 발송 템플릿 ID (알림톡 템플릿 리스트에서 확인 가능)
+                channelId:
+                  type: string
+                  description: 발송할 카카오 채널 ID
+                resendSendNo:
+                  type: string
+                  description: 대체 발송 발신 번호 (노티플라이 문자 자체 발송이 설정된 번호)
+                senderGroupingKey:
+                  type: string
+                  description: 발신 그룹핑 키 (최대 100자)
+                recipientList:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - recipientNo
+                    properties:
+                      recipientNo:
+                        type: string
+                        description: 수신 번호 (최대 15자)
+                      templateParameter:
+                        type: object
+                        description: 템플릿 파라미터, 치환할 변수가 포함된 경우 필수
+                      resendParameter:
+                        type: object
+                        description: 대체 발송 정보
+                        properties:
+                          isResend:
+                            type: boolean
+                            description: 발송 실패 시 문자 대체 발송 여부 (기본값 false)
+                          resendType:
+                            type: string
+                            enum:
+                              - SMS
+                              - LMS
+                            description: 대체 발송 타입. 템플릿 본문 길이에 따라 타입이 구분됩니다.
+                          resendTitle:
+                            type: string
+                            description: LMS 대체 발송 제목 (기본값은 플러스친구 ID)
+                          resendContent:
+                            type: string
+                            description: 대체 발송 내용 (기본값은 메시지 본문과 웹링크 버튼명 - 웹링크 Mobile 링크)
+                  description: 수신자 목록 (최대 1,000명)
+            example:
+              projectId: "example_project_1234567890abcdef"
+              templateId: "template-id"
+              recipientList:
+                - recipientNo: "01012345678"
+      responses:
+        "200":
+          description: 성공적인 메시지 발송입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              example:
+                success: true
+        "413":
+          description: 발신자 정보가 등록되지 않았습니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    nullable: true
+                  error:
+                    type: string
+              example:
+                data: null
+                error: "Sender info is not registered."
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                internal_error:
+                  value:
+                    success: false
+                    error: "Internal Server Error"
+                resend_sender_not_registered:
+                  value:
+                    success: false
+                    error: "The sender information for resending text message has not been registered. Please register it in the Notifly console first."
+
+  /messages/kakao-friendtalk:
+    post:
+      summary: send-kakao-friendtalk
+      operationId: sendKakaoFriendtalk
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Warning>
+            **주의 사항**
+
+            - HTTP API를 이용한 카카오 친구톡 발송은 노티플라이 카카오톡 자체 발송 설정이 되어있을 경우에만 가능합니다.
+            - 아직 API를 이용한 발송 결과에 대한 통계는 UI로 제공되지 않습니다. 정보가 필요하실 경우 contact@notifly.tech으로 문의해주세요.
+          </Warning>
+
+          <Warning>
+            **친구톡 광고 메시지 대체 발송 시 주의사항**
+
+            친구톡 광고 메시지가 실패하여 광고 SMS로 대체 발송되는 경우, 반드시 080 수신 거부 번호가 등록되어 있어야 합니다.
+
+            - `resendContent` 필드를 입력한 경우: SMS 광고 API의 광고 문구 규격에 맞게 필수 광고 문구를 포함해야 정상 대체 발송됩니다.
+            - `resendContent` 필드를 입력하지 않은 경우: 등록된 080 수신 거부 번호를 활용하여 광고 문구를 자동 생성하여 대체 발송됩니다.
+          </Warning>
+        metadata:
+          title: "카카오 친구톡 발송"
+          description: "카카오 친구톡 메시지를 발송합니다. 친구톡 메시지는 수신자 목록, 광고 여부, 메시지 유형 등을 설정하여 전송합니다."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - projectId
+                - messageType
+                - recipientList
+              properties:
+                projectId:
+                  type: string
+                  description: 노티플라이 설정 페이지에서 확인 가능
+                channelId:
+                  type: string
+                  description: 여러 카카오 채널이 등록되어 있을 경우 발송할 채널 ID
+                messageType:
+                  type: string
+                  enum:
+                    - text
+                  description: 메시지 타입 (현재 text 타입만 지원)
+                isAd:
+                  type: boolean
+                  description: 광고 여부
+                recipientList:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - recipientNo
+                      - content
+                    properties:
+                      recipientNo:
+                        type: string
+                        description: 수신 번호
+                      content:
+                        type: object
+                        required:
+                          - text
+                        properties:
+                          text:
+                            type: string
+                            description: 본문 내용
+                      resendParameter:
+                        type: object
+                        description: 대체 발송 정보
+                        properties:
+                          isResend:
+                            type: boolean
+                            description: 발송 실패 시 문자 대체 발송 여부 (기본값 false)
+                          resendType:
+                            type: string
+                            enum:
+                              - SMS
+                              - LMS
+                            description: 대체 발송 타입(SMS, LMS). 템플릿 본문 길이에 따라 타입이 구분됩니다.
+                          resendTitle:
+                            type: string
+                            description: LMS 대체 발송 제목 (기본값은 플러스친구 ID)
+                          resendContent:
+                            type: string
+                            description: 대체 발송 내용 (기본값은 메시지 본문과 웹링크 버튼명 - 웹링크 Mobile 링크)
+                  description: 수신자 목록 (최대 1,000명)
+            example:
+              projectId: "example_project_1234567890abcdef"
+              messageType: "text"
+              isAd: false
+              recipientList:
+                - recipientNo: "01012345678"
+                  content:
+                    text: "안녕하세요! 새로운 이벤트 소식을 알려드립니다."
+      responses:
+        "200":
+          description: 성공적인 메시지 발송입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              example:
+                success: true
+        "413":
+          description: 발신자 정보가 등록되지 않았습니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    nullable: true
+                  error:
+                    type: string
+              example:
+                data: null
+                error: "Sender info is not registered."
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              example:
+                success: false
+                error: "Internal Server Error"
+
+  /projects/{projectId}/messages/kakao-alimtalk/templates:
+    get:
+      summary: list-kakao-alimtalk-templates
+      operationId: listKakaoAlimtalkTemplates
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        metadata:
+          title: "알림톡 템플릿 리스트 조회"
+          description: "등록된 카카오 알림톡 템플릿 목록을 조회합니다."
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+        - name: channelId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 알림톡 채널 ID. 등록된 채널이 여러개일 경우 사용됩니다.
+        - name: templateCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 템플릿 코드
+        - name: templateName
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 템플릿 이름
+        - name: templateStatus
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 템플릿 상태 코드
+        - name: pageNum
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            maximum: 1000
+          description: 조회 건수
+      responses:
+        "200":
+          description: 성공적인 템플릿 리스트 조회입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KakaoTemplateListResponse"
+        "400":
+          description: 요청 본문 형식 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "401":
+          description: 인증 실패입니다 (만료 또는 잘못된 토큰)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+
+    post:
+      summary: create-kakao-alimtalk-template
+      operationId: createKakaoAlimtalkTemplate
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Warning>
+            **주의 사항**
+            
+            - **템플릿 메시지 유형**이 `EX` 또는 `MI`일 경우, `templateExtra` 필드를 반드시 포함해야 합니다.
+            - **템플릿 강조 표시 타입**이 `TEXT`일 경우, `templateTitle`과 `templateSubtitle` 필드를 필수로 포함해야 합니다.
+            - **템플릿 강조 표시 타입**이 `IMAGE`일 경우, `templateImageName`과 `templateImageUrl` 필드를 필수로 포함해야 합니다.
+            - **템플릿 아이템 리스트**는 최소 2개에서 최대 10개까지 포함할 수 있습니다.
+            - **버튼 타입**에 따라 필수 필드가 다릅니다.
+          </Warning>
+        metadata:
+          title: "알림톡 템플릿 등록"
+          description: "새로운 카카오 알림톡 템플릿을 등록합니다."
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KakaoTemplateInput"
+      responses:
+        "200":
+          description: 성공적인 템플릿 등록입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KakaoTemplateResponse"
+        "400":
+          description: 요청 본문 형식 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "401":
+          description: 인증 실패입니다 (만료 또는 잘못된 토큰)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+
+  /projects/{projectId}/messages/kakao-alimtalk/templates/{templateCode}:
+    put:
+      summary: update-kakao-alimtalk-template
+      operationId: updateKakaoAlimtalkTemplate
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Warning>
+            **주의 사항**
+            
+            - 템플릿 수정 시, **템플릿 메시지 유형** 및 **템플릿 강조 표시 타입**에 따른 필수 필드를 준수해야 합니다.
+            - **버튼 타입**에 따라 필수 필드가 다르므로 주의하여 입력해야 합니다.
+          </Warning>
+        metadata:
+          title: "알림톡 템플릿 수정"
+          description: "기존 카카오 알림톡 템플릿을 수정합니다."
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+        - name: templateCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 수정할 템플릿 코드
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KakaoTemplateInput"
+      responses:
+        "200":
+          description: 성공적인 템플릿 수정입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KakaoTemplateResponse"
+        "400":
+          description: 요청 본문 형식 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "401":
+          description: 인증 실패입니다 (만료 또는 잘못된 토큰)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+
+    delete:
+      summary: delete-kakao-alimtalk-template
+      operationId: deleteKakaoAlimtalkTemplate
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        metadata:
+          title: "알림톡 템플릿 삭제"
+          description: "카카오 알림톡 템플릿을 삭제합니다."
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+        - name: templateCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 삭제할 템플릿 코드
+        - name: channelId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 알림톡 채널 ID. 등록된 채널이 여러개일 경우 사용됩니다. 넘기지 않을 경우 먼저 등록된 채널로 지정됩니다.
+      responses:
+        "200":
+          description: 성공적인 템플릿 삭제입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KakaoTemplateResponse"
+        "400":
+          description: 요청 본문 형식 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "401":
+          description: 인증 실패입니다 (만료 또는 잘못된 토큰)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+
+  /projects/{projectId}/messages/text-message/blockservice/recipients:
+    get:
+      summary: list-080-block-recipients
+      operationId: list080BlockRecipients
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        metadata:
+          title: "080 수신거부 목록 조회"
+          description: "080 수신 거부 서비스에 등록된 수신거부 대상자 목록을 조회합니다."
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+        - name: unsubscribeNo
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 080 수신 거부 번호 (최대 25자)
+        - name: recipientNo
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 수신 거부 대상자 번호 (최대 25자)
+        - name: startRequestDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 수신 거부 요청 시작값 (yyyy-MM-dd HH:mm:ss)
+        - name: endRequestDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 수신 거부 요청 종료값 (yyyy-MM-dd HH:mm:ss)
+        - name: pageNum
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 15
+            maximum: 1000
+          description: 검색 수
+      responses:
+        "200":
+          description: 성공적인 수신거부 목록 조회입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNum:
+                    type: integer
+                  pageSize:
+                    type: integer
+                  totalCount:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        unsubscribeNo:
+                          type: string
+                        recipientNo:
+                          type: string
+                        requestDate:
+                          type: string
+              example:
+                pageNum: 1
+                pageSize: 15
+                totalCount: 1
+                data:
+                  - unsubscribeNo: "0808888888"
+                    recipientNo: "01000000000"
+                    requestDate: "2018-05-14 17:07:29.0"
+                  - unsubscribeNo: "0808888888"
+                    recipientNo: "010012341234"
+                    requestDate: "2018-05-14 17:07:29.0"
+        "400":
+          description: 요청 본문 형식 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "401":
+          description: 인증 실패입니다 (만료 또는 잘못된 토큰)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+
+    post:
+      summary: register-080-block-recipients
+      operationId: register080BlockRecipients
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        metadata:
+          title: "080 수신거부 등록"
+          description: "080 수신 거부 서비스에 수신거부 대상자를 등록합니다."
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - unsubscribeNo
+                - recipientNoList
+              properties:
+                unsubscribeNo:
+                  type: string
+                  description: 080 수신거부번호 (최대 25자)
+                recipientNoList:
+                  type: array
+                  items:
+                    type: string
+                  description: 수신 거부 대상자 번호 (최대 10개)
+            example:
+              unsubscribeNo: "0800000000"
+              recipientNoList:
+                - "0100000000"
+                - "0100000001"
+      responses:
+        "200":
+          description: 성공적인 수신거부 등록입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              example:
+                success: true
+        "400":
+          description: 요청 본문 형식 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "401":
+          description: 인증 실패입니다 (만료 또는 잘못된 토큰)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+
+  /projects/{projectId}/messages/text-message/blockservice/recipients/removes:
+    delete:
+      summary: remove-080-block-recipients
+      operationId: remove080BlockRecipients
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        metadata:
+          title: "080 수신거부 삭제"
+          description: "080 수신 거부 서비스에서 수신거부 대상자를 삭제합니다."
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+        - name: unsubscribeNo
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 080 수신 거부 번호 (최대 20자)
+          example: "0800000000"
+        - name: recipientNoList
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 삭제할 수신 거부 번호 (콤마로 구분)
+          example: "0100000000,0100000001"
+      responses:
+        "200":
+          description: 성공적인 수신거부 삭제입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              example:
+                success: true
+        "400":
+          description: 요청 본문 형식 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "401":
+          description: 인증 실패입니다 (만료 또는 잘못된 토큰)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleErrorResponse"
+
+components:
+  schemas:
+    UserPropertySingle:
+      type: object
+      required:
+        - projectId
+        - userProperties
+        - userId
+      properties:
+        projectId:
+          type: string
+          description: 노티플라이 팀에서 제공하는 프로젝트 ID입니다. 설정 > 프로젝트 정보에서 확인하실 수 있습니다.
+        userProperties:
+          type: object
+          description: 유저 속성(key-value)
+        userId:
+          type: string
+          description: 유저 식별자
+
+    UserDeleteSingle:
+      type: object
+      required:
+        - projectId
+      properties:
+        projectId:
+          type: string
+          description: 노티플라이 팀에서 제공하는 프로젝트 ID입니다. 설정 > 프로젝트 정보에서 확인하실 수 있습니다.
+        userId:
+          type: string
+          description: 삭제할 유저의 ID
+        userProperties:
+          type: object
+          description: 삭제할 유저 속성 (이메일, 전화번호 기반 삭제 지원)
+          properties:
+            $email:
+              type: string
+              description: 삭제할 유저의 이메일 주소
+            $phone_number:
+              type: string
+              description: 삭제할 유저의 전화번호
+      example:
+        projectId: "example_project_1234567890abcdef"
+        userId: "user_abc123"
+
+    SuccessResponse:
+      type: object
+      properties:
+        data:
+          type: string
+          description: 인증 토큰 값입니다 (1시간 유효)
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example
+        error:
+          type: string
+          nullable: true
+          description: 성공 시 null입니다
+          example: null
+
+    ErrorResponse:
+      type: object
+      properties:
+        data:
+          type: string
+          nullable: true
+          description: 오류 시 null
+          example: null
+        error:
+          type: string
+          description: 에러 메시지
+        projectId:
+          type: string
+          nullable: true
+          description: 프로젝트 ID (500 오류 시에만 포함)
+          example: null
+        durationMs:
+          type: integer
+          nullable: true
+          description: 처리 시간(ms) (500 오류 시에만 포함)
+          example: null
+
+    SimpleErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: 에러 메시지
+      example:
+        error: "some-error-message"
+
+    KakaoTemplateResponse:
+      type: object
+      properties:
+        resultCode:
+          type: integer
+          description: 결과 코드
+        resultMessage:
+          type: string
+          description: 결과 메시지
+      example:
+        resultCode: 0
+        resultMessage: "Success"
+
+    KakaoTemplateListResponse:
+      type: object
+      properties:
+        resultCode:
+          type: integer
+          description: 결과 코드
+        resultMessage:
+          type: string
+          description: 결과 메시지
+        templateListResponse:
+          type: object
+          properties:
+            templates:
+              type: array
+              items:
+                type: object
+              description: 템플릿 목록
+            totalCount:
+              type: integer
+              description: 전체 템플릿 수
+
+    KakaoTemplateInput:
+      type: object
+      required:
+        - templateCode
+        - templateName
+        - templateContent
+      properties:
+        channelId:
+          type: string
+          description: 알림톡 채널 ID
+        templateCode:
+          type: string
+          description: 템플릿 코드 (최대 20자, Unique)
+        templateName:
+          type: string
+          description: 템플릿명 (최대 150자)
+        templateContent:
+          type: string
+          description: 템플릿 본문 (최대 1000자)
+        templateMessageType:
+          type: string
+          enum:
+            - BA
+            - EX
+            - AD
+            - MI
+          description: 템플릿 메시지 유형 (BA-기본형, EX-부가정보형, AD-채널추가형, MI-복합형)
+        templateEmphasizeType:
+          type: string
+          enum:
+            - NONE
+            - TEXT
+            - IMAGE
+            - ITEM_LIST
+          description: 템플릿 강조 표시 타입
+        templateExtra:
+          type: string
+          description: 템플릿 부가 정보 (EX 또는 MI일 경우 필수)
+        templateTitle:
+          type: string
+          description: 템플릿 제목 (최대 50자)
+        templateSubtitle:
+          type: string
+          description: 템플릿 보조 문구 (최대 50자)
+        templateHeader:
+          type: string
+          description: 템플릿 헤더 (최대 16자)
+        templateItem:
+          type: object
+          description: 아이템 정보
+          properties:
+            list:
+              type: array
+              items:
+                type: object
+                required:
+                  - title
+                  - description
+                properties:
+                  title:
+                    type: string
+                    description: 아이템 타이틀 (최대 6자)
+                  description:
+                    type: string
+                    description: 아이템 디스크립션 (최대 23자)
+              description: 아이템 리스트 (최소 2개, 최대 10개)
+            summary:
+              type: object
+              required:
+                - title
+                - description
+              properties:
+                title:
+                  type: string
+                  description: 요약 타이틀 (최대 6자)
+                description:
+                  type: string
+                  description: 요약 디스크립션 (변수 및 화폐 단위, 숫자, 쉼표, 마침표만 사용 가능, 최대 14자)
+              description: 아이템 요약 정보
+        templateItemHighlight:
+          type: object
+          description: 아이템 하이라이트
+          properties:
+            title:
+              type: string
+              description: 하이라이트 타이틀 (최대 30자, 섬네일 이미지가 있을 경우 21자)
+            description:
+              type: string
+              description: 하이라이트 디스크립션 (최대 19자, 섬네일 이미지가 있을 경우 13자)
+            imageUrl:
+              type: string
+              description: 섬네일 이미지 URL
+        templateRepresentLink:
+          type: object
+          description: 대표 링크
+          properties:
+            linkMo:
+              type: string
+              description: 모바일 웹 링크 (최대 500자)
+            linkPc:
+              type: string
+              description: PC 웹 링크 (최대 500자)
+            schemeIos:
+              type: string
+              description: iOS 앱 링크 (최대 500자)
+            schemeAndroid:
+              type: string
+              description: 안드로이드 앱 링크 (최대 500자)
+        templateImageName:
+          type: string
+          description: 이미지명
+        templateImageUrl:
+          type: string
+          description: 이미지 URL
+        securityFlag:
+          type: boolean
+          description: 보안 템플릿 여부
+        categoryCode:
+          type: string
+          description: 템플릿 카테고리 코드 (기본값 999999)
+        buttons:
+          type: array
+          items:
+            type: object
+            required:
+              - ordering
+              - type
+              - name
+            properties:
+              ordering:
+                type: integer
+                description: 버튼 순서 (1~5)
+              type:
+                type: string
+                enum:
+                  - WL
+                  - AL
+                  - DS
+                  - BK
+                  - MD
+                  - BC
+                  - BT
+                  - AC
+                  - BF
+                  - P1
+                  - P2
+                  - P3
+                description: 버튼 타입 (WL-웹링크, AL-앱링크, DS-배송조회, BK-봇키워드, MD-메시지전달, BC-상담톡전환, BT-봇전환, AC-채널추가, BF-비즈니스폼, P1/P2/P3-플러그인)
+              name:
+                type: string
+                description: 버튼 이름 (최대 14자)
+              linkMo:
+                type: string
+                description: 모바일 웹 링크 (WL 타입일 경우 필수, 최대 500자)
+              linkPc:
+                type: string
+                description: PC 웹 링크 (WL 타입일 경우 선택, 최대 500자)
+              schemeIos:
+                type: string
+                description: iOS 앱 링크 (AL 타입일 경우 필수, 최대 500자)
+              schemeAndroid:
+                type: string
+                description: 안드로이드 앱 링크 (AL 타입일 경우 필수, 최대 500자)
+              bizFormId:
+                type: integer
+                description: 비즈니스폼 ID (BF 타입일 경우 필수)
+              pluginId:
+                type: string
+                description: 플러그인 ID (최대 24자)
+          description: 버튼 리스트 (최대 5개)
+        quickReplies:
+          type: array
+          items:
+            type: object
+            required:
+              - ordering
+              - type
+              - name
+            properties:
+              ordering:
+                type: integer
+                description: 바로연결 순서
+              type:
+                type: string
+                enum:
+                  - WL
+                  - AL
+                  - BK
+                  - BC
+                  - BT
+                  - BF
+                description: 바로연결 타입 (WL-웹링크, AL-앱링크, BK-봇키워드, BC-상담톡전환, BT-봇전환, BF-비즈니스폼)
+              name:
+                type: string
+                description: 바로연결 이름 (최대 14자)
+              linkMo:
+                type: string
+                description: 모바일 웹 링크 (WL 타입일 경우 필수, 최대 500자)
+              linkPc:
+                type: string
+                description: PC 웹 링크 (WL 타입일 경우 선택, 최대 500자)
+              schemeIos:
+                type: string
+                description: iOS 앱 링크 (AL 타입일 경우 필수, 최대 500자)
+              schemeAndroid:
+                type: string
+                description: 안드로이드 앱 링크 (AL 타입일 경우 필수, 최대 500자)
+              bizFormId:
+                type: integer
+                description: 비즈니스폼 ID (BF 타입일 경우 필수)
+          description: 바로연결 리스트 (최대 5개)
+    CampaignStatistics:
+      type: object
+      properties:
+        date:
+          type: string
+          description: 통계 데이터 날짜 (YYYY-MM-DD 형식)
+        resource_type:
+          type: string
+          enum:
+            - campaign
+            - user-journey
+          description: 리소스 타입
+        message:
+          type: object
+          description: 메시지 내용 (채널별로 상이한 구조)
+        campaign_id:
+          type: string
+          nullable: true
+          description: 캠페인 ID (캠페인 리소스인 경우에만 존재)
+        campaign_name:
+          type: string
+          nullable: true
+          description: 캠페인 이름 (캠페인 리소스인 경우에만 존재)
+        variant_id:
+          type: string
+          nullable: true
+          description: Variant ID (캠페인 리소스이고, A/B 테스트인 경우에만 존재)
+        variant_name:
+          type: string
+          nullable: true
+          description: Variant 이름 (캠페인 리소스이고, A/B 테스트인 경우에만 존재)
+        tags:
+          type: array
+          items:
+            type: string
+          description: 캠페인 태그 목록
+        user_journey_id:
+          type: string
+          nullable: true
+          description: 유저 여정 ID (유저 여정 리소스인 경우에만 존재)
+        user_journey_name:
+          type: string
+          nullable: true
+          description: 유저 여정 이름 (유저 여정 리소스인 경우에만 존재)
+        user_journey_node_id:
+          type: string
+          nullable: true
+          description: 유저 여정 노드 ID (유저 여정 리소스인 경우에만 존재)
+        user_journey_node_name:
+          type: string
+          nullable: true
+          description: 유저 여정 노드 이름 (유저 여정 리소스인 경우에만 존재)
+        channel:
+          type: string
+          description: 발송 채널 정보
+        message_sent:
+          type: integer
+          description: 발송 시도된 메시지 수
+        message_failed:
+          type: integer
+          description: 발송 실패한 메시지 수
+        delivered:
+          type: integer
+          nullable: true
+          description: 전달 완료된 메시지 수 (채널에서 지원하지 않는 경우 null)
+        click:
+          type: integer
+          nullable: true
+          description: 클릭된 메시지 수 (채널에서 지원하지 않는 경우 null)
+        conversion:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: 전환 이름
+              type:
+                type: string
+                description: 전환 타입
+              count:
+                type: integer
+                description: 전환 수
+          description: 전환 데이터 배열
+
+    CampaignStatsMetric:
+      type: object
+      properties:
+        metricName:
+          type: string
+          description: 집계된 메트릭의 이름
+        metricType:
+          type: string
+          enum:
+            - standard
+            - conversion
+          description: 메트릭의 타입
+        conversionType:
+          type: string
+          enum:
+            - direct_count_conversion
+            - total_count_conversion
+            - sales_conversion
+          description: 전환 지표의 타입 (metricType이 conversion인 경우만 존재)
+        totalCount:
+          type: integer
+          description: 지정된 기간 동안 해당 메트릭이 누적된 총 횟수
+        totalSum:
+          type: number
+          description: 지정된 기간 동안 해당 메트릭의 총 합계 (sales_conversion인 경우)
+        dailyCounts:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                description: 집계 날짜 (yyyy-MM-dd 형식, KST 기준)
+              count:
+                type: integer
+                description: 해당 날짜에 발생한 메트릭 횟수
+              dimensionCounts:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    dimensionKey:
+                      type: string
+                      description: 유저 속성 키
+                    dimensionValue:
+                      type: string
+                      description: 유저 속성 값
+                    count:
+                      type: integer
+                      description: 해당 속성 값에 대한 메트릭 횟수
+          description: 일별로 집계된 메트릭 데이터
+        dailySums:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                description: 집계 날짜 (yyyy-MM-dd 형식, KST 기준)
+              sum:
+                type: number
+                description: 해당 날짜의 합계
+              dimensionSums:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    dimensionKey:
+                      type: string
+                      description: 유저 속성 키
+                    dimensionValue:
+                      type: string
+                      description: 유저 속성 값
+                    sum:
+                      type: number
+                      description: 해당 속성 값에 대한 합계
+          description: 일별로 집계된 메트릭 데이터 (sales_conversion인 경우)
+
+    CampaignEventData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 이벤트 ID
+        user_id:
+          type: string
+          description: 유저 ID
+        notifly_user_id:
+          type: string
+          description: 노티플라이 유저 ID
+        device_id:
+          type: string
+          description: 디바이스 ID
+        notifly_device_id:
+          type: string
+          description: 노티플라이 디바이스 ID
+        channel:
+          type: string
+          description: 발송 채널
+        event_name:
+          type: string
+          description: 이벤트 이름
+        failure_reason:
+          type: string
+          nullable: true
+          description: 실패 사유 (실패한 경우에만 포함)
+        resource_title:
+          type: string
+          description: 리소스 제목
+        resource_type:
+          type: string
+          description: 리소스 타입 (campaign 또는 user-journey)
+        campaign_id:
+          type: string
+          nullable: true
+          description: 캠페인 ID
+        experiment_group_name:
+          type: string
+          nullable: true
+          description: A/B 테스트 그룹 이름
+        user_journey_id:
+          type: string
+          nullable: true
+          description: 유저 여정 ID
+        user_journey_node_id:
+          type: string
+          nullable: true
+          description: 유저 여정 노드 ID
+        time:
+          type: string
+          description: 이벤트 발생 시간 (마이크로초 타임스탬프)
+        message_data:
+          type: object
+          description: 메시지 데이터 (채널별로 상이한 구조, 자세한 예시는 위의 메시지 데이터 예시 참조)
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: POST /authenticate로 발급받은 인증 토큰
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: POST /authenticate로 발급받은 인증 토큰

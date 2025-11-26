@@ -1,0 +1,408 @@
+/* =========================
+   0) Font: Pretendard
+   - Use variable font if possible; fallback to static.
+========================= */
+
+/* Variable (preferred) */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css");
+
+/* Static fallback (uncomment only if variable fails) */
+/* @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"); */
+
+:root {
+  /* Brand palette */
+  --notifly-primary: #0144cd;
+  --notifly-primary-600: #0144cd; /* main */
+  --notifly-primary-700: #003bb5; /* hover/darker */
+  --notifly-primary-100: #e8f0ff; /* subtle background */
+  --notifly-ink: #0b1220;         /* body text */
+  --notifly-muted: #5a6473;       /* secondary text */
+  --notifly-border: #e6e8ec;
+
+  /* Map to Mintlify theme tokens where available */
+  --mint-color-primary: var(--notifly-primary);
+  --mint-color-primary-contrast: #ffffff;
+  --mint-color-fg: var(--notifly-ink);
+  --mint-color-muted: var(--notifly-muted);
+  --mint-border-color: var(--notifly-border);
+
+  /* Typography scale */
+  --notifly-h1: 2rem;
+  --notifly-h2: 1.5rem;
+  --notifly-h3: 1.25rem;
+  --notifly-body: 1rem;
+  --notifly-small: 0.9375rem;
+}
+
+/* Global font + color */
+html, body {
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple SD Gothic Neo",
+               "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji",
+               "Segoe UI Symbol", sans-serif !important;
+  color: var(--notifly-ink);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings: crisp weights and tighter tracking */
+.mdx-content h1, .page-title {
+  font-size: var(--notifly-h1);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.mdx-content h2 {
+  font-size: var(--notifly-h2);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.mdx-content h3 {
+  font-size: var(--notifly-h3);
+  font-weight: 600;
+}
+
+/* Links */
+a, .link {
+  color: var(--notifly-primary);
+  text-underline-offset: 2px;
+}
+a:hover, .link:hover {
+  color: var(--notifly-primary-700);
+}
+
+/* Primary CTAs (Topbar + generic) */
+.topbar-cta-button,
+.topbar-cta-button a,
+button.tryit-button,
+.navbar .button-primary,
+.button-primary {
+  background: var(--notifly-primary) !important;
+  color: #fff !important;
+  border: 1px solid var(--notifly-primary) !important;
+  box-shadow: none !important;
+}
+.topbar-cta-button:hover,
+button.tryit-button:hover,
+.navbar .button-primary:hover,
+.button-primary:hover {
+  background: var(--notifly-primary-700) !important;
+  border-color: var(--notifly-primary-700) !important;
+}
+
+/* Tabs (top nav bar items) */
+.nav-tabs, .tabs, .TabsBar, .nav-tabs-item {
+  --tab-active: var(--notifly-primary);
+}
+.nav-tabs-item[aria-selected="true"],
+.tabs [aria-selected="true"] {
+  color: var(--notifly-primary);
+  border-bottom-color: var(--notifly-primary);
+}
+
+/* Sidebar */
+.sidebar, .Sidebar, .sidebar-content {
+  font-family: inherit;
+}
+.sidebar-group-header, .SidebarGroupHeader {
+  font-weight: 700;
+}
+.sidebar a, .sidebar .link, .Sidebar a {
+  color: var(--notifly-ink);
+}
+.sidebar a:hover, .Sidebar a:hover {
+  color: var(--notifly-primary);
+}
+.sidebar-title, .SidebarTitle {
+  color: var(--notifly-muted);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: .06em;
+}
+.sidebar-group-icon {
+  color: var(--notifly-primary);
+}
+
+/* Breadcrumbs / Eyebrow */
+.eyebrow, .Eyebrow {
+  color: var(--notifly-muted);
+}
+
+/* Code blocks & inline code */
+code, pre code, .code-block, .CodeBlock {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+               "Courier New", monospace !important;
+}
+.code-block, .CodeBlock {
+  border: 1px solid var(--notifly-border);
+}
+code {
+  background: #f6f8fa;
+  border-radius: 6px;
+  padding: 0.1rem 0.3rem;
+}
+
+/* Method/Tag Pills in API Reference */
+.method-pill, .MethodPill,
+.method-nav-pill, .MethodNavPill,
+.nav-tag-pill, .NavTagPill {
+  /* background: var(--notifly-primary-100); */
+  text-align: center;
+  color: var(--notifly-primary);
+  font-weight: 600;
+}
+
+/* API Playground inputs + request/response panels */
+.api-playground-input, .APIPlaygroundInput,
+.RequestExample, .request-example,
+.ResponseExample, .response-example,
+.panel, .Panel {
+  border-color: var(--notifly-border) !important;
+}
+.api-playground-input:focus-within,
+.search-input:focus,
+.field:focus-within {
+  outline: 2px solid var(--notifly-primary);
+  outline-offset: 2px;
+}
+
+/* Search */
+.search-input, .SearchInput {
+  border: 1px solid var(--notifly-border);
+}
+.search-input:focus {
+  border-color: var(--notifly-primary);
+}
+
+/* Callouts */
+.callout, .Callout {
+  border-left: 4px solid var(--notifly-primary);
+  background: #f8fbff;
+}
+
+/* Table of contents */
+.table-of-contents a, .toc a, .TableOfContents a {
+  color: var(--notifly-ink);
+}
+.table-of-contents a:hover, .toc a:hover, .TableOfContents a:hover {
+  color: var(--notifly-primary);
+}
+
+/* Pagination */
+.pagination-title, .PaginationTitle {
+  color: var(--notifly-primary);
+}
+
+/* Selection + focus */
+::selection {
+  background: rgba(1, 68, 205, 0.18);
+}
+
+/* Footer */
+.footer, .Footer {
+  border-top: 1px solid var(--notifly-border);
+}
+
+
+
+/* ======================================
+   Notifly Blue Cards — Pretendard + White Text
+   Uses: .card-content, .card-title, .card-content-container, .card-icon
+====================================== */
+
+/* Load Pretendard (variable) once globally */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css");
+
+/* =========================================
+   Notifly Blue Cards (wrapper-scoped)
+   Works with nested <Columns> → <Card> DOM
+   ========================================= */
+
+.doccards-gray a.card {
+  background-color: #FFFFFF !important;   /* override bg-white */
+  border-color: #B6BBC1 !important;
+  color: #000000 !important;
+  border-radius: 1.25rem;                  /* rounded-2xl */
+  box-shadow: none !important;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple SD Gothic Neo",
+               "Noto Sans KR", sans-serif !important;
+}
+
+.doccards-gray a.card:hover,
+.doccards-gray a.card:focus-visible {
+  background-color: #FFFFFF !important;
+  border-color: #000000 !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(1, 68, 205, .35);
+  outline: none;
+}
+
+/* Title */
+.doccards-gray a.card [data-component-part="card-title"] {
+  color: #000000 !important;
+  font-weight: 700 !important;
+  font-size: 17px !important;
+}
+
+/* Body text → force soft white over prose defaults */
+.doccards-gray a.card [data-component-part="card-content"],
+.doccards-gray a.card [data-component-part="card-content"] * {
+  color: #727272 !important;
+  font-size: 14px !important;
+}
+
+/* Icon: Mintlify uses a masked SVG whose visible "color" is its background */
+.doccards-gray a.card [data-component-part="card-icon"] {
+  color: #727272 !important;    /* for font icons */
+  fill: #727272 !important;     /* for inline SVG fills */
+}
+.doccards-gray a.card [data-component-part="card-icon"] > svg {
+  background-color: #727272 !important; /* <- this paints the masked glyph white */
+}
+
+/* Optional: adjust the little arrow icon on hover */
+.doccards-gray a.card #card-link-arrow-icon {
+  color: #000000 !important;
+}
+.doccards-gray a.card:hover #card-link-arrow-icon {
+  color: #000000 !important;
+}
+
+/* ======================================
+   Notifly Table Styling (Mintlify MDX)
+   ====================================== */
+.mdx-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  table-layout: fixed;
+  border-radius: 10px !important;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple SD Gothic Neo",
+               "Noto Sans KR", sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  border: 1px solid #DFE0E4;
+}
+
+/* Header */
+.mdx-content th {
+  background-color: #F6F6F7;
+  color: #000000;
+  font-weight: 600;
+  text-align: left;
+  padding: 14px 18px;
+  border: 1px solid #DFE0E4;
+}
+
+/* Body cells */
+.mdx-content td {
+  background-color: #ffffff;
+  color: #1b1f23;
+  padding: 12px 18px;
+  border: 1px solid #DFE0E4;
+  vertical-align: middle;
+}
+
+/* Make sure tbody and thead match table width */
+.mdx-content thead,
+.mdx-content tbody {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* Fix floating border issue in Mintlify’s prose mode */
+.mdx-content thead tr,
+.mdx-content tbody tr {
+  display: table-row;
+  width: 100%;
+}
+
+
+/* Left-align the first column */
+.mdx-content td:first-child,
+.mdx-content th:first-child {
+  text-align: left;
+  font-weight: 500;
+}
+
+/* Zebra striping */
+.mdx-content tr:nth-child(even) td {
+  background-color: #f9fafc;
+}
+
+/* Hover highlight */
+.mdx-content tr:hover td {
+  background-color: #eff6ff;
+}
+
+/* ✅ Responsive tweaks for narrow screens */
+@media (max-width: 768px) {
+  .mdx-content table {
+    font-size: 0.9rem;
+  }
+  .mdx-content th,
+  .mdx-content td {
+    padding: 8px 10px;
+  }
+}
+
+/* =======================
+   Dark mode
+   ======================= */
+/* @media (prefers-color-scheme: dark) {
+  .mdx-content table {
+    border-color: #000000;
+  }
+  .mdx-content th {
+    background-color: #ffffff !important;
+    border: 1px solid #000000;
+    color: #000000;
+  }
+  .mdx-content td {
+    background-color: #ffffff !important;
+    color: #1b1f23;
+    border: 1px solid #e5e7eb;
+  }
+  .mdx-content tr:nth-child(even) td {
+    background-color: #f9fafc;
+  }
+  .mdx-content tr:hover td {
+    background-color: #eff6ff;
+  }
+} */
+
+/* Steps component styling using Notifly theme tokens */
+.steps .step [data-component-part="step-number"] .size-7 {
+  background-color: var(--notifly-primary-600) !important; /* circle */
+  color: var(--mint-color-primary-contrast) !important;    /* number (white) */
+}
+
+.steps .step > .absolute.w-px {
+  background-color: var(--notifly-primary-600) !important; /* vertical line */
+  opacity: 1 !important;
+}
+
+/* Optional: hide connector for the last step */
+.steps .step:last-of-type > .absolute.w-px {
+  display: none;
+}
+
+/* (Optional) hover/focus enhancement */
+.steps .step:hover [data-component-part="step-number"] .size-7 {
+  background-color: var(--notifly-primary-700) !important; /* darker blue */
+}
+
+.eyebrow {
+   color: var(--notifly-primary-600) !important;  
+}
+
+/* Override Mintlify blockquote styling to use Notifly brand blue */
+.prose :where(blockquote):not(:where([class~=not-prose],[class~=not-prose] *)) {
+  border-inline-start-color: var(--notifly-primary-600); /* Notifly blue */
+}

@@ -1,0 +1,413 @@
+---
+title: "푸시 알림 클릭 이벤트 구독"
+description: "노티플라이 SDK 심화 기능 연동"
+---
+
+<Tabs>
+  <Tab title="Android">
+
+  <Info> 해당 기능은 노티플라이 Android SDK 1.5.0 이상 버전부터 지원됩니다. </Info>
+
+  노티플라이 Android SDK에서는 푸시 알림 클릭 이벤트를 구독하여 유저가 푸시 알림을 클릭했을 때 앱 내에서 특정 동작을 수행하도록 커스터마이즈 할 수 있습니다.
+
+  ```kotlin
+    
+    package com.your.project
+
+    import android.app.Application
+    import android.util.Log
+    import tech.notifly.Notifly
+    import tech.notifly.push.interfaces.INotificationClickEvent
+    import tech.notifly.push.interfaces.INotificationClickListener
+
+    class SampleApplication : Application() {
+        override fun onCreate() {
+            super.onCreate()
+
+            // Optional: Set log level
+            Notifly.setLogLevel(Log.VERBOSE)
+
+            // Initialize Notifly SDK
+            Notifly.initialize(
+                context = applicationContext,
+                projectId = BuildConfig.NOTIFLY_PROJECT_ID,
+                username = BuildConfig.NOTIFLY_USERNAME,
+                password = BuildConfig.NOTIFLY_PASSWORD,
+            )
+
+            // Subscribe for push notification click event
+            Notifly.addNotificationClickListener(object : INotificationClickListener {
+                override fun onClick(event: INotificationClickEvent) {
+                    Log.d("SampleApplication", "Notification clicked!")
+
+                    Log.d("SampleApplication", "Notification title: ${event.notification.title}")
+                    Log.d("SampleApplication", "Notification body: ${event.notification.body}")
+                    Log.d(
+                        "SampleApplication",
+                        "Notification custom data: ${event.notification.customData}"
+                    )
+                }
+            })
+        }
+    }
+
+  ```
+  </Tab>
+<Tab title="Flutter">
+  
+  <Info> 해당 기능은 노티플라이 Flutter SDK 1.4.0 이상 버전부터 지원됩니다.</Info>
+
+    노티플라이 Flutter SDK에서는 푸시 알림 클릭 이벤트를 구독하여 유저가 푸시 알림을 클릭했을 때 앱 내에서 특정 동작을 수행하도록 커스터마이즈 할 수 있습니다. 아래 예시는 Go Router 라이브러리를 사용하여 푸시 알림 클릭 이벤트를 구독하고, 푸시 알림 클릭 시 특정 페이지로 이동하는 예시입니다.
+    
+    ```dart
+    import 'dart:io';
+    import 'package:flutter/foundation.dart';
+    import 'package:flutter/material.dart';
+    import 'package:flutter_dotenv/flutter_dotenv.dart';
+    import 'package:go_router/go_router.dart';
+    import 'package:notifly_flutter/notifly_flutter.dart';
+    import 'package:notifly_flutter_example/src/DetailPage.dart';
+    import 'package:notifly_flutter_example/src/HomePage.dart';
+
+    void main() async {
+    await dotenv.load();
+    runApp(const MyApp());
+    }
+
+    final router = GoRouter(
+    routes: [
+        GoRoute(
+        path: '/',
+        builder: (context, state) => const HomePage(),
+        ),
+        GoRoute(
+        path: '/:id',
+        builder: (context, state) {
+            final pathId = state.pathParameters['id']!;
+            return DetailPage(id: pathId);
+        },
+        )
+    ],
+    );
+
+    class MyApp extends StatefulWidget {
+    const MyApp({super.key});
+
+    @override
+    _MyAppState createState() => _MyAppState();
+    }
+
+    class _MyAppState extends State<MyApp> {
+    Future<void> initNotifly() async {
+        WidgetsFlutterBinding.ensureInitialized();
+
+        await NotiflyPlugin.initialize(
+        projectId: dotenv.env['NOTIFLY_PROJECT_ID']!,
+        username: dotenv.env['NOTIFLY_USERNAME']!,
+        password: dotenv.env['NOTIFLY_PASSWORD']!,
+        );
+
+        print('🔥 [Flutter] NotiflyPlugin initialized');
+
+        if (!kIsWeb && Platform.isAndroid) {
+        await NotiflyPlugin.addNotificationClickListener((event) {
+            final customData = event.notification.customData;
+            if (customData != null) {
+            final routeId = customData['routeId'];
+            if (routeId != null) {
+                router.go('/$routeId');
+            }
+            }
+        });
+        }
+    }
+
+    @override
+    void dispose() {
+        super.dispose();
+    }
+
+    @override
+    void initState() {
+        super.initState();
+        initNotifly();
+    }
+    }
+    ```
+</Tab>
+</Tabs>
+
+## 푸시 알림 클릭 이벤트 인터페이스
+
+<Tabs>
+  <Tab title="Android">
+
+  `INotificationClick` 의 `notification` 객체에 접근하여, 유저가 어떠한 푸시를 클릭했는지에 대한 정보를 확인할 수 있습니다.
+
+    아래는 `INotification` 객체의 속성들에 대한 설명입니다.
+
+    <Expandable title="INotification Properties">
+        <ResponseField name="androidNotificationId" type="Int">
+        Android system-level 푸시 알림 ID입니다. (Since 1.5.0)
+        </ResponseField>
+
+        <ResponseField name="campaignId" type="String?">
+        푸시 알림이 발송된 노티플라이 캠페인의 ID입니다. (Since 1.5.0)
+        </ResponseField>
+
+        <ResponseField name="body" type="String?">
+        푸시 메시지의 내용입니다. (Since 1.5.0)
+        </ResponseField>
+
+        <ResponseField name="title" type="String">
+        푸시 메시지의 제목입니다. (Since 1.5.0)
+        </ResponseField>
+
+        <ResponseField name="url" type="String">
+        푸시 메시지가 클릭되었을 때 이동할 URL입니다. 만약 '앱 실행' 액션으로 푸시 알림을 발송하였다면, `null` 값이 반환됩니다. (Since 1.5.0)
+        </ResponseField>
+
+        <ResponseField name="customData" type="HashMap<String, String>">
+        FCM 푸시 메시지의 `data` 필드에 포함된 키-값 쌍의 커스텀 데이터입니다. 노티플라이 콘솔에서 설정할 수 있습니다. (Since 1.5.0)
+        </ResponseField>
+
+        <ResponseField name="imageUrl" type="String?">
+        이미지형 푸시 메시지에 포함된 이미지 URL 입니다. (Since 1.5.0)
+        </ResponseField>
+
+        <ResponseField name="importance" type="Importance">
+        Importance 는 `tech.notifly.push.impl.Importance` 에 정의되어 있으며, `Importance.HIGH`, `Importance.NORMAL`, `Importance.LOW` 중 하나의 값입니다. (Since 1.5.0)
+        </ResponseField>
+
+        <ResponseField name="notiflyMessageId" type="String?">
+        노티플라이 서버에서 임의로 생성한 메시지 ID입니다. (Since 1.5.0)
+        </ResponseField>
+
+        <ResponseField name="rawPayload" type="String">
+        FCM data의 가공되지 않은 payload입니다. JSON을 stringify한 형태로 반환됩니다. (Since 1.5.0)
+        </ResponseField>
+
+        <ResponseField name="sentTime" type="Long">
+        FCM 서버에서 푸시 알림을 발송한 시간입니다. (Since 1.5.0)
+        </ResponseField>
+
+        <ResponseField name="ttl" type="Int">
+        푸시 알림의 TTL(Time To Live) 값입니다. (Since 1.5.0)
+        </ResponseField>
+    </Expandable>
+  
+  </Tab>
+<Tab title="Flutter">
+  
+  `OSNotificationClickEvent`의 `notification` 멤버에 접근하여, 유저가 클릭한 푸시에 대한 정보를 확인할 수 있습니다.
+
+    ```dart
+    /// Callback for handling received notifications.
+typedef NotificationClickListener = void Function(
+  OSNotificationClickEvent event,
+);
+
+/// Represents a notification received from the Notifly service.
+enum OSNotificationImportance {
+  /// The notification is of low importance.
+  low,
+
+  /// The notification is of normal importance.
+  normal,
+
+  /// The notification is of high importance.
+  high,
+}
+
+/// Represents a notification received from the Notifly service.
+class OSNotification extends JSONStringRepresentable {
+  /// The Notifly message ID of the notification.
+  String? notiflyMessageId;
+
+  /// (Only Android) The Android system notification ID of the notification.
+  int? androidNotificationId;
+
+  /// Notifly campaign ID where the notification was sent from.
+  String? campaignId;
+
+  /// Notification title
+  String? title;
+
+  /// Notification body
+  String? body;
+
+  /// (Only Android) Importance of the notification.
+  OSNotificationImportance? importance;
+
+  /// URL included in the notification.
+  String? url;
+
+  /// URL to the image included in the notification.
+  String? imageUrl;
+
+  /// Sent time of the notification in milliseconds since epoch
+  int? sentTime;
+
+  /// TTL of the notification in seconds
+  int? ttl;
+
+  /// Customized data included in the notification.
+  Map<String, dynamic>? customData;
+
+  /// Raw payload of the notification.
+  Map<String, dynamic>? rawPayload;
+}
+
+/// Represents a notification click event.
+class OSNotificationClickEvent {
+  OSNotification notification;
+}
+
+    ```
+
+    아래는 `OSNotification` 객체의 속성들에 대한 설명입니다.
+
+    <Expandable title="OSNotification Properties">
+        <ResponseField name="androidNotificationId" type="int?">
+        Android system-level 푸시 알림 ID입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="campaignId" type="String?">
+        푸시 알림이 발송된 노티플라이 캠페인의 ID입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="body" type="String?">
+        푸시 메시지의 내용입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="title" type="String?">
+        푸시 메시지의 제목입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="url" type="String?">
+        푸시 메시지가 클릭되었을 때 이동할 URL입니다. 만약 '앱 실행' 액션으로 푸시 알림을 발송하였다면, `null` 값이 반환됩니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="customData" type="Map<String, dynamic>?">
+        FCM 푸시 메시지의 `data` 필드에 포함된 키-값 쌍의 커스텀 데이터입니다. 노티플라이 콘솔에서 설정할 수 있습니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="imageUrl" type="String?">
+        이미지형 푸시 메시지에 포함된 이미지 URL 입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="importance" type="Importance">
+        `Importance.high`, `Importance.normal`, `Importance.low` 중 하나의 값입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="notiflyMessageId" type="String?">
+        노티플라이 서버에서 임의로 생성한 메시지 ID입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="rawPayload" type="Map<String, dynamic>?">
+        FCM data의 가공되지 않은 payload입니다. JSON을 stringify한 형태로 반환됩니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="sentTime" type="int?">
+        FCM 서버에서 푸시 알림을 발송한 시간입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="ttl" type="int?">
+        푸시 알림의 TTL(Time To Live) 값입니다. (Since 1.4.0)
+        </ResponseField>
+    </Expandable>
+
+</Tab>
+<Tab title="React">
+
+`OSNotificationClickEvent`의 `notification` 멤버에 접근하여, 유저가 클릭한 푸시 알림의 정보를 확인할 수 있습니다.
+
+```TypeScript
+export type NotificationClickListener = (
+  event: OSNotificationClickEvent,
+) => void;
+
+export declare enum OSNotificationImportance {
+  LOW = 0,
+  NORMAL = 1,
+  HIGH = 2,
+}
+
+export interface OSNotificationClickEvent {
+  notification: OSNotification;
+}
+
+export interface OSNotification {
+  notiflyMessageId?: string;
+  androidNotificationId?: number;
+  campaignId?: string;
+  title?: string;
+  body?: string;
+  importance?: OSNotificationImportance;
+  url?: string;
+  imageUrl?: string;
+  sentTime?: number;
+  ttl?: number;
+  customData?: {
+    [key: string]: any;
+  };
+  rawPayload?: {
+    [key: string]: any;
+  };
+}
+```
+
+아래는 `OSNotification` 객체의 속성들에 대한 설명입니다.
+
+    <Expandable title="OSNotification Properties">
+        <ResponseField name="androidNotificationId" type="number">
+        Android system-level 푸시 알림 ID입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="campaignId" type="String?">
+        푸시 알림이 발송된 노티플라이 캠페인의 ID입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="body" type="String?">
+        푸시 메시지의 내용입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="title" type="String?">
+        푸시 메시지의 제목입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="url" type="String?">
+        푸시 메시지가 클릭되었을 때 이동할 URL입니다. 만약 '앱 실행' 액션으로 푸시 알림을 발송하였다면, `null` 값이 반환됩니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="customData" type="{[key: string]: any}?">
+        FCM 푸시 메시지의 `data` 필드에 포함된 키-값 쌍의 커스텀 데이터입니다. 노티플라이 콘솔에서 설정할 수 있습니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="imageUrl" type="String?">
+        이미지형 푸시 메시지에 포함된 이미지 URL 입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="importance" type="OSNotificationImportance">
+        `OSNotificationImportance.HIGH`, `OSNotificationImportance.NORMAL`, `OSNotificationImportance.LOW` 중 하나의 값입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="notiflyMessageId" type="String?">
+        노티플라이 서버에서 임의로 생성한 메시지 ID입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="rawPayload" type="{[key: string]: any}?">
+        FCM data의 가공되지 않은 payload입니다. JSON을 stringify한 형태로 반환됩니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="sentTime" type="number">
+        FCM 서버에서 푸시 알림을 발송한 시간입니다. (Since 1.4.0)
+        </ResponseField>
+
+        <ResponseField name="ttl" type="number">
+        푸시 알림의 TTL(Time To Live) 값입니다. (Since 1.4.0)
+        </ResponseField>
+    </Expandable>
+
+</Tab>
+</Tabs>

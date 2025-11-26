@@ -1,0 +1,80 @@
+---
+title: API 에러 코드 및 응답 형식
+description: 노티플라이 API의 표준 에러 응답 구조와 HTTP 상태코드별 처리 가이드
+---
+
+# API 에러 응답 구조
+
+노티플라이 API는 공통적으로 아래 **표준 응답 포맷**을 사용합니다.
+
+```json
+{ "success": false, "code": 400, "error": "Bad request: 상세 메시지" }
+```
+
+일부 엔드포인트는 다음과 같이 최소형/대체 포맷을 사용할 수 있습니다.
+
+```json
+{ "error": "Bad request: 상세 메시지" }
+```
+
+성공 응답의 일반적인 형태 예시:
+
+```json
+{ "success": true }
+```
+
+또는
+
+```json
+{ "data": "...", "error": null }
+```
+
+---
+
+## HTTP 상태 코드
+
+| Code | Name                      | 의미/원인 (예시)                                  | 주로 발생하는 위치                  | 권장 조치 |
+|-----:|---------------------------|---------------------------------------------------|-------------------------------------|-----------|
+| 200  | OK                        | 요청 성공                                         | 전 엔드포인트                       | —         |
+| 400  | Bad Request               | 스키마 오류, 필수값 누락, 잘못된 값/형식         | Body/Query/Path 검증                | 요청 파라미터/바디 수정 후 재시도 |
+| 401  | Unauthorized              | 토큰 만료/무효, 인증 실패                         | 인증이 필요한 모든 엔드포인트       | 토큰 재발급(POST `/authenticate`) |
+| 403  | Forbidden _(옵션)_        | 프로젝트/리소스 접근 권한 없음                    | 권한 제어가 있는 리소스             | 권한 확인/부여 요청               |
+| 404  | Not Found _(옵션)_        | 대상 리소스(예: campaignId, user) 없음            | 캠페인/유저 조회형/트리거         | ID/경로 재확인                    |
+| 405  | Method Not Allowed        | 지원하지 않는 HTTP 메서드                         | 오퍼레이션 미스매치                 | 메서드 교정 (예: POST/DELETE)     |
+| 409  | Conflict _(옵션)_         | 중복/상태 충돌(템플릿 상태 등)                    | 리소스 생성/갱신/상태 전이          | 리소스 상태 확인 후 재요청        |
+| 413  | Payload Too Large         | 요청 본문/배치 크기 제한 초과                     | 배치(예: 1000명 초과)               | 청크 분할/크기 축소               |
+| 429  | Too Many Requests _(옵션)_| 레이트 리밋 초과                                  | 고빈도 호출 엔드포인트              | 지수 백오프 후 재시도             |
+| 500  | Internal Server Error     | 서버 내부 오류                                    | 전 엔드포인트                       | 재시도, 지속 시 문의              |
+| 501  | Not Implemented           | 아직 미지원                                       | 일부 베타/로드맵 항목               | 문서/로드맵 확인                  |
+
+---
+
+## 에러 응답 예시
+
+### 400 잘못된 요청
+```json
+{ "success": false, "code": 400, "error": "Bad request: eventName missing" }
+```
+
+### 401 인증 실패
+```json
+{ "success": false, "code": 401, "error": "Unauthorized: Invalid token" }
+```
+
+### 413 요청 크기 초과
+```json
+{ "success": false, "code": 413, "error": "Payload too large" }
+```
+
+### 500 서버 내부 오류
+```json
+{ "success": false, "code": 500, "error": "Internal Server Error" }
+```
+
+---
+
+## 에러 처리 가이드
+
+- **토큰 만료**가 의심되면 `POST /authenticate`로 즉시 재발급 후 재시도하세요.  
+- **배치 한도(예: 1,000건)** 를 넘는 경우 요청을 **여러 청크**로 분할하세요.  
+- 재시도 가능한 오류(429, 일부 500)는 **지수 백오프** 전략을 사용하세요.

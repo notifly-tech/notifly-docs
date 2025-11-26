@@ -1,0 +1,31 @@
+---
+title: "랜덤 버킷 넘버"
+description: "랜덤 버킷 넘버를 사용하여 일부 유저에게만 캠페인을 실행할 수 있습니다."
+---
+
+* 노티플라이에 유저가 등록이 되면, 유저 속성 값으로 자동 생성되는 버킷 넘버를 사용할 수 있습니다.
+* 랜덤 버킷 넘버는 0부터 9999까지의 숫자로 구성되며, 각 유저에 할당된 버킷 넘버는 유저 리스트 페이지에서 확인할 수 있습니다.
+* 유저에게 할당된 랜덤 버킷 넘버는 균일하게 분포되어 있으며 유저가 등록된 시점에 랜덤으로 할당됩니다. 따라서 유저 그룹 내에서 랜덤하게 분포되어 있는 유저를 선택하고자 할 때 활용할 수 있습니다.
+
+![random bucket in user list](/ko/user-guide/images/user-guide/campaigns/campaign-segments/ko/assets/images/user_list_random_bucket_number-358f20bdf353aee3abaaa355fb39bd97.png)
+
+## 랜덤 버킷 넘버 활용하기
+
+랜덤 버킷을 이용하여 유저 그룹을 나누어 다양하게 활용할 수 있습니다.
+
+### 활용 방안 예시: 점진적 캠페인 노출
+
+* 본 캠페인을 집행하기 전, 일부 유저에게만 먼저 캠페인을 실험해보고자 할 때 활용할 수 있습니다.
+
+* 예시: 새로운 캠페인을 진행하기 전, 10%의 유저에게 먼저 캠페인을 진행해보고 캠페인의 효과를 확인한 후 나머지 90%의 유저에게 캠페인을 진행합니다.
+
+  * 다음 예시에서는 랜덤 버킷 넘버가 0\~999인 유저를 약 10%의 유저로 설정하고, 랜덤 버킷 넘버가 1000\~9999인 유저를 약 90%의 유저로 설정하여 진행합니다.
+
+    * 예비 캠페인(캠페인 A): 랜덤 버킷 넘버가 0\~999인 유저를 대상으로 진행
+    * 본 캠페인(캠페인 B): 랜덤 버킷 넘버가 1000\~9999인 유저를 대상으로 진행
+      * 예비 캠페인에 노출된 유저에게는 본 캠페인이 노출되지 않게 할 수 있습니다.
+    * 캠페인 A와 B의 콘텐츠는 노출할 대상을 제외하고 모두 동일합니다.
+
+  * 캠페인 A를 먼저 집행해본 후, 캠페인 B를 노출시킴으로써 점진적으로 캠페인 대상을 늘려갈 수 있습니다.
+
+  ![random bucket number 1](/ko/user-guide/images/user-guide/campaigns/campaign-segments/ko/assets/images/campaign_segment_random_bucket_number_pre-ef4d01b6efbf924ef3143bbba4fed9fe.png)![random bucket number 1](/ko/user-guide/images/user-guide/campaigns/campaign-segments/ko/assets/images/campaign_segment_random_bucket_number_main-4038bd5112cb87c5a48eda368b57fa0c.png)

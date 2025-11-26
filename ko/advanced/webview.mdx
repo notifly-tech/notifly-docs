@@ -1,0 +1,64 @@
+---
+title: "웹뷰"
+description: "노티플라이 SDK 심화 기능 연동"
+---
+
+<Tabs>
+<Tab title="Android">
+노티플라이 Android SDK는 인앱 팝업(In-App Message) 를 표시하기 위해 내부적으로 WebView를 사용합니다.
+
+Android 환경에서는 앱이 백그라운드에 있을 때도 WebView의 JavaScript 코드가 계속 실행될 수 있어, 불필요한 자원 소모가 발생할 수 있습니다. 
+이를 방지하기 위해 Activity의 Lifecycle에 따라 `pauseTimers()`와 `resumeTimers()`를 적절히 호출하여 WebView의 실행 상태를 제어하는 것이 권장됩니다.
+
+## 1. WebView 타이머 제어
+
+`pauseTimers()`와 `resumeTimers()` 메서드는 특정 WebView 인스턴스만이 아니라 앱 전체의 WebView에 전역적으로 적용됩니다.
+따라서, 앱 내에 여러 WebView가 존재하는 경우에는 두 메서드 호출 시 다른 WebView의 동작에도 영향을 미칠 수 있으므로 주의가 필요합니다.
+
+## 2. SDK 1.8.0 미만 버전의 동작
+
+노티플라이 Android SDK 1.8.0 미만 버전에서는
+인앱 팝업 Activity가 시작/종료될 때 SDK 내부에서 `pauseTimers()`와 `resumeTimers()`를 자동으로 호출했습니다.
+
+다음은 해당 버전에서 인앱 팝업을 표시하는 Activity의 예시 코드입니다:
+
+```kotlin highlight={11, 16}
+package tech.notifly.inapp
+
+import android.app.Activity
+// ...
+
+class NotiflyInAppMessageActivity : Activity() {
+    // ...
+
+    override fun onPause() {
+        super.onPause()
+        mNotiflyWebView?.pauseTimers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mNotiflyWebView?.resumeTimers()
+    }
+
+    // ...
+}
+
+```
+
+## 3. 잠재적 문제 및 대응
+
+이전 버전(1.8.0 미만)의 경우, 인앱 팝업이 닫힌 직후 `pauseTimers()`가 호출되면 앱 내의 다른 WebView가 함께 정지되어 동작하지 않는 문제가 발생할 수 있습니다.
+
+이러한 상황에서는 다음과 같이 `resumeTimers()`를 명시적으로 호출하여 WebView를 다시 활성화하세요.
+
+```kotlin
+WebView.resumeTimers()
+```
+
+## 4. 인앱 팝업이 표시되지 않을 경우
+
+인앱 팝업이 정상적으로 표시되지 않는다면, 해당 시점에 WebView가 정상적으로 동작 중인지(즉, `pauseTimers()`로 인해 정지 상태가 아닌지)를 반드시 확인해야 합니다.
+
+</Tab>
+</Tabs>

@@ -1,0 +1,265 @@
+---
+title: API 개요
+---
+
+노티플라이 HTTP API는 **JSON over HTTPS** 방식의 REST 엔드포인트로 구성됩니다.  
+아래 개요와 **빠른 이동 카드**로 주요 문서로 바로 이동하세요.
+
+---
+
+## 기본 정보
+
+| 항목 | 값 |
+|---|---|
+| Base URL | `https://api.notifly.tech` |
+| Media Type | `application/json` |
+| Auth | `POST /authenticate`로 토큰 발급 후 `Authorization` 헤더에 전달 |
+| Charset | UTF-8 |
+| Timezone | ISO 8601 (예: `2025-10-11T12:34:56Z`) |
+
+### 공통 헤더
+
+| Header | Value | 비고 |
+|---|---|---|
+| `Content-Type` | `application/json` | 요청 본문 JSON |
+| `Authorization` | `<auth-token>` | 인증 토큰(로그인/세션 아님) |
+
+> 토큰 유효기간은 1시간. 만료 시 재발급 후 재시도하세요.
+
+---
+
+## 요청/응답 패턴
+
+```http
+POST /some-endpoint HTTP/1.1
+Host: api.notifly.tech
+Content-Type: application/json
+Authorization: <auth-token>
+
+{ "example": "payload" }
+```
+
+```json
+{
+  "success": true,
+  "data": { "example": "response" },
+  "error": null
+}
+```
+
+에러 응답은 공통 에러 모델을 따릅니다. 자세한 필드는 **Error Model** 문서를 참고하세요.
+
+---
+
+## 인증 → 호출까지 최소 예시
+
+```js
+// 1) 토큰 발급
+const authRes = await fetch("https://api.notifly.tech/authenticate", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    accessKey: "your-access-key",
+    secretKey: "your-secret-key"
+  })
+});
+const { data: authToken } = await authRes.json();
+
+// 2) API 호출
+const res = await fetch("https://api.notifly.tech/track-event", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": authToken
+  },
+  body: JSON.stringify({
+    projectId: "your-project-id",
+    eventName: "view_home",
+    isGlobalEvent: false,
+    userId: "alice",
+    eventParams: { plan: "premium" }
+  })
+});
+console.log(await res.json());
+```
+
+---
+
+## 빠른 이동
+
+<div class="card-group doccards-gray">
+<Columns cols={2}>
+
+  <Card
+    title="Authentication"
+    icon="key-square"
+    href="/api-reference/authenticate"
+    horizontal
+  >
+    토큰 발급 (`POST /authenticate`) — 예제 코드 포함
+  </Card>
+
+  <Card
+    title="Error Model"
+    icon="square-x"
+    href="/ko/api-reference/error"
+    horizontal
+  >
+    표준 에러 스키마 & 상태코드 레퍼런스
+  </Card>
+
+</Columns>
+</div>
+
+---
+
+## 이벤트 & 유저
+
+<div class="card-group doccards-gray">
+<Columns cols={3}>
+
+  <Card
+    title="Track Event"
+    icon="chart-line"
+    href="/api-reference/track-event"
+  >
+    유저/전역 이벤트 전송
+  </Card>
+
+  <Card
+    title="Set User Properties"
+    icon="user-cog"
+    href="/api-reference/set-user-properties"
+  >
+    유저 속성 등록/갱신(배치 지원)
+  </Card>
+
+  <Card
+    title="Delete Users"
+    icon="user-minus"
+    href="/api-reference/delete-users"
+  >
+    유저 삭제(단건/다건)
+  </Card>
+
+</Columns>
+</div>
+
+---
+
+## 캠페인/여정
+
+<div class="card-group doccards-gray">
+<Columns cols={2}>
+
+    <Card
+    title="Campaign"
+    icon="scroll"
+    href="/api-reference/trigger-campaign"
+  >
+    캠페인 트리거
+  </Card>
+
+    <Card
+    title="User Journey"
+    icon="route"
+    href="/api-reference/trigger-user-journey"
+  >
+    유저 여정 트리거
+  </Card>
+
+</Columns>
+</div>
+
+---
+
+## 메시징
+
+<div class="card-group doccards-gray">
+<Columns cols={3}>
+
+  <Card
+    title="Text Message (SMS/MMS)"
+    icon="message"
+    href="/api-reference/send-text-message"
+  >
+    SMS/LMS/MMS 발송
+  </Card>
+
+  <Card
+    title="Kakao Alimtalk"
+    icon="megaphone"
+    href="/api-reference/send-kakao-alimtalk"
+  >
+    알림톡 템플릿 발송
+  </Card>
+
+    <Card
+    title="Kakao Friendtalk"
+    icon="message-captions"
+    href="/api-reference/send-kakao-friendtalk"
+  >
+    친구톡 발송
+  </Card>
+
+</Columns>
+</div>
+---
+
+## 메시징 관리
+
+<div class="card-group doccards-gray">
+<Columns cols={2}>
+
+      <Card
+    title="Template Update"
+    icon="pen-to-square"
+    href="/api-reference/update-kakao-alimtalk-template"
+  >
+    카카오 템플릿 수정
+  </Card>
+
+  <Card
+    title="Text 080 Block Service"
+    icon="slash"
+    href="/api-reference/list-080-block-recipients"
+  >
+    080 수신거부 번호 조회/등록/삭제
+  </Card>
+
+</Columns>
+</div>
+---
+
+## Export & 통계
+<div class="card-group doccards-gray">
+<Columns cols={3}>
+
+    <Card
+    title="Campaign Event Export"
+    icon="file-export"
+    href="/api-reference/create-campaign-event-export"
+  >
+    메시지 이벤트 데이터 내보내기
+  </Card>
+
+    <Card
+    title="Campaign Statistics"
+    icon="chart-line"
+    href="/api-reference/get-campaign-statistics"
+  >
+    메시지 통계 조회
+  </Card>
+
+  <Card
+    title="Campaign Statistics Retrieval"
+    icon="chart-network"
+    href="/api-reference/get-campaign-statistics-retrieval"
+  >
+    특정 캠페인 요약/일자별 통계
+  </Card>
+
+</Columns>
+</div>
+---
+

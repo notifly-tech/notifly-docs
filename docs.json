@@ -307,5 +307,12 @@
       "author": "Notifly",
       "keywords": "노티플라이, Notifly, push notification, 푸시 알림, 인앱 팝업, in-app message, 마케팅 자동화, marketing automation, 유저 참여, user engagement, 모바일 SDK, mobile SDK, web push, 웹 푸시, 카카오톡, 이메일, SMS, campaign, 캠페인, user journey, 유저 여정, personalization, 개인화, analytics, 분석, Firebase, Android SDK, iOS SDK, React Native, Flutter, JavaScript SDK, GTM, API"
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/ko/llms.txt",
+      "destination": "/llms.txt",
+      "permanent": true
+    }
+  ]
 }

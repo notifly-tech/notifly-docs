@@ -1,0 +1,124 @@
+---
+title: "Amplitude 코호트 동기화"
+description: "Amplitude에서 생성한 코호트(유저 그룹)를 노티플라이의 유저 그룹으로 동기화하여 타겟 캠페인에 활용할 수 있는 기능입니다."
+---
+
+<Check>
+  Amplitude 연동 기능은 노티플라이 프로 플랜, 엔터프라이즈 플랜 사용시 제공하는 기능입니다. (Amplitude의 플랜과는 상관없음)
+</Check>
+
+Amplitude 코호트 동기화는 Amplitude에서 분석을 통해 생성한 유저 그룹을 노티플라이의 유저 그룹으로 자동 동기화하는 기능입니다.
+Amplitude 공식 문서 - [Notifly (Cohort Sync)](https://amplitude.com/docs/data/destination-catalog/notifly-cohort-sync)를 참고하세요.
+
+Amplitude 코호트 동기화를 활용하면 다양한 타겟 캠페인을 효과적으로 실행할 수 있습니다:
+
+1. 장바구니 이탈 유저 재유도: 장바구니에 상품을 담았지만 구매를 완료하지 않은 유저 코호트를 노티플라이에 동기화하여, 할인 혜택과 함께 구매 완료를 유도하는 리마인드 알림 캠페인을 실행할 수 있습니다.
+2. 신규 기능 온보딩 캠페인: 새로운 기능을 아직 사용해보지 않은 유저 코호트를 생성하고 노티플라이에 동기화하여, 인앱 메시지와 푸시 알림을 통해 기능의 가치를 소개하고 사용을 유도하는 캠페인을 진행할 수 있습니다.
+3. 휴면 유저 재활성화: 30일 이상 앱을 열지 않은 유저를 식별하여 노티플라이에 동기화하고, 개인화된 콘텐츠와 특별 혜택, 업데이트 소식을 담은 일련의 메시지를 통해 유저를 다시 앱으로 유입시킬 수 있습니다.
+
+## 주의사항
+
+코호트 동기화를 설정하기 전에 다음 사항들을 확인해 주세요:
+
+  - 이 연동은 Amplitude의 유저 ID(혹은 특정 유저 속성)를 노티플라이의 `external_user_id`에 매핑합니다.
+  - 익명 유저는 지원하지 않습니다. Amplitude와 노티플라이에서 유저를 식별하려면 각 유저에게 ID가 있어야 합니다.
+  - 노티플라이는 코호트당 하나의 유저 그룹을 생성합니다. 코호트 불일치를 방지하기 위해 동일한 코호트에 대한 각 새 동기화는 기존 유저 그룹을 재설정합니다. (주의: "새 동기화"는 새로 추가된 destination을 의미합니다.) 다른 매핑으로 다시 동기화할 때 주의하세요.
+
+## 1. 노티플라이 설정
+
+먼저 노티플라이에서 API 인증 정보를 확인해야 합니다.
+
+1. 노티플라이 제품에서 프로젝트 설정으로 이동합니다.
+2. Project ID와 API Credentials (Access Key 및 Secret Key)를 복사합니다.
+
+## 2. Amplitude 설정
+
+Amplitude에서 노티플라이를 Destination으로 추가합니다.
+
+1. Amplitude의 Data 탭에서 **Catalog > Destinations** 탭으로 이동합니다.
+2. Cohort 섹션에서 **Notifly**를 선택합니다.
+
+![Amplitude cohort destinations](/ko/user-guide/images/user-guide/amplitude/ko/assets/images/amplitude_catalog.png)
+
+3. Destination 이름을 입력하고, 노티플라이에서 복사한 Project ID, Access Key, Secret Key를 입력합니다.
+
+![Amplitude notifly destination setup](/ko/user-guide/images/user-guide/amplitude/ko/assets/images/amplitude_connect_notifly_modal.png)
+
+4. Amplitude의 유저 ID를 노티플라이의 `external_user_id`에 매핑합니다. Amplitude의 미리 정의된 유저 속성 또는 커스텀 유저 속성 중 하나를 유저 ID로 선택할 수 있습니다.
+
+<Info>
+  유저 ID 매핑은 매우 중요합니다. 선택한 유저 속성이 Amplitude와 노티플라이 양쪽에 모두 존재하는지 확인해 주세요.
+</Info>
+
+5. 설정이 완료되면 Save 버튼을 클릭합니다.
+
+## 3. 코호트 전송
+
+이제 Amplitude 코호트를 노티플라이로 전송할 수 있습니다.
+
+1. Amplitude에서 노티플라이로 전송할 코호트를 엽니다.
+2. Target Users 버튼을 클릭하고 sync this cohort to… 에서 Notifly를 선택합니다.
+
+![Amplitude cohort sync](/ko/user-guide/images/user-guide/amplitude/ko/assets/images/amplitude_select_notifly_sync.png)
+
+3. 앞서 생성한 Destination을 선택합니다.
+
+![Amplitude cohort destination](/ko/user-guide/images/user-guide/amplitude/ko/assets/images/amplitude_cohort_sync_type.png)
+
+4. 동기화 주기를 선택합니다.
+   - One-time sync: 1회성 동기화
+   - Scheduled sync: 정기적인 동기화 (시간별, 일별 등)
+
+![Amplitude cohort sync cadence](/ko/user-guide/images/user-guide/amplitude/ko/assets/images/amplitude_cohort_sync_cadence.png)
+
+
+<Info>
+  정기 동기화의 경우, 최초 동기화에는 전체 코호트가 포함되지만, 이후 동기화에는 마지막 동기화 이후 추가 및 제거된 유저만 포함됩니다.
+</Info>
+
+5. Save를 클릭하여 동기화를 시작합니다.
+
+## 4. 노티플라이에서 코호트 확인
+
+Amplitude 코호트를 노티플라이로 전송하면, 노티플라이 콘솔의 유저 그룹 섹션에서 확인할 수 있습니다.
+
+![Notifly user groups](/ko/user-guide/images/user-guide/amplitude/ko/assets/images/notifly_user_group_amplitude.png)
+
+Amplitude에서 전송된 코호트는 이름 끝에 (Amplitude) 접미사가 붙습니다.
+
+![Notifly user group detail](/ko/user-guide/images/user-guide/amplitude/ko/assets/images/notifly_user_group_amplitude_details.png)
+
+
+<Warning>
+  노티플라이는 식별자가 있는 유저만 수집합니다.
+
+  예시: Amplitude 코호트 (Cohort 1)에 User A, User B, User C가 있고, 노티플라이에는 User A와 User C의 식별자만 있는 경우, 노티플라이는 User A와 User C만 포함하는 유저 그룹을 생성하고 User B는 제외됩니다.
+</Warning>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="코호트 동기화와 이벤트 스트리밍을 함께 사용할 수 있나요?">
+    네, 두 기능은 독립적으로 동작하므로 함께 사용하실 수 있습니다. 이벤트 스트리밍으로 실시간 이벤트를 수집하고, 코호트 동기화로 특정 유저 그룹을 타겟팅하는 식으로 활용하시면 더욱 효과적입니다.
+  </Accordion>
+
+  <Accordion title="동기화된 코호트의 유저 수가 Amplitude와 다릅니다.">
+    노티플라이는 식별자가 있는 유저만 수집합니다. Amplitude 코호트에 포함된 유저 중 노티플라이에 식별자가 없는 유저는 유저 그룹에 추가되지 않습니다. 또한 유저 ID 매핑이 올바르게 설정되어 있는지 확인해 주세요.
+  </Accordion>
+
+  <Accordion title="동기화 주기를 어떻게 설정하는 것이 좋나요?">
+    캠페인의 목적에 따라 다릅니다:
+    - 실시간성이 중요한 경우 (예: 장바구니 이탈): 시간별 또는 더 짧은 주기로 설정
+    - 장기 캠페인 (예: 휴면 유저): 일별 또는 주별로 설정
+
+    동기화 주기가 짧을수록 더 최신 데이터를 활용할 수 있지만, Amplitude의 사용량도 증가할 수 있습니다.
+  </Accordion>
+
+  <Accordion title="여러 개의 코호트를 동기화할 수 있나요?">
+    네, 노티플라이에 여러 개의 Amplitude 코호트를 동기화할 수 있습니다. 각 코호트는 노티플라이에서 별도의 유저 그룹으로 생성됩니다.
+  </Accordion>
+
+  <Accordion title="동기화된 유저 그룹을 수동으로 수정할 수 있나요?">
+    Amplitude에서 동기화된 유저 그룹은 자동으로 관리되므로 노티플라이에서 직접 수정하실 수 없습니다. 유저 그룹을 수정하려면 Amplitude에서 코호트를 수정한 후 다시 동기화해 주세요.
+  </Accordion>
+</AccordionGroup>

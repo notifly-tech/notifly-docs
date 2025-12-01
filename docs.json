@@ -139,7 +139,9 @@
                   {
                     "group": "Amplitude",
                     "pages": [
-                      "ko/user-guide/integrations/amplitude/amplitude-introduction"
+                      "ko/user-guide/integrations/amplitude/amplitude-introduction",
+                      "ko/user-guide/integrations/amplitude/amplitude-event-streaming",
+                      "ko/user-guide/integrations/amplitude/amplitude-cohort-sync"
                     ]
                   },
                   {

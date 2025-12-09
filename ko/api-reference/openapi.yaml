@@ -392,11 +392,12 @@ paths:
                     properties:
                       type:
                         type: string
-                        description: 수신자 유형 (기본값 user-id). user-id, phone-number, email 지원
+                        description: 수신자 유형 (기본값 user-id). user-id, phone-number, email, line 지원
                         enum:
                           - user-id
                           - phone-number
                           - email
+                          - line
                       userId:
                         type: string
                         description: 유저 ID (type이 user-id인 경우 필수)

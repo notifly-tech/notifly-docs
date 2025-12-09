@@ -217,6 +217,26 @@ yarn global add notifly-mcp-server@latest
 
 </Tab>
 
+<Tab title="Amazon Q">
+
+{" "}
+<p><strong>설정</strong></p>
+<ul>
+  <li>`~/.aws/amazonq/agents/default.json` 파일을 엽니다.</li>
+  <li>아래 설정으로 `mcpServers` 구성 섹션을 수정합니다.</li>
+</ul>
+
+```json
+"mcpServers": {
+  "notifly-mcp-server": {
+    "command": "npx",
+    "args": ["-y", "notifly-mcp-server@latest"]
+  }
+}
+```
+
+</Tab>
+
 <Tab title="Google Antigravity">
 
 {" "}
@@ -307,6 +327,28 @@ claude mcp add --transport stdio notifly-mcp-server -- npx -y notifly-mcp-server
 ```
 
 </Tab>
+
+<Tab title="Kiro CLI">
+  <p><strong>설정</strong></p>
+  Q CLI가 Kiro CLI로 변경되었습니다.
+  <ul>
+    <li>워크스페이스 디렉터리에 `.kiro/settings/mcp.json` 파일을 새로 만들거나, 이미 존재하는 경우 해당 파일을 엽니다.</li>
+    <li>아래 설정을 추가합니다.</li>
+  </ul>
+
+```json
+{
+  "mcpServers": {
+    "notifly-mcp-server": {
+      "command": "npx",
+      "args": ["-y", "notifly-mcp-server@latest"]
+    }
+  }
+}
+```
+
+</Tab>
+
 
 <Tab title="Claude Desktop App">
   <p><strong>설정</strong></p>

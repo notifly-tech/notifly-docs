@@ -20,25 +20,46 @@ description: "노티플라이에서 LINE 메시지를 발송하여 일본 및 �
 ## 1. LINE 채널 등록하기
 
 LINE Official Account를 준비하셨다면, 노티플라이 프로젝트에 LINE 채널을 등록해 주세요.\
-노티플라이 프로젝트의 설정 페이지에서 채널 섹션으로 이동하여 채널 등록 버튼을 클릭합니다.
+노티플라이 프로젝트의 설정 페이지에서 채널 섹션으로 이동하여 **채널 등록** 버튼을 클릭합니다.
 
-![LINE 설정 화면 화면](/ko/user-guide/images/user-guide/line/line_setting_empty.png)
-
+<img
+  src="/ko/user-guide/images/user-guide/line/line_setting_empty.png"
+  style={{width: "600px", height: "auto", display: "block", margin: "0 auto"}}
+  alt="LINE 설정 화면"
+/>
 
 ### 1-1. 입력 정보
 
-[LINE Developers Console](https://developers.line.biz/console/)에서 확인되는 채널 정보를 입력해 주세요:
+1. [LINE Developers Console](https://developers.line.biz/console/)에 로그인하세요.
+2. Basic Settings 탭에서 Channel ID와 Channel Secret을 확인하여 입력하세요.
 
 * **라인 Channel ID**: 라인 채널 고유 ID 
 * **라인 Channel Secret**: Messaging API 채널 시크릿
+
+<img
+  src="/ko/user-guide/images/user-guide/line/line_developers_basic.png"
+  style={{width: "auto", height: "auto", display: "block", margin: "0 auto"}}
+  alt="LINE Developers Console Basic Settings 화면"
+/>
+
+3. Messaging API 탭에서 Channel Access Token과 Basic ID 또는 Premium ID를 확인하여 입력하세요.
+
 * **라인 Channel Access Token**: Messaging API용 채널 액세스 토큰 (Messaging API settings에서 확인 가능)
 * **라인 Basic ID 또는 Premium ID**: 일반 LINE 사용자가 앱 내에서 친구 검색을 하거나, 친구 추가 링크를 생성할 때 사용되는 ID (Messaging API settings에서 확인 가능)
 
-예시 Line Developers Console 화면:
-![LINE Developers Console 화면](/ko/user-guide/images/user-guide/line/line_developers.png)
+<img
+  src="/ko/user-guide/images/user-guide/line/line_developers_messaging_api.png"
+  style={{width: "auto", height: "auto", display: "block", margin: "0 auto"}}
+  alt="LINE Developers Console Messaging API Settings 화면"
+/>
 
 노티플라이 LINE 채널 등록 화면:
-![LINE 채널 등록 화면](/ko/user-guide/images/user-guide/line/line_channel_register_example.png)
+
+<img
+  src="/ko/user-guide/images/user-guide/line/line_channel_register_example.png"
+  style={{width: "500px", height: "auto", display: "block", margin: "0 auto"}}
+  alt="LINE 채널 등록 화면"
+/>
 
 
 <Warning>
@@ -66,11 +87,21 @@ LINE Developers Console의 Messaging API 설정 화면에서 Webhook URL을 다�
    https://integration.notifly.tech/line/webhook
    ```
 3. **Webhook 사용 여부**를 사용(Enable)으로 설정합니다.
-![LINE 웹훅 설정 화면](/ko/user-guide/images/user-guide/line/line_developers_webhook_settings.png)
+
+<img
+  src="/ko/user-guide/images/user-guide/line/line_developers_webhook_settings.png"
+  style={{width: "500px", height: "auto", display: "block", margin: "0 auto"}}
+  alt="LINE 웹훅 설정  화면"
+/>
+
 
 4. Verify가 잘 되는지 확인해 주세요.
-![LINE 웹훅 Verify](/ko/user-guide/images/user-guide/line/line_webhook_test.png)
 
+<img
+  src="/ko/user-guide/images/user-guide/line/line_webhook_test.png"
+  style={{width: "400px", height: "auto", display: "block", margin: "0 auto"}}
+  alt="LINE 웹훅 Verify"
+/>
 
 ### 2-2. 기존 Webhook 사용 중인 경우
 
@@ -115,7 +146,11 @@ LINE Text Message v2 형식으로 메시지를 작성하고, 캠페인/유저 �
 
 에디터 우측에서 LINE 메시지 형태로 실시간 미리보기를 확인할 수 있습니다. 텍스트를 수정하면 미리보기 화면도 함께 반영됩니다.
 
-![LINE 메시지 에디터 화면](/ko/user-guide/images/user-guide/line/line_campaign_example.png)
+<img
+  src="/ko/user-guide/images/user-guide/line/line_campaign_example.png"
+  style={{width: "auto", height: "auto", display: "block", margin: "0 auto"}}
+  alt="LINE 메시지 에디터 화면"
+/>
 
 <Info>
 현재는 다음 기능을 지원하지 않습니다:
@@ -133,7 +168,11 @@ LINE Text Message v2 형식으로 메시지를 작성하고, 캠페인/유저 �
 2. 테스트 발송 버튼을 눌러 테스트 대상 유저를 선택합니다.
 3. 실제 LINE 앱에서 메시지가 정상적으로 도착하는지 확인합니다.
 
-![LINE 테스트 발송 화면](/ko/user-guide/images/user-guide/line/line_test_send.png)
+<img
+  src="/ko/user-guide/images/user-guide/line/line_test_send.png"
+  style={{width: "auto", height: "auto", display: "block", margin: "0 auto"}}
+  alt="LINE 테스트 발송 화면"
+/>
 
 ## 6. 발송 시점 및 대상 설정
 

@@ -254,13 +254,13 @@ paths:
                   type: object
                   description: 삭제할 유저 속성 (이메일, 전화번호, 라인 유저 ID 기반 삭제 지원)
                   properties:
-                    email:
+                    $email:
                       type: string
                       description: 삭제할 유저의 이메일 주소
-                    phone_number:
+                    $phone_number:
                       type: string
                       description: 삭제할 유저의 전화번호
-                    line_user_id:
+                    $line_user_id:
                       type: string
                       description: 삭제할 유저의 라인 유저 ID
             example:

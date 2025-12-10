@@ -392,12 +392,12 @@ paths:
                     properties:
                       type:
                         type: string
-                        description: 수신자 유형 (기본값 user-id). user-id, phone-number, email, line 지원
+                        description: 수신자 유형 (기본값 user-id). user-id, phone-number, email, line-user-id 지원
                         enum:
                           - user-id
                           - phone-number
                           - email
-                          - line
+                          - line-user-id
                       userId:
                         type: string
                         description: 유저 ID (type이 user-id인 경우 필수)
@@ -409,7 +409,7 @@ paths:
                         description: 이메일 주소 (type이 email인 경우 필수)
                       lineUserId:
                         type: string
-                        description: 라인 유저 ID (type이 line인 경우 필수)
+                        description: 라인 유저 ID (type이 line-user-id인 경우 필수)
                       eventParams:
                         type: object
                         description: 메시지 개인화를 위한 이벤트 파라미터

@@ -267,8 +267,8 @@ paths:
               projectId: "example_project_1234567890abcdef"
               userId: "user_abc123"
               userProperties:
-                email: "delete@example.com"
-                phone_number: "+821012345678"
+                $email: "delete@example.com"
+                $phone_number: "+821012345678"
       responses:
         "200":
           description: 성공적인 유저 삭제입니다

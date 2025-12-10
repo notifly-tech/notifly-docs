@@ -115,6 +115,10 @@
                   {
                     "group": "웹훅",
                     "pages": ["ko/user-guide/channel/webhook/guide"]
+                  },
+                  {
+                    "group": "라인",
+                    "pages": ["ko/user-guide/channel/line/guide"]
                   }
                 ]
               },

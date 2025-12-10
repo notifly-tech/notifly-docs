@@ -61,9 +61,9 @@ Google Tag Manager(GTM)에 노티플라이 맞춤 템플릿을 추가해 코드 
 3. 태그 시퀀싱에서 `setUserId` → `setUserProperties` 순서가 되도록 구성.
 ![태그 시퀀싱](./image/gtm/gtm-set-user-props-2.png)
 
-<Info> 
-- 이메일 발송에는 **`$email`**, 카카오 알림톡/친구톡/문자 발송에는 **`$phone_number`** 예약 키가 필요합니다. 
-- 예약 키는 반드시 표기 그대로 사용하세요. 예: `$email`, `$phone_number` 
+<Info>
+- 이메일 발송에는 **`$email`**, 카카오 알림톡/친구톡/문자 발송에는 **`$phone_number`**, LINE 메시지 발송에는 **`$line_user_id`** 예약 키가 필요합니다.
+- 예약 키는 반드시 표기 그대로 사용하세요. 예: `$email`, `$phone_number`, `$line_user_id`
 </Info>
 
 <Warning>

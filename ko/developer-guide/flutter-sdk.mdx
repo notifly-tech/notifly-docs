@@ -240,13 +240,14 @@ NotiflyPlugin.setUserProperties(params)
 ```
 
 <ParamField path="param" type="Map<String, Object>" required>
-  유저 속성 key-value 쌍. `$email`, `$phone_number` 등 사전 정의된 키 지원
+  유저 속성 key-value 쌍. `$email`, `$phone_number`, `$line_user_id` 등 사전 정의된 키 지원
 </ParamField>
 
 <Info>
-- `$email` : 이메일 캠페인용 주소  
-- `$phone_number` : 문자/카카오 캠페인용 전화번호  
-- 기타 커스텀 필드: `"plan"`, `"tier"`, `"country"` 등 자유롭게 설정 가능  
+- `$email` : 이메일 캠페인용 주소
+- `$phone_number` : 문자/카카오 캠페인용 전화번호
+- `$line_user_id` : LINE 메시지 캠페인용 LINE User ID
+- 기타 커스텀 필드: `"plan"`, `"tier"`, `"country"` 등 자유롭게 설정 가능
 </Info>
 
 <Tabs>

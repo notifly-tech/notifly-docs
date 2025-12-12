@@ -1,329 +1,329 @@
-{
-  "$schema": "https://mintlify.com/docs.json",
-  "name": "Notifly Docs",
-  "theme": "mint",
-  "colors": {
-    "primary": "#0144CD",
-    "light": "#3F7BFF"
-  },
-  "appearance": {
-    "default": "light",
-    "strict": true
-  },
-  "favicon": "/favicon.ico",
-  "navigation": {
-    "languages": [
-      {
-        "language": "ko",
-        "tabs": [
-          {
-            "tab": "User Guides",
-            "groups": [
-              {
-                "group": "시작하기 전에",
-                "expanded": true,
-                "pages": ["ko/index"]
-              },
-              {
-                "group": "캠페인",
-                "pages": [
-                  "ko/user-guide/campaigns/basic",
-                  {
-                    "group": "메시지 개인화",
-                    "pages": [
-                      "ko/user-guide/campaigns/personalization/basic",
-                      "ko/user-guide/campaigns/personalization/advanced"
-                    ]
-                  },
-                  {
-                    "group": "캠페인 발송대상 설정",
-                    "pages": [
-                      "ko/user-guide/campaigns/campaign-segments/segment",
-                      "ko/user-guide/campaigns/campaign-segments/random-bucket-number",
-                      "ko/user-guide/campaigns/campaign-segments/personalized-user-condition"
-                    ]
-                  },
-                  "ko/user-guide/campaigns/abtest",
-                  "ko/user-guide/campaigns/campaign-analytics"
-                ]
-              },
-              {
-                "group": "유저 여정",
-                "pages": [
-                  "ko/user-guide/user-journey/index",
-                  "ko/user-guide/user-journey/basic",
-                  "ko/user-guide/user-journey/basic-info",
-                  "ko/user-guide/user-journey/status",
-                  {
-                    "group": "유저 여정 노드",
-                    "pages": [
-                      "ko/user-guide/user-journey/nodes/delay_node",
-                      "ko/user-guide/user-journey/nodes/message_node",
-                      "ko/user-guide/user-journey/nodes/event_branching_node",
-                      "ko/user-guide/user-journey/nodes/user_group_branching_node",
-                      "ko/user-guide/user-journey/nodes/user_update_node",
-                      "ko/user-guide/user-journey/nodes/event_trigger_node",
-                      "ko/user-guide/user-journey/nodes/variant_branching_node"
-                    ]
-                  },
-                  "ko/user-guide/user-journey/statistics",
-                  "ko/user-guide/user-journey/examples"
-                ]
-              },
-              {
-                "group": "채널",
-                "pages": [
-                  {
-                    "group": "앱 푸시",
-                    "pages": [
-                      "ko/user-guide/channel/app-push-notification/guide"
-                    ]
-                  },
-                  {
-                    "group": "웹 푸시",
-                    "pages": [
-                      "ko/user-guide/channel/web-push-notification/guide",
-                      "ko/user-guide/channel/web-push-notification/web-push-components"
-                    ]
-                  },
-                  {
-                    "group": "문자",
-                    "pages": [
-                      "ko/user-guide/channel/text-message/notifly_guide"
-                    ]
-                  },
-                  {
-                    "group": "카카오톡",
-                    "pages": [
-                      "ko/user-guide/channel/kakaotalk/setup",
-                      "ko/user-guide/channel/kakaotalk/alimtalk-guide",
-                      "ko/user-guide/channel/kakaotalk/friendtalk-guide"
-                    ]
-                  },
-                  {
-                    "group": "이메일",
-                    "pages": ["ko/user-guide/channel/email/guide"]
-                  },
-                  {
-                    "group": "웹 팝업",
-                    "pages": ["ko/user-guide/channel/web-message/guide"]
-                  },
-                  {
-                    "group": "인앱 팝업",
-                    "pages": ["ko/user-guide/channel/in-app-message/guide"]
-                  },
-                  {
-                    "group": "웹훅",
-                    "pages": ["ko/user-guide/channel/webhook/guide"]
-                  },
-                  {
-                    "group": "라인",
-                    "pages": ["ko/user-guide/channel/line/guide"]
-                  }
-                ]
-              },
-              {
-                "group": "분석",
-                "pages": [
-                  {
-                    "group": "쉐어 링크",
-                    "pages": ["ko/user-guide/analytics/share-link/guide"]
-                  }
-                ]
-              },
-              {
-                "group": "연동",
-                "pages": [
-                  {
-                    "group": "Mixpanel",
-                    "pages": [
-                      "ko/user-guide/integrations/mixpanel/mixpanel-introduction"
-                    ]
-                  },
-                  {
-                    "group": "Amplitude",
-                    "pages": [
-                      "ko/user-guide/integrations/amplitude/amplitude-introduction",
-                      "ko/user-guide/integrations/amplitude/amplitude-event-streaming",
-                      "ko/user-guide/integrations/amplitude/amplitude-cohort-sync"
-                    ]
-                  },
-                  {
-                    "group": "카페24",
-                    "pages": [
-                      "ko/user-guide/integrations/cafe24/cafe24-integration",
-                      "ko/user-guide/integrations/cafe24/cafe24-gtm",
-                      "ko/user-guide/integrations/cafe24/cafe24-spec",
-                      "ko/user-guide/integrations/cafe24/campaign-examples"
-                    ]
-                  }
-                ]
-              },
-              {
-                "group": "Resources",
-                "pages": ["ko/user-guide/faq"]
-              }
-            ]
-          },
-          {
-            "tab": "Developer Guides",
-            "groups": [
-              {
-                "group": "시작하기",
-                "expanded": true,
-                "pages": ["ko/developer-guide/index"]
-              },
-              {
-                "group": "개발자 가이드",
-                "expanded": false,
-                "pages": [
-                  "ko/developer-guide/firebase-integration",
-                  {
-                    "group": "모바일 SDK",
-                    "expanded": false,
-                    "pages": [
-                      {
-                        "group": "기본 연동하기",
-                        "pages": [
-                          "ko/developer-guide/android-sdk",
-                          "ko/developer-guide/ios-sdk",
-                          "ko/developer-guide/react-native-sdk",
-                          "ko/developer-guide/flutter-sdk"
-                        ]
-                      },
-                      {
-                        "group": "심화 연동하기",
-                        "expanded": false,
-                        "pages": [
-                          "ko/advanced/index",
-                          "ko/advanced/push-notification-icon",
-                          "ko/advanced/push-notification-consent",
-                          "ko/advanced/push-notification-click-events",
-                          "ko/advanced/push-notification-interceptor",
-                          "ko/advanced/inapp-popup-event-listener",
-                          "ko/advanced/rich-push-notification",
-                          "ko/advanced/webview"
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "group": "웹 SDK",
-                    "pages": [
-                      "ko/developer-guide/javascript-sdk",
-                      "ko/developer-guide/google-tag-manager"
-                    ]
-                  },
-                  "ko/integration-test"
-                ]
-              },
-              {
-                "group": "개발자 도구",
-                "pages": ["ko/devtools/notifly-mcp-server"]
-              }
-            ]
-          },
-          {
-            "tab": "API Reference",
-            "openapi": "ko/api-reference/openapi.yaml",
-            "groups": [
-              {
-                "group": "시작하기",
-                "pages": [
-                  "ko/api-reference/getting-started",
-                  "ko/api-reference/error"
-                ]
-              },
-              {
-                "group": "인증",
-                "pages": ["POST /authenticate"]
-              },
-              {
-                "group": "이벤트 & 유저",
-                "pages": [
-                  "POST /track-event",
-                  "POST /set-user-properties",
-                  "DELETE /users"
-                ]
-              },
-              {
-                "group": "캠페인",
-                "pages": [
-                  "POST /projects/{projectId}/campaigns/{campaignId}/send",
-                  "POST /projects/{projectId}/user-journeys/{userJourneyId}/enter"
-                ]
-              },
-              {
-                "group": "메시징",
-                "pages": [
-                  "POST /messages/text-message",
-                  "POST /messages/kakao-alimtalk",
-                  "POST /messages/kakao-friendtalk"
-                ]
-              },
-              {
-                "group": "메시징 관리",
-                "pages": [
-                  {
-                    "group": "카카오 알림톡 템플릿",
-                    "pages": [
-                      "GET /projects/{projectId}/messages/kakao-alimtalk/templates",
-                      "POST /projects/{projectId}/messages/kakao-alimtalk/templates",
-                      "PUT /projects/{projectId}/messages/kakao-alimtalk/templates/{templateCode}",
-                      "DELETE /projects/{projectId}/messages/kakao-alimtalk/templates/{templateCode}"
-                    ]
-                  },
-                  {
-                    "group": "080 수신 거부 서비스",
-                    "pages": [
-                      "GET /projects/{projectId}/messages/text-message/blockservice/recipients",
-                      "POST /projects/{projectId}/messages/text-message/blockservice/recipients",
-                      "DELETE /projects/{projectId}/messages/text-message/blockservice/recipients/removes"
-                    ]
-                  }
-                ]
-              },
-              {
-                "group": "내보내기 & 분석",
-                "pages": [
-                  {
-                    "group": "메시지 이벤트 데이터 내보내기",
-                    "pages": [
-                      "POST /projects/{projectId}/campaign-event-data/exports",
-                      "GET /projects/{projectId}/campaign-event-data/exports/{exportId}/result"
-                    ]
-                  },
-                  "POST /v1/projects/{projectId}/statistics",
-                  "GET /projects/{projectId}/campaigns/{campaignId}/stats"
-                ]
-              }
-            ]
-          }
-        ]
+  {
+    "$schema": "https://mintlify.com/docs.json",
+    "name": "Notifly Docs",
+    "theme": "mint",
+    "colors": {
+      "primary": "#0144CD",
+      "light": "#3F7BFF"
+    },
+    "appearance": {
+      "default": "light",
+      "strict": true
+    },
+    "favicon": "/favicon.ico",
+    "navigation": {
+      "languages": [
+        {
+          "language": "ko",
+          "tabs": [
+            {
+              "tab": "User Guides",
+              "groups": [
+                {
+                  "group": "시작하기 전에",
+                  "expanded": true,
+                  "pages": ["ko/index"]
+                },
+                {
+                  "group": "캠페인",
+                  "pages": [
+                    "ko/user-guide/campaigns/basic",
+                    {
+                      "group": "메시지 개인화",
+                      "pages": [
+                        "ko/user-guide/campaigns/personalization/basic",
+                        "ko/user-guide/campaigns/personalization/advanced"
+                      ]
+                    },
+                    {
+                      "group": "캠페인 발송대상 설정",
+                      "pages": [
+                        "ko/user-guide/campaigns/campaign-segments/segment",
+                        "ko/user-guide/campaigns/campaign-segments/random-bucket-number",
+                        "ko/user-guide/campaigns/campaign-segments/personalized-user-condition"
+                      ]
+                    },
+                    "ko/user-guide/campaigns/abtest",
+                    "ko/user-guide/campaigns/campaign-analytics"
+                  ]
+                },
+                {
+                  "group": "유저 여정",
+                  "pages": [
+                    "ko/user-guide/user-journey/index",
+                    "ko/user-guide/user-journey/basic",
+                    "ko/user-guide/user-journey/basic-info",
+                    "ko/user-guide/user-journey/status",
+                    {
+                      "group": "유저 여정 노드",
+                      "pages": [
+                        "ko/user-guide/user-journey/nodes/delay_node",
+                        "ko/user-guide/user-journey/nodes/message_node",
+                        "ko/user-guide/user-journey/nodes/event_branching_node",
+                        "ko/user-guide/user-journey/nodes/user_group_branching_node",
+                        "ko/user-guide/user-journey/nodes/user_update_node",
+                        "ko/user-guide/user-journey/nodes/event_trigger_node",
+                        "ko/user-guide/user-journey/nodes/variant_branching_node"
+                      ]
+                    },
+                    "ko/user-guide/user-journey/statistics",
+                    "ko/user-guide/user-journey/examples"
+                  ]
+                },
+                {
+                  "group": "채널",
+                  "pages": [
+                    {
+                      "group": "앱 푸시",
+                      "pages": [
+                        "ko/user-guide/channel/app-push-notification/guide"
+                      ]
+                    },
+                    {
+                      "group": "웹 푸시",
+                      "pages": [
+                        "ko/user-guide/channel/web-push-notification/guide",
+                        "ko/user-guide/channel/web-push-notification/web-push-components"
+                      ]
+                    },
+                    {
+                      "group": "문자",
+                      "pages": [
+                        "ko/user-guide/channel/text-message/notifly_guide"
+                      ]
+                    },
+                    {
+                      "group": "카카오톡",
+                      "pages": [
+                        "ko/user-guide/channel/kakaotalk/setup",
+                        "ko/user-guide/channel/kakaotalk/alimtalk-guide",
+                        "ko/user-guide/channel/kakaotalk/friendtalk-guide"
+                      ]
+                    },
+                    {
+                      "group": "이메일",
+                      "pages": ["ko/user-guide/channel/email/guide"]
+                    },
+                    {
+                      "group": "웹 팝업",
+                      "pages": ["ko/user-guide/channel/web-message/guide"]
+                    },
+                    {
+                      "group": "인앱 팝업",
+                      "pages": ["ko/user-guide/channel/in-app-message/guide"]
+                    },
+                    {
+                      "group": "웹훅",
+                      "pages": ["ko/user-guide/channel/webhook/guide"]
+                    },
+                    {
+                      "group": "라인",
+                      "pages": ["ko/user-guide/channel/line/guide"]
+                    }
+                  ]
+                },
+                {
+                  "group": "분석",
+                  "pages": [
+                    {
+                      "group": "쉐어 링크",
+                      "pages": ["ko/user-guide/analytics/share-link/guide"]
+                    }
+                  ]
+                },
+                {
+                  "group": "연동",
+                  "pages": [
+                    {
+                      "group": "Mixpanel",
+                      "pages": [
+                        "ko/user-guide/integrations/mixpanel/mixpanel-introduction"
+                      ]
+                    },
+                    {
+                      "group": "Amplitude",
+                      "pages": [
+                        "ko/user-guide/integrations/amplitude/amplitude-introduction",
+                        "ko/user-guide/integrations/amplitude/amplitude-event-streaming",
+                        "ko/user-guide/integrations/amplitude/amplitude-cohort-sync"
+                      ]
+                    },
+                    {
+                      "group": "카페24",
+                      "pages": [
+                        "ko/user-guide/integrations/cafe24/cafe24-integration",
+                        "ko/user-guide/integrations/cafe24/cafe24-gtm",
+                        "ko/user-guide/integrations/cafe24/cafe24-spec",
+                        "ko/user-guide/integrations/cafe24/campaign-examples"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "group": "Resources",
+                  "pages": ["ko/user-guide/faq"]
+                }
+              ]
+            },
+            {
+              "tab": "Developer Guides",
+              "groups": [
+                {
+                  "group": "시작하기",
+                  "expanded": true,
+                  "pages": ["ko/developer-guide/index"]
+                },
+                {
+                  "group": "개발자 가이드",
+                  "expanded": false,
+                  "pages": [
+                    "ko/developer-guide/firebase-integration",
+                    {
+                      "group": "모바일 SDK",
+                      "expanded": false,
+                      "pages": [
+                        {
+                          "group": "기본 연동하기",
+                          "pages": [
+                            "ko/developer-guide/android-sdk",
+                            "ko/developer-guide/ios-sdk",
+                            "ko/developer-guide/react-native-sdk",
+                            "ko/developer-guide/flutter-sdk"
+                          ]
+                        },
+                        {
+                          "group": "심화 연동하기",
+                          "expanded": false,
+                          "pages": [
+                            "ko/advanced/index",
+                            "ko/advanced/push-notification-icon",
+                            "ko/advanced/push-notification-consent",
+                            "ko/advanced/push-notification-click-events",
+                            "ko/advanced/push-notification-interceptor",
+                            "ko/advanced/inapp-popup-event-listener",
+                            "ko/advanced/rich-push-notification",
+                            "ko/advanced/webview"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "group": "웹 SDK",
+                      "pages": [
+                        "ko/developer-guide/javascript-sdk",
+                        "ko/developer-guide/google-tag-manager"
+                      ]
+                    },
+                    "ko/integration-test"
+                  ]
+                },
+                {
+                  "group": "개발자 도구",
+                  "pages": ["ko/devtools/notifly-mcp-server"]
+                }
+              ]
+            },
+            {
+              "tab": "API Reference",
+              "openapi": "ko/api-reference/openapi.yaml",
+              "groups": [
+                {
+                  "group": "시작하기",
+                  "pages": [
+                    "ko/api-reference/getting-started",
+                    "ko/api-reference/error"
+                  ]
+                },
+                {
+                  "group": "인증",
+                  "pages": ["POST /authenticate"]
+                },
+                {
+                  "group": "이벤트 & 유저",
+                  "pages": [
+                    "POST /track-event",
+                    "POST /set-user-properties",
+                    "DELETE /users"
+                  ]
+                },
+                {
+                  "group": "캠페인",
+                  "pages": [
+                    "POST /projects/{projectId}/campaigns/{campaignId}/send",
+                    "POST /projects/{projectId}/user-journeys/{userJourneyId}/enter"
+                  ]
+                },
+                {
+                  "group": "메시징",
+                  "pages": [
+                    "POST /messages/text-message",
+                    "POST /messages/kakao-alimtalk",
+                    "POST /messages/kakao-friendtalk"
+                  ]
+                },
+                {
+                  "group": "메시징 관리",
+                  "pages": [
+                    {
+                      "group": "카카오 알림톡 템플릿",
+                      "pages": [
+                        "GET /projects/{projectId}/messages/kakao-alimtalk/templates",
+                        "POST /projects/{projectId}/messages/kakao-alimtalk/templates",
+                        "PUT /projects/{projectId}/messages/kakao-alimtalk/templates/{templateCode}",
+                        "DELETE /projects/{projectId}/messages/kakao-alimtalk/templates/{templateCode}"
+                      ]
+                    },
+                    {
+                      "group": "080 수신 거부 서비스",
+                      "pages": [
+                        "GET /projects/{projectId}/messages/text-message/blockservice/recipients",
+                        "POST /projects/{projectId}/messages/text-message/blockservice/recipients",
+                        "DELETE /projects/{projectId}/messages/text-message/blockservice/recipients/removes"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "group": "내보내기 & 분석",
+                  "pages": [
+                    {
+                      "group": "메시지 이벤트 데이터 내보내기",
+                      "pages": [
+                        "POST /projects/{projectId}/campaign-event-data/exports",
+                        "GET /projects/{projectId}/campaign-event-data/exports/{exportId}/result"
+                      ]
+                    },
+                    "POST /v1/projects/{projectId}/statistics",
+                    "GET /projects/{projectId}/campaigns/{campaignId}/stats"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "logo": {
+      "light": "/images/notifly.png",
+      "dark": "/images/notifly.png"
+    },
+    "seo": {
+      "metatags": {
+        "canonical": "https://docs.notifly.tech",
+        "author": "Notifly",
+        "keywords": "노티플라이, Notifly, push notification, 푸시 알림, 인앱 팝업, in-app message, 마케팅 자동화, marketing automation, 유저 참여, user engagement, 모바일 SDK, mobile SDK, web push, 웹 푸시, 카카오톡, 이메일, SMS, campaign, 캠페인, user journey, 유저 여정, personalization, 개인화, analytics, 분석, Firebase, Android SDK, iOS SDK, React Native, Flutter, JavaScript SDK, GTM, API"
       }
-    ]
-  },
-  "logo": {
-    "light": "/images/notifly.png",
-    "dark": "/images/notifly.png"
-  },
-  "seo": {
-    "metatags": {
-      "canonical": "https://docs.notifly.tech",
-      "author": "Notifly",
-      "keywords": "노티플라이, Notifly, push notification, 푸시 알림, 인앱 팝업, in-app message, 마케팅 자동화, marketing automation, 유저 참여, user engagement, 모바일 SDK, mobile SDK, web push, 웹 푸시, 카카오톡, 이메일, SMS, campaign, 캠페인, user journey, 유저 여정, personalization, 개인화, analytics, 분석, Firebase, Android SDK, iOS SDK, React Native, Flutter, JavaScript SDK, GTM, API"
-    }
-  },
-  "contextual": {
-   "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
- }
-}
+    },
+    "contextual": {
+     "options": [
+       "copy",
+       "view",
+       "chatgpt",
+       "claude",
+       "perplexity",
+       "mcp",
+       "cursor",
+       "vscode"
+     ]
+   }
+  }

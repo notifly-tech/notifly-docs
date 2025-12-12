@@ -21,17 +21,17 @@ description: "Description of your new file."
 
 프로덕트의 보안 관련 설정을 관리하는 섹션입니다. 각 설정의 특징을 알아보겠습니다.
 
-![image.png](image.png)
+![setting-security.png](/images/setting-security.png)
 
 ### 2-1. 유저 권한 관리
 
-노티플라이에 가입한 사용자 중 해당 프로덕트에 할당된 사용자 계정의 권한에 위계를 두어 관리할 수 있습니다.
+노티플라이에 가입한 사용자 중 해당 프로덕트에 할당된 사용자 계정의 권한에 차등을 두어 관리할 수 있습니다.
 
 - 기본 값은 ‘비활성’ 상태이며, 비활성 시 모든 유저가 관리자와 동일한 권한을 갖습니다.
 - ‘활성’ 시 2가지 위계로 구분됩니다.
   - **관리자(admin)** : 모든 정보에 접근 가능하며 구성원의 권한을 변경할 수 있습니다.
   - **멤버(member)** : 유저리스트를 포함한 ‘유저’, ‘결제’, ‘구성원 관리’ 메뉴 및 ‘설정’-‘보안 설정’ 섹션에 접근이 불가합니다.
-- 구성원 권한 변경은 ‘구성원 관리’ \> 해당 계정 오른쪽 **⋮** 아이콘을 클릭하여 변경합니다.
+- 구성원 권한 변경은 ‘구성원 관리’ 메뉴 \> 해당 계정 오른쪽 **⋮** 아이콘을 클릭하여 변경합니다.
 
 ### 2-2. 세션 관리
 
@@ -65,11 +65,11 @@ description: "Description of your new file."
 
 ### 3-2. 글로벌 제한 발송
 
-특정 기간동안 유저에게 발송되는 메시지 발송 빈도를 채널별로 설정할 수 있습니다. 유저 프리퀀시(Frequency), 유저 캡핑(capping) 또는 유저 피로도 관리라고도 합니다.
+특정 기간동안 유저에게 발송되는 메시지 발송 빈도를 채널별로 설정할 수 있습니다. '유저 프리퀀시(Frequency)', '유저 캡핑(capping)' 또는 '유저 피로도 관리'라고도 합니다.
 
 (Pro plan 이상에서 제공되는 기능입니다.)
 
-![image.png](image%201.png)
+![setting-user-global-frequency.png](/images/setting-user-global-frequency.png)
 
 - 기본 값은 ‘비활성’입니다.
 - ‘활성’ 시 채널별 특정 기간(시간, 일, 주, 월)동안 최대 수신 가능 횟수를 지정할 수 있으며, 다수의 그룹을 생성할 수 있습니다.
@@ -81,6 +81,7 @@ description: "Description of your new file."
   수정된 경우 반드시 **저장** 버튼을 클릭해야만 적용이 됩니다.
 </Check>
 
+
 ## 4. 캠페인 기본 유저 조건
 
 캠페인의 추가 필터에 기본으로 추가되는 유저 조건을 설정합니다.
@@ -91,7 +92,7 @@ description: "Description of your new file."
 
 캠페인 유저 그룹에 디폴트로 사전 설정(Preset)될 유저 조건을 세팅하여 사용성을 높일 수 있습니다.
 
-![image.png](image%202.png)
+![setting-default-user-segment.png](/images/setting-default-user-segment.png)
 
 - 기본 값은 NULL 입니다.
 - 동일한 채널에 여러 조건을 추가할 수 있으며, 모두 AND 조건으로 연결됩니다.
@@ -110,21 +111,21 @@ description: "Description of your new file."
 
 캠페인 발송 채널에 대해 기본 유저 조건이 세팅되어 있는 경우, **기본 정보 및 채널** ‘고급 설정’에서 기본 유저 조건 토글이 노출됩니다.
 
-![image.png](image%203.png)
+![setting-default-user-segment-toggle.png](/images/setting-default-user-segment-toggle.png)
 
 - 기본값은 ‘활성화’ 입니다.
 - 특정 캠페인에서 기본 유저 조건을 비활성화 하고 싶은 경우 해당 토글을 꺼주세요.
 
-![image.png](image%204.png)
+![setting-default-user-segment-example.png](/images/setting-default-user-segment-example.png)
 
 - 고급 설정 ‘기본 유저 조건’ 토글이 활성화 되어 있을 경우, 추가 필터에 유저 조건이 삽입됩니다.
 - 기본 유저 조건을 특정 캠페인 발송 대상에서 직접 수정하는 것은 불가합니다. 필요한 경우, 아래 2가지 작업을 수행해주세요.
   1. 고급 설정 ‘기본 유저 조건’ 토클을 비활성화 합니다.
   2. 추가 필터에 원하는 조건을 수동으로 삽입합니다.
 
-캠페인 최종 생성 직전 검토 페이지에서 추가 필터에 기본 유저 조건이 삽입되어 있는 것을 확인하세요.
+![download.png](/images/download.png)
 
-![image.png](image%205.png)
+캠페인 최종 생성 직전 검토 페이지에서 추가 필터에 기본 유저 조건이 삽입되어 있는 것을 확인하세요.
 
 ### 4-3. 활용 예시
 
@@ -145,6 +146,7 @@ SDK 연동 및 API 개발을 위해 필요한 인증 정보를 확인할 수 있
 <Warning>
   API Secret Key를 갱신하면 API 인증 토큰 호출 requestBody의 Secret Key를 업데이트 해주셔야 합니다. 잘못된 Secret Key를 이용해 지속적으로 인증 토큰을 요청할 경우 해당 Access Key가 잠길 수 있습니다. **Secret Key를 갱신한 경우 반드시 내부 개발팀과 공유하세요.**
 </Warning>
+
 
 ## 6. 결제 정보
 

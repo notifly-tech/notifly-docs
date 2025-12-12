@@ -159,6 +159,12 @@
                     }
                   ]
                 },
+                 {
+                   "group": "콘솔 메뉴",
+                   "pages": [
+                     "ko/user-guide/console/settings"
+                   ]
+                },
                 {
                   "group": "Resources",
                   "pages": ["ko/user-guide/faq"]

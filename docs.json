@@ -138,7 +138,9 @@
                     {
                       "group": "Mixpanel",
                       "pages": [
-                        "ko/user-guide/integrations/mixpanel/mixpanel-introduction"
+                        "ko/user-guide/integrations/mixpanel/mixpanel-introduction",
+                        "ko/user-guide/integrations/mixpanel/mixpanel-cohort-sync",
+                        "ko/user-guide/integrations/mixpanel/mixpanel-export-events"
                       ]
                     },
                     {

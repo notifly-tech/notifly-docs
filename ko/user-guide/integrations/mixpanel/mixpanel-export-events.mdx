@@ -1,0 +1,117 @@
+---
+title: 노티플라이 이벤트 Mixpanel Export
+description: 노티플라이 메시지 발송, 클릭, 오픈 등의 이벤트 데이터를 Mixpanel로 전송해 메시징 성과를 함께 분석합니다.
+---
+
+<Check>
+  노티플라이 이벤트 Mixpanel Export 기능은 연동 기능은 노티플라이 프로 플랜, 엔터프라이즈 플랜 사용시 제공하는 기능입니다.
+</Check>
+
+- 노티플라이 메시지 성과를 Mixpanel 퍼널, 리텐션, 코호트 분석에 함께 포함할 수 있습니다.
+- 푸시 클릭 이후 구매, 이메일 오픈 이후 재방문 같은 흐름을 한 번에 확인할 수 있습니다.
+- 전송할 이벤트를 선택할 수 있어, 불필요한 이벤트 전송을 줄일 수 있습니다.
+
+## 동작 방식
+
+노티플라이는 선택된 이벤트를 모아 주기적으로 배치 방식으로 Mixpanel Import Events API로 전송합니다.  
+설정 직후 데이터가 바로 보이지 않을 수 있으며, 약간의 지연이 생길 수 있습니다.
+
+## 설정 방법
+
+### 1. Mixpanel 프로젝트 토큰 확인
+
+Mixpanel 대시보드에서 연동할 프로젝트의 Project Token을 확인해 주세요. 일반적으로 Project Settings에서 확인할 수 있습니다.
+
+<img
+  src="/ko/user-guide/images/user-guide/mixpanel/ko/assets/images/mixpanel_project_token.png"
+  style={{width: "800px", height: "auto", display: "block", margin: "0 auto"}}
+  alt="Mixpanel 프로젝트 토큰 확인"
+/>
+
+### 2. 노티플라이에서 Mixpanel 프로젝트 토큰 입력
+
+노티플라이 콘솔에서 Mixpanel 프로젝트를 연결합니다.
+
+1. 노티플라이 콘솔에서 설정으로 이동합니다.
+2. Mixpanel 연동 설정 화면에서 프로젝트 토큰을 입력합니다.
+
+<img
+  src="/ko/user-guide/images/user-guide/mixpanel/ko/assets/images/mixpanel_event_export_settings.png"
+  style={{width: "800px", height: "auto", display: "block", margin: "0 auto"}}
+  alt="Mixpanel 연동 설정 화면"
+/>
+
+
+### 3. 전송할 이벤트 선택
+
+Mixpanel로 전송할 이벤트를 선택합니다. Mixpanel은 이벤트 수집량(MTU/Event Count)에 따라 과금이 발생할 수 있으므로, 분석에 꼭 필요한 이벤트부터 시작하고, 필요할 때 추가하는 방식을 권장드립니다.
+
+<img
+  src="/ko/user-guide/images/user-guide/mixpanel/ko/assets/images/mixpanel_event_export_list.png"
+  style={{width: "500px", height: "auto", display: "block", margin: "0 auto"}}
+  alt="Mixpanel 이벤트 선택 목록"
+/>
+
+
+* Select all / Clear all: 전체 선택하거나 전체 해제할 수 있습니다.
+* 설정을 완료하면 저장 버튼을 누릅니다.
+
+
+---
+
+## 지원 이벤트 목록
+
+노티플라이에서 Mixpanel로 내보낼 수 있는 이벤트 상세 목록입니다.
+
+| 카테고리 | 이벤트 이름 (Name) | 설명 |
+| :--- | :--- | :--- |
+| **메시지 전송 (이메일 제외)** | `send_success` | 메시지 발송 성공 |
+| | `send_failure` | 메시지 발송 실패 |
+| | `failover_text_message_send_success` | 대체 문자 메시지 발송 성공 |
+| | `failover_text_message_send_failure` | 대체 문자 메시지 발송 실패 |
+| **이메일** | `email_send` | 이메일 발송 요청 |
+| | `email_delivery` | 이메일 수신 |
+| | `email_open` | 이메일 오픈 |
+| | `email_click` | 이메일 내 링크 클릭 |
+| | `email_bounce` | 이메일 반송 (Bounce) |
+| | `email_complaint` | 이메일 스팸 신고 등 불만 접수 |
+| **푸시/팝업** | `push_delivered` | 푸시 알림 수신 확인 (Client) |
+| | `push_click` | 푸시 알림 클릭 |
+| | `in_app_message_show` | 인앱 팝업 노출 |
+| | `in_web_message_show` | 웹 팝업 노출 |
+| | `main_button_click` | 팝업 메인 버튼 클릭 |
+| | `close_button_click` | 팝업 닫기 버튼 클릭 |
+
+
+## 비회원 데이터 처리 정책
+
+Mixpanel로 이벤트를 전송하려면 distinct_id가 필요합니다. 노티플라이는 distinct_id를 external_user_id로 매핑하기 때문에, external_user_id가 없는 이벤트(비회원)는 기본적으로 전송하지 않습니다.\
+비회원 이벤트까지 분석이 필요하다면, `$distinct_id`를 `notifly:{notifly_user_id}` 포맷으로 전송하도록 설정이 가능합니다. 이 경우 Mixpanel 내에서 Identity Merge(ID 병합) 전략을 직접 수립하셔야 합니다. 해당 설정이 필요하신 경우 노티플라이 팀에 문의해 주세요.
+
+---
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="설정을 완료했는데 Mixpanel에 데이터가 바로 보이지 않습니다.">
+    노티플라이는 데이터를 실시간 스트리밍이 아닌, 주기적인 배치 방식으로 전송합니다. 따라서 설정 후 데이터가 Mixpanel 대시보드에 반영되기까지 약간의 지연 시간이 발생할 수 있습니다.
+    
+    가장 먼저 다음 3가지를 확인해 주세요:
+    1. 프로젝트 토큰이 올바른지
+    2. 해당 이벤트가 체크박스에 선택되어 있는지
+    3. 테스트한 유저에게 `external_user_id`가 존재하는지
+  </Accordion>
+
+  <Accordion title="Mixpanel 비용이 걱정됩니다. 이벤트를 다 보내야 하나요?">
+    노티플라이 설정 화면에서 필요한 이벤트만 선택하여 보낼 수 있습니다.
+    예를 들어 단순 발송 로그보다는 오픈이나 클릭 같은 유저 행동 데이터가 분석에 더 중요할 수 있으므로, 중요도가 높은 이벤트 위주로 선택하시면 비용을 효율적으로 관리할 수 있습니다.
+  </Accordion>
+
+  <Accordion title="이벤트가 중복으로 집계될 수 있나요?">
+    노티플라이는 각 이벤트의 고유 ID를 Mixpanel의 `$insert_id` 필드에 매핑하여 보냅니다. 네트워크 문제 등으로 동일한 데이터가 재전송되더라도, Mixpanel이 `$insert_id`를 기준으로 중복을 제거하므로 안심하셔도 됩니다.
+  </Accordion>
+
+  <Accordion title="여러 개의 Mixpanel 프로젝트를 연동할 수 있나요?">
+    현재 UI에서는 하나의 프로젝트 토큰만 설정할 수 있습니다. 여러 프로젝트와의 연동 등 특수한 구성이 필요하신 경우 [contact@notifly.tech](mailto:contact@notifly.tech)로 연락 부탁드립니다.
+  </Accordion>
+</AccordionGroup>

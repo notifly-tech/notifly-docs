@@ -1,0 +1,129 @@
+---
+title: "Mixpanel 코호트 동기화"
+description: "Mixpanel에서 생성한 코호트(유저 그룹)를 노티플라이의 유저 그룹으로 동기화하여 타겟 캠페인에 활용할 수 있는 기능입니다."
+---
+
+<Check>
+  - Mixpanel의 코호트 동기화 기능을 사용하기 위해서는 Mixpanel의 유료 플랜을 사용중이어야 합니다.
+  - Mixpanel 연동 기능은 노티플라이 프로 플랜, 엔터프라이즈 플랜 사용시 제공하는 기능입니다.
+</Check>
+
+Mixpanel 코호트 동기화는 Mixpanel에서 분석을 통해 생성한 유저 그룹을 노티플라이의 유저 그룹으로 자동 동기화하는 기능입니다.
+
+Mixpanel 코호트 동기화를 활용하면 다양한 타겟 캠페인을 효과적으로 실행할 수 있습니다:
+
+1. 장바구니 이탈 유저 재유도: 장바구니에 상품을 담았지만 구매를 완료하지 않은 유저 코호트를 노티플라이에 동기화하여, 할인 혜택과 함께 구매 완료를 유도하는 리마인드 알림 캠페인을 실행할 수 있습니다.
+2. 신규 기능 온보딩 캠페인: 새로운 기능을 아직 사용해보지 않은 유저 코호트를 생성하고 노티플라이에 동기화하여, 인앱 메시지와 푸시 알림을 통해 기능의 가치를 소개하고 사용을 유도하는 캠페인을 진행할 수 있습니다.
+3. 휴면 유저 재활성화: 30일 이상 앱을 열지 않은 유저를 식별하여 노티플라이에 동기화하고, 개인화된 콘텐츠와 특별 혜택, 업데이트 소식을 담은 일련의 메시지를 통해 유저를 다시 앱으로 유입시킬 수 있습니다.
+
+## 주의사항
+
+코호트 동기화를 설정하기 전에 다음 사항들을 확인해 주세요:
+
+- 이 연동은 Mixpanel의 유저 ID(혹은 특정 유저 속성)를 노티플라이의 `external_user_id`에 매핑합니다.
+- 익명 유저는 지원하지 않습니다. Mixpanel과 노티플라이에서 유저를 식별하려면 각 유저에게 ID가 있어야 합니다.
+- recurring(실시간) 동기화는 최대 60개까지만 연동할 수 있습니다. (Mixpanel 정책)
+- 코호트는 유저 속성으로 연동됩니다.
+
+## 1. 노티플라이 설정
+
+먼저 노티플라이에서 API 인증 정보를 확인해야 합니다.
+
+1. 노티플라이 제품에서 프로젝트 설정으로 이동합니다.
+2. Project ID와 API Credentials (Access Key 및 Secret Key)를 복사합니다.
+
+<Note>
+  Secret Key는 보안 상 이유로 서버에서만 관리해주세요. 갱신할 때는 반드시 내부 개발팀과 미리 공유해야 합니다.
+</Note>
+
+## 2. Mixpanel 설정
+
+Mixpanel에서 노티플라이를 Custom Webhook으로 추가합니다.
+
+1. Mixpanel의 우측 상단 메뉴를 클릭하여 **Integration** 메뉴에 진입합니다.
+
+![Mixpanel Integration Menu](/ko/user-guide/images/user-guide/mixpanel/ko/assets/images/mixpanel_integration_step_1-b9540eb6baad5f945b42329e049bd9ac.png)
+
+2. Integration 하단의 **Custom Webhook**을 새롭게 추가합니다. **Add Connection**을 선택해주세요.
+
+![Mixpanel Add Custom Webhook](/ko/user-guide/images/user-guide/mixpanel/ko/assets/images/mixpanel_integration_step_2-6c19d4b6244ce8a480c26872477be86d.png)
+
+3. 아래의 정보를 정확하게 입력해주세요.
+
+![Mixpanel Webhook Configuration](/ko/user-guide/images/user-guide/mixpanel/ko/assets/images/mixpanel_integration_step_3-006c88be3fa8c62f3517d061d16dab17.png)
+
+   | 필드명            | 값                                                                         | 설명                                                |
+   | -------------- | ------------------------------------------------------------------------- | ------------------------------------------------- |
+   | Connector Name | 원하는 커넥션 이름                                                                | 예를 들면, Notifly - cohort sync                      |
+   | URL            | `https://integration.notifly.tech/mixpanel/projects/<project_id>/cohorts` | project\_id는 노티플라이 콘솔 > 설정에서 확인 가능                |
+   | USERNAME       | `<access_key>`                                                            | access\_key는 노티플라이 콘솔 > 설정 > API 인증 정보 영역에서 확인 가능 |
+   | PASSWORD       | `<secret_key>`                                                            | secret\_key는 노티플라이 콘솔 > 설정 > API 인증 정보 영역에서 확인 가능 |
+
+<Info>
+  Project ID, Access Key, Secret Key는 모두 노티플라이 콘솔의 설정 페이지에서 확인할 수 있습니다.
+</Info>
+
+## 3. 코호트 전송
+
+이제 Mixpanel 코호트를 노티플라이로 전송할 수 있습니다.
+
+1. Mixpanel에서 노티플라이로 전송할 코호트를 엽니다.
+2. 코호트 상세 페이지에서 **Export** 메뉴를 클릭합니다.
+3. 앞서 생성한 Custom Webhook(노티플라이)를 선택합니다.
+4. 동기화 타입을 선택합니다:
+   - **One-time sync**: 1회성 동기화
+   - **Recurring sync**: 정기적인 동기화 (실시간 연동)
+
+<Info>
+  Recurring sync의 경우, 최초 동기화에는 전체 코호트가 포함되지만, 이후 동기화에는 추가 및 제거된 유저만 포함됩니다.
+</Info>
+
+<Warning>
+  Recurring sync는 최대 60개까지만 연동할 수 있습니다. 사용하지 않는 cohort sync는 제거해주시는게 좋습니다. 해당 정책은 Mixpanel의 외부연동 정책인 점 참고해주세요.
+</Warning>
+
+## 4. 노티플라이에서 코호트 확인
+
+Mixpanel 코호트를 노티플라이로 전송하면, 노티플라이 콘솔의 유저 그룹 섹션에서 확인할 수 있습니다.
+
+![Notifly User Groups with Mixpanel Cohort](/ko/user-guide/images/user-guide/mixpanel/ko/assets/images/mixpanel_integration_usage-cb3ca17cf9e6ea6f6461a11812fef9cf.png)
+
+발송 대상에서 유저 그룹 불러오기를 통해서 Mixpanel 코호트를 불러올 수 있으며, 추가 조건을 설정할 수 있습니다.
+
+<Note>
+  노티플라이는 식별자가 있는 유저만 수집합니다.
+
+  예시: Mixpanel 코호트 (Cohort 1)에 User A, User B, User C가 있고, 노티플라이에는 User A와 User C의 `external_user_id`만 있는 경우, 노티플라이는 User A와 User C만 포함하는 유저 그룹을 생성하고 User B는 제외됩니다.
+</Note>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="코호트 동기화와 이벤트 Export를 함께 사용할 수 있나요?">
+    네, 두 기능은 독립적으로 동작하므로 함께 사용하실 수 있습니다. 코호트 동기화로 특정 유저 그룹을 타겟팅하고, 이벤트 Export로 노티플라이 메시징 성과를 Mixpanel에서 분석하는 식으로 활용하시면 더욱 효과적입니다.
+  </Accordion>
+  <Accordion title="동기화된 코호트의 유저 수가 Mixpanel과 다릅니다.">
+    노티플라이는 `external_user_id`가 있는 유저만 수집합니다. Mixpanel 코호트에 포함된 유저 중 노티플라이에 식별자가 없는 유저는 유저 그룹에 추가되지 않습니다.
+
+    또한 Mixpanel과 노티플라이에서 사용하는 유저 ID 매핑이 올바르게 설정되어 있는지 확인해 주세요.
+  </Accordion>
+  <Accordion title="동기화 타입을 어떻게 선택하는 것이 좋나요?">
+    캠페인의 목적에 따라 다릅니다:
+
+    - **Recurring sync**: 실시간성이 중요한 경우 (예: 장바구니 이탈, 실시간 행동 기반 캠페인)
+    - **One-time sync**: 특정 시점의 코호트 스냅샷이 필요한 경우 (예: 월간 분석 결과 기반 캠페인)
+
+    Recurring sync는 더 최신 데이터를 활용할 수 있지만, Mixpanel의 연동 개수 제한(최대 60개)을 고려해야 합니다.
+  </Accordion>
+  <Accordion title="여러 개의 코호트를 동기화할 수 있나요?">
+    네, 노티플라이에 여러 개의 Mixpanel 코호트를 동기화할 수 있습니다. 각 코호트는 노티플라이에서 별도의 유저 그룹으로 생성됩니다.
+
+    단, Recurring sync의 경우 최대 60개까지만 연동할 수 있으니 참고해 주세요.
+  </Accordion>
+  <Accordion title="동기화된 유저 그룹을 수동으로 수정할 수 있나요?">
+    Mixpanel에서 동기화된 유저 그룹은 자동으로 관리되므로 노티플라이에서 직접 수정하실 수 없습니다. 유저 그룹을 수정하려면 Mixpanel에서 코호트를 수정한 후 다시 동기화해 주세요.
+  </Accordion>
+  <Accordion title="Recurring sync의 개수 제한이 있나요?">
+    최대 60개까지의 Recurring sync (실시간 연동)를 사용할 수 있습니다. 사용하지 않는 cohort sync는 제거해주시는게 좋습니다. 해당 정책은 Mixpanel의 외부연동 정책인 점 참고해주세요.
+  </Accordion>
+</AccordionGroup>

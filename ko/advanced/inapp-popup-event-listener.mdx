@@ -7,57 +7,56 @@ description: "노티플라이 SDK에서 인앱 팝업 이벤트를 감지하고 
 
 <Tabs>
   <Tab title="Android">
-
-  <Info> 해당 기능은 노티플라이 Android SDK 1.16.1 이상 버전부터 지원됩니다. </Info>
-
-  ```kotlin
-    package com.your.project
-
-    import android.app.Application
-    import android.util.Log
-    import androidx.core.app.NotificationCompat
-    import androidx.core.content.ContextCompat
-    import tech.notifly.Notifly
-    import tech.notifly.push.interfaces.IInAppMessageEventListener
-
-    class SampleApplication : Application() {
-        override fun onCreate() {
-            super.onCreate()
-
-            // Initialize Notifly SDK
-            Notifly.initialize(
-                context = applicationContext,
-                projectId = BuildConfig.NOTIFLY_PROJECT_ID,
-                username = BuildConfig.NOTIFLY_USERNAME,
-                password = BuildConfig.NOTIFLY_PASSWORD,
-            )
-
-            // Add Notifly in-app message event listener
-            Notifly.addInAppMessageEventListener(
-                object : IInAppMessageEventListener {
-                    override fun handleEvent(
-                        eventName: String,
-                        eventParams: Map<String, Any?>?,
-                    ) {
-                        Log.d("SampleApplication", "InAppMessage event dispatched: $eventName, $eventParams")
-                    }
-                },
-            )
-        }
-    }
-  ```
-  </Tab>
-
-<Tab title="iOS">
-  
-  <Info> 해당 기능은 노티플라이 iOS SDK 1.16.1 이상 버전부터 지원됩니다.</Info>
+    <Info>
+       해당 기능은 노티플라이 Android SDK 1.16.1 이상 버전부터 지원됩니다. 
+    </Info>
+    ```kotlin
+      package com.your.project
     
+      import android.app.Application
+      import android.util.Log
+      import androidx.core.app.NotificationCompat
+      import androidx.core.content.ContextCompat
+      import tech.notifly.Notifly
+      import tech.notifly.push.interfaces.IInAppMessageEventListener
+    
+      class SampleApplication : Application() {
+          override fun onCreate() {
+              super.onCreate()
+    
+              // Initialize Notifly SDK
+              Notifly.initialize(
+                  context = applicationContext,
+                  projectId = BuildConfig.NOTIFLY_PROJECT_ID,
+                  username = BuildConfig.NOTIFLY_USERNAME,
+                  password = BuildConfig.NOTIFLY_PASSWORD,
+              )
+    
+              // Add Notifly in-app message event listener
+              Notifly.addInAppMessageEventListener(
+                  object : IInAppMessageEventListener {
+                      override fun handleEvent(
+                          eventName: String,
+                          eventParams: Map<String, Any?>?,
+                      ) {
+                          Log.d("SampleApplication", "InAppMessage event dispatched: $eventName, $eventParams")
+                      }
+                  },
+              )
+          }
+      }
+    ```
+  </Tab>
+  <Tab title="iOS">
+    <Info>
+       해당 기능은 노티플라이 iOS SDK 1.16.1 이상 버전부터 지원됩니다.
+    </Info>
     ```swift
     import Firebase
     import notifly_ios_sdk
     import UIKit
     import UserNotifications
-
+    
     @main
     class AppDelegate: UIResponder, UIApplicationDelegate {
         func application(
@@ -68,7 +67,7 @@ description: "노티플라이 SDK에서 인앱 팝업 이벤트를 감지하고 
             Notifly.initialize(
                 projectId: TestConstant.projectId, username: TestConstant.username,
                 password: TestConstant.password)
-
+    
             Notifly.addInAppMessageEventListener { eventName, eventParams in
                 print("In App Message Event: \(eventName)")
                 if let params = eventParams {
@@ -80,152 +79,146 @@ description: "노티플라이 SDK에서 인앱 팝업 이벤트를 감지하고 
         }
     }
     ```
-</Tab>
-<Tab title="Flutter">
-
-  <Info> 해당 기능은 노티플라이 Flutter SDK 2.1.0 이상 버전부터 지원됩니다.</Info>
-
-
- ```dart
-import 'package:flutter/material.dart';
-import 'package:notifly_flutter/notifly_flutter.dart';
-import 'dart:async';
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  StreamSubscription<InAppMessageEvent>? _subscription;
-
-  @override
-  void initState() {
-    super.initState();
-    _initNotifly();
-  }
-
-  Future<void> _initNotifly() async {
-    // Initialize Notifly SDK
-    await NotiflyPlugin.initialize(
-      projectId: 'YOUR_PROJECT_ID',
-      username: 'YOUR_USERNAME',
-      password: 'YOUR_PASSWORD',
-    );
-
-    // Subscribe to in-app message events
-    _subscription = NotiflyPlugin.inAppEvents.listen(
-      (event) {
-        print('InAppMessage event dispatched: ${event.eventName}');
-        print('Event params: ${event.eventParams}');
-        
-        // Handle specific events
-        switch (event.eventName) {
-          case 'main_button_click':
-            // Handle main button click
-            break;
-          case 'close_button_click':
-            // Handle close button click
-            break;
-        }
-      },
-      onError: (error, stackTrace) {
-        print('InAppMessage event error: $error');
-        print('Stack trace: $stackTrace');
-      },
-      cancelOnError: false, // Continue listening even after an error
-    );
-  }
-
-  @override
-  void dispose() {
-    _subscription?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Notifly Sample')),
-        body: const Center(child: Text('Notifly Initialized')),
-      ),
-    );
-  }
-}
-```
-
-</Tab>
+  </Tab>
+  <Tab title="Flutter">
+    <Info>
+       해당 기능은 노티플라이 Flutter SDK 2.1.0 이상 버전부터 지원됩니다.
+    </Info>
+    ```dart
+    import 'package:flutter/material.dart';
+    import 'package:notifly_flutter/notifly_flutter.dart';
+    import 'dart:async';
+    
+    class MyApp extends StatefulWidget {
+     const MyApp({super.key});
+    
+     @override
+     State<MyApp> createState() => _MyAppState();
+    }
+    
+    class _MyAppState extends State<MyApp> {
+     StreamSubscription<InAppMessageEvent>? _subscription;
+    
+     @override
+     void initState() {
+       super.initState();
+       _initNotifly();
+     }
+    
+     Future<void> _initNotifly() async {
+       // Initialize Notifly SDK
+       await NotiflyPlugin.initialize(
+         projectId: 'YOUR_PROJECT_ID',
+         username: 'YOUR_USERNAME',
+         password: 'YOUR_PASSWORD',
+       );
+    
+       // Subscribe to in-app message events
+       _subscription = NotiflyPlugin.inAppEvents.listen(
+         (event) {
+           print('InAppMessage event dispatched: ${event.eventName}');
+           print('Event params: ${event.eventParams}');
+           
+           // Handle specific events
+           switch (event.eventName) {
+             case 'main_button_click':
+               // Handle main button click
+               break;
+             case 'close_button_click':
+               // Handle close button click
+               break;
+           }
+         },
+         onError: (error, stackTrace) {
+           print('InAppMessage event error: $error');
+           print('Stack trace: $stackTrace');
+         },
+         cancelOnError: false, // Continue listening even after an error
+       );
+     }
+    
+     @override
+     void dispose() {
+       _subscription?.cancel();
+       super.dispose();
+     }
+    
+     @override
+     Widget build(BuildContext context) {
+       return MaterialApp(
+         home: Scaffold(
+           appBar: AppBar(title: const Text('Notifly Sample')),
+           body: const Center(child: Text('Notifly Initialized')),
+         ),
+       );
+     }
+    }
+    ```
+  </Tab>
 </Tabs>
-
-
 
 ## 인앱 팝업 이벤트 리스너 인터페이스
 
 <Tabs>
-<Tab title="Android">
-`IInAppMessageEventListener` 인터페이스의 `handleEvent` 메서드를 구현하여 인앱 팝업에서 발생하는 이벤트들을 감지할 수 있습니다. 이 메서드는 다음과 같은 파라미터를 받습니다:
+  <Tab title="Android">
+    `IInAppMessageEventListener` 인터페이스의 `handleEvent` 메서드를 구현하여 인앱 팝업에서 발생하는 이벤트들을 감지할 수 있습니다. 이 메서드는 다음과 같은 파라미터를 받습니다:
 
-<ParamField path="eventName" type="field name">
-발생한 이벤트의 이름입니다.
-</ParamField>
-<ParamField path="eventParams" type="field name">
-발생한 이벤트와 관련된 추가 정보가 포함된 객체입니다.
-</ParamField>
-</Tab>
-<Tab title="iOS">
-`addInAppMessageEventListener` 메서드를 통해 `InAppMessageEventListener`를 등록할 수 있습니다.
+    <ParamField path="eventName" type="field name">
+      발생한 이벤트의 이름입니다.
+    </ParamField>
+    <ParamField path="eventParams" type="field name">
+      발생한 이벤트와 관련된 추가 정보가 포함된 객체입니다.
+    </ParamField>
+  </Tab>
+  <Tab title="iOS">
+    `addInAppMessageEventListener` 메서드를 통해 `InAppMessageEventListener`를 등록할 수 있습니다.
 
-<ParamField path="eventName" type="field name">
-발생한 이벤트의 이름입니다.
-</ParamField>
-<ParamField path="eventParams" type="field name">
-발생한 이벤트와 관련된 추가 정보가 포함된 객체입니다.
-</ParamField>
+    <ParamField path="eventName" type="field name">
+      발생한 이벤트의 이름입니다.
+    </ParamField>
+    <ParamField path="eventParams" type="field name">
+      발생한 이벤트와 관련된 추가 정보가 포함된 객체입니다.
+    </ParamField>
+  </Tab>
+  <Tab title="Flutter">
+    `NotiflyPlugin.inAppEvents` 스트림을 통해 인앱 팝업 이벤트를 구독할 수 있습니다. 각 이벤트는 `InAppMessageEvent` 객체로 전달되며, 다음과 같은 속성을 포함합니다:
 
-</Tab>
-<Tab title="Flutter">
-`NotiflyPlugin.inAppEvents` 스트림을 통해 인앱 팝업 이벤트를 구독할 수 있습니다.
-각 이벤트는 `InAppMessageEvent` 객체로 전달되며, 다음과 같은 속성을 포함합니다:
-<ParamField path="eventName" type="field name">
-발생한 이벤트의 이름입니다.
-</ParamField>
-<ParamField path="eventParams" type="field name">
-발생한 이벤트와 관련된 추가 정보가 포함된 객체입니다.
-</ParamField>
-</Tab>
+    <ParamField path="eventName" type="field name">
+      발생한 이벤트의 이름입니다.
+    </ParamField>
+    <ParamField path="eventParams" type="field name">
+      발생한 이벤트와 관련된 추가 정보가 포함된 객체입니다.
+    </ParamField>
+  </Tab>
 </Tabs>
 
 ## 인앱 팝업 이벤트 목록
 
 <Tabs>
-<Tab title="Android">
-`handleEvent`로 전달되는 `eventName` 목록입니다.
+  <Tab title="Android">
+    `handleEvent`로 전달되는 `eventName` 목록입니다.
 
-- `in_app_message_show`: 인앱 팝업 노출.
-- `main_button_click`: 팝업 내 메인 버튼 클릭.
-- `hide_in_app_message_button_click`: 다시 보지 않기 버튼 클릭.
-- `close_button_click`: 팝업 내 닫기 버튼 클릭.
-- `survey_submit_button_click`: 설문 조사 제출 버튼 클릭.
-</Tab>
-<Tab title="iOS">
-`addInAppMessageEventListener`로 전달되는 `eventName` 목록입니다.
+    - `in_app_message_show`: 인앱 팝업 노출.
+    - `main_button_click`: 팝업 내 메인 버튼 클릭.
+    - `hide_in_app_message_button_click`: 다시 보지 않기 버튼 클릭.
+    - `close_button_click`: 팝업 내 닫기 버튼 클릭.
+  </Tab>
+  <Tab title="iOS">
+    `addInAppMessageEventListener`로 전달되는 `eventName` 목록입니다.
 
-- `in_app_message_show`: 인앱 팝업 노출.
-- `main_button_click`: 팝업 내 메인 버튼 클릭.
-- `hide_in_app_message_button_click`: 다시 보지 않기 버튼 클릭.
-- `close_button_click`: 팝업 내 닫기 버튼 클릭.
-- `survey_submit_button_click`: 설문 조사 제출 버튼 클릭.
-</Tab>
-<Tab title="Flutter">
-`NotiflyPlugin.inAppEvents`로 전달되는 `eventName` 목록입니다.
+    - `in_app_message_show`: 인앱 팝업 노출.
+    - `main_button_click`: 팝업 내 메인 버튼 클릭.
+    - `hide_in_app_message_button_click`: 다시 보지 않기 버튼 클릭.
+    - `close_button_click`: 팝업 내 닫기 버튼 클릭.
+    - `survey_submit_button_click`: 설문 조사 제출 버튼 클릭.
+  </Tab>
+  <Tab title="Flutter">
+    `NotiflyPlugin.inAppEvents`로 전달되는 `eventName` 목록입니다.
 
-- `in_app_message_show`: 인앱 팝업 노출.
-- `main_button_click`: 팝업 내 메인 버튼 클릭.
-- `hide_in_app_message_button_click`: 다시 보지 않기 버튼 클릭.
-- `close_button_click`: 팝업 내 닫기 버튼 클릭.
-- `survey_submit_button_click`: 설문 조사 제출 버튼 클릭.
-</Tab>
+    - `in_app_message_show`: 인앱 팝업 노출.
+    - `main_button_click`: 팝업 내 메인 버튼 클릭.
+    - `hide_in_app_message_button_click`: 다시 보지 않기 버튼 클릭.
+    - `close_button_click`: 팝업 내 닫기 버튼 클릭.
+    - `survey_submit_button_click`: 설문 조사 제출 버튼 클릭.
+  </Tab>
 </Tabs>

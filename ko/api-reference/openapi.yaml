@@ -2812,6 +2812,9 @@ components:
         message_data:
           type: object
           description: 메시지 데이터 (채널별로 상이한 구조, 자세한 예시는 위의 메시지 데이터 예시 참조)
+        channel_metadata:
+          type: object
+          description: 채널 메타 데이터 (카카오 친구톡 / 브랜드 메시지 유형 및 타겟)
 
   securitySchemes:
     bearerAuth:

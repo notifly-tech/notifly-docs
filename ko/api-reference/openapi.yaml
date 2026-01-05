@@ -1140,8 +1140,9 @@ paths:
               }
               ```
             </Tab>
-            
-            <Tab title="kakao-friendtalk">
+      
+
+                 <Tab title="kakao-friendtalk">
               ```json
               {
                 "plusFriendId": "@채널명",
@@ -1164,6 +1165,7 @@ paths:
               ```
             </Tab>
             
+          
             <Tab title="kakao-alimtalk">
               ```json
               {
@@ -1302,6 +1304,7 @@ paths:
                       title: "지금 확인하고 혜택 받기!"
                       body: "6월 신규 회원님만을 위한 특별 이벤트 🎁"
                       link: "link://link/feed?id=1243"
+                    "channel_metadata": "{channel_subtype=text, brand_message_target=null}"
                 total_page_count: 1
         "202":
           description: 데이터 생성 중입니다

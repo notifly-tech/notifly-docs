@@ -228,7 +228,9 @@
                 },
                 {
                   "group": "개발자 도구",
-                  "pages": ["ko/devtools/notifly-mcp-server"]
+                  "pages": ["ko/devtools/notifly-mcp-server",
+                            "ko/devtools/notifly-agent-skills"
+                  ]
                 }
               ]
             },

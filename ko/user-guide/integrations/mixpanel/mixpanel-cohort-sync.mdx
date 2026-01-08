@@ -40,9 +40,10 @@ Mixpanel 코호트 동기화를 활용하면 다양한 타겟 캠페인을 효�
 
 Mixpanel에서 노티플라이를 Custom Webhook으로 추가합니다.
 
-1. Mixpanel의 우측 상단 메뉴를 클릭하여 **Integration** 메뉴에 진입합니다.
+1. Mixpanel의 좌측 하단 톱니바퀴 아이콘을 클릭한 뒤 **Integrations**를 클릭합니다.
 
-![Mixpanel Integration Menu](/ko/user-guide/images/user-guide/mixpanel/ko/assets/images/mixpanel_integration_step_1-b9540eb6baad5f945b42329e049bd9ac.png)
+   ![Mixpanel Integrations 1](/images/mixpanel_integrations-1.png)
+
 
 2. Integration 하단의 **Custom Webhook**을 새롭게 추가합니다. **Add Connection**을 선택해주세요.
 
@@ -52,15 +53,18 @@ Mixpanel에서 노티플라이를 Custom Webhook으로 추가합니다.
 
 ![Mixpanel Webhook Configuration](/ko/user-guide/images/user-guide/mixpanel/ko/assets/images/mixpanel_integration_step_3-006c88be3fa8c62f3517d061d16dab17.png)
 
-   | 필드명            | 값                                                                         | 설명                                                |
-   | -------------- | ------------------------------------------------------------------------- | ------------------------------------------------- |
-   | Connector Name | 원하는 커넥션 이름                                                                | 예를 들면, Notifly - cohort sync                      |
-   | URL            | `https://integration.notifly.tech/mixpanel/projects/<project_id>/cohorts` | project\_id는 노티플라이 콘솔 > 설정에서 확인 가능                |
-   | USERNAME       | `<access_key>`                                                            | access\_key는 노티플라이 콘솔 > 설정 > API 인증 정보 영역에서 확인 가능 |
-   | PASSWORD       | `<secret_key>`                                                            | secret\_key는 노티플라이 콘솔 > 설정 > API 인증 정보 영역에서 확인 가능 |
+| 필드명                  | 값                                                                         | 설명                                                 |
+| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------- |
+| Connector Name       | 원하는 커넥션 이름                                                                | 예를 들면, Notifly - cohort sync                       |
+| URL                  | `https://integration.notifly.tech/mixpanel/projects/<project_id>/cohorts` | project_id는 노티플라이 콘솔 \> 설정에서 확인 가능                 |
+| PROPERTIES TO EXPORT | 설정하지 마세요.                                                                 | 지원하지 않습니다.                                         |
+| USERNAME             | `<access_key>`                                                            | access_key는 노티플라이 콘솔 \> 설정 \> API 인증 정보 영역에서 확인 가능 |
+| PASSWORD             | `<secret_key>`                                                            | secret_key는 고객사 내부 개발팀에 문의 필요                      |
 
 <Info>
-  Project ID, Access Key, Secret Key는 모두 노티플라이 콘솔의 설정 페이지에서 확인할 수 있습니다.
+  Project ID, Access Key는 모두 노티플라이 콘솔의 설정 페이지에서 확인할 수 있습니다.
+
+  Secret Key는 보안 상의 이유로 노티플라이에서 열람이 불가능하며 고객사 내부 개발팀에 문의하시기 바랍니다.
 </Info>
 
 ## 3. 코호트 전송

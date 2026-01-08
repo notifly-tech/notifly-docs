@@ -269,7 +269,8 @@
                   "pages": [
                     "POST /messages/text-message",
                     "POST /messages/kakao-alimtalk",
-                    "POST /messages/kakao-friendtalk"
+                    "POST /messages/kakao-friendtalk",
+                    "POST /messages/kakao-brand-message"
                   ]
                 },
                 {

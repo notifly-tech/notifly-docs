@@ -340,27 +340,29 @@ claude mcp add --transport stdio notifly-mcp-server -- npx -y notifly-mcp-server
 
 <Tab title="Gemini CLI">
   <p><strong>설정</strong></p>
-  <p>터미널에서 Gemini CLI를 실행합니다. 아래 중 한 가지 방법으로 노티플라이 MCP 서버를 등록합니다.</p> 
-  <ul>
-    <li><strong>옵션 1: 프로젝트 범위(권장)</strong></li>
-  </ul>
+  <p>터미널에서 Gemini CLI를 실행합니다. 아래 중 한 가지 방법으로 노티플라이 MCP 서버를 등록합니다.</p>
+
+- **옵션 1: 프로젝트 범위(권장)**
 
 ```bash
 gemini mcp add --scope project notifly-mcp-server npx -y notifly-mcp-server@latest
 ```
-  <ul>
-    <li><strong>옵션 2: 사용자 범위</strong></li>
-  </ul>
+
+- **옵션 2: 사용자 범위**
 
 ```bash
 gemini mcp add --scope user notifly-mcp-server npx -y notifly-mcp-server@latest
 ```
 
-  <p><strong>대안: 수동 설정</strong></p>
-  <ul>
-    <li>사용자 설정(<code>~/.gemini/settings.json</code>) 또는 프로젝트 설정(<code>.gemini/settings.json</code>)을 엽니다.</li>
-    <li>아래 설정을 추가한 뒤 Gemini CLI를 재시작합니다.</li>
-  </ul>
+- **옵션 3: 수동 설정**
+
+<p>
+  {" "}
+  사용자 설정(<code>~/.gemini/settings.json</code>) 또는 프로젝트 설정(<code>
+    .gemini/settings.json
+  </code>)을 엽니다.
+</p>
+<p> 아래 설정을 추가한 뒤 Gemini CLI를 재시작합니다.</p>
 
 ```json
 {

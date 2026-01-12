@@ -30,6 +30,7 @@ CLI는 스킬에 대해 두 가지 설치 모드를 지원합니다.
 
 1. **Repo Root (프로젝트별)** – 현재 프로젝트 디렉터리에 스킬을 설치합니다
    (기본값)
+
    - 스킬은 **현재 프로젝트에서만 사용 가능**합니다.
    - 프로젝트별로 다른 설정을 사용하고자 할 때 적합합니다.
 
@@ -75,8 +76,9 @@ npx notifly-agent-skills@latest install --all --client cursor --global
 | :------------- | :------------------------------------- | :----------------- |
 | Amp            | `--client amp`                         | `.amp/skills/`     |
 | Claude Code    | `--client claude` (또는 `claude-code`) | `.claude/skills/`  |
-| Codex          | `--client codex`                       | `.codex/skills/`   |
+| Codex CLI      | `--client codex`                       | `.codex/skills/`   |
 | Cursor         | `--client cursor`                      | `.cursor/skills/`  |
+| Gemini CLI     | `--client gemini`                      | `.gemini/skills/`  |
 | GitHub Copilot | `--client github`                      | `.github/skills/`  |
 | Goose          | `--client goose`                       | `.goose/skills/`   |
 | Letta          | `--client letta`                       | `.skills/`         |
@@ -142,3 +144,10 @@ AI의 비결정적 특성으로 인해 이러한 스킬이 때때로 실패하�
 
 자세한 내용과 최신 스킬 목록은 `notifly-agent-skills` 패키지와 GitHub 저장소를
 참고하시기 바랍니다.
+
+### 기여 및 피드백
+
+버그 제보, 기능 제안 및 직접 기여해 주시는 것을 언제나 환영합니다. 의견이나 개선 사항이 있다면 GitHub 이슈를 등록하거나 Pull Request를 열어주세요.
+
+- GitHub repository: [notifly-tech/skills](https://github.com/notifly-tech/skills)
+- 패키지 및 릴리스 노트: [npm에서 확인](https://www.npmjs.com/package/notifly-agent-skills)

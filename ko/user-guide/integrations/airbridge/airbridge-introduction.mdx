@@ -1,0 +1,192 @@
+---
+title: "Airbridge 어트리뷰션 연동"
+description: "Airbridge를 사용하고 계신 고객사들을 위해 Airbridge의 어트리뷰션 데이터를 노티플라이에서 연동하여 활용할 수 있는 기능입니다. 어트리뷰션 데이터를 기반으로 유저 세그먼트를 생성하여 타겟팅된 CRM 마케팅 캠페인을 실행할 수 있습니다."
+---
+
+<Check>
+  Airbridge 연동 기능은 노티플라이 프로 플랜, 엔터프라이즈 플랜 사용시 제공하는 기능입니다.
+</Check>
+
+## 개요
+
+Airbridge는 모바일 어트리뷰션 분석 플랫폼입니다. Airbridge 연동을 통해 어트리뷰션 데이터를 기반으로 유저를 세그먼트하여 타겟팅된 CRM 마케팅을 실행할 수 있습니다.
+
+## 어트리뷰션 데이터 필드
+
+Airbridge에서 제공하는 어트리뷰션 데이터 필드는 다음과 같습니다:
+
+| 필드명 | 설명 |
+| --- | --- |
+| `attributedChannel` | 채널 |
+| `attributedCampaign` | 캠페인 |
+| `attributedAdGroup` | 광고 그룹 |
+| `attributedAdCreative` | 광고 소재 |
+| `attributedContent` | 콘텐츠 |
+| `attributedTerm` | 키워드 |
+| `attributedSubPublisher` | 하위매체 |
+
+## 연동 가이드
+
+Airbridge SDK에서 어트리뷰션 결과를 받아 노티플라이 SDK의 `setUserProperties` 메소드를 통해 유저 속성으로 설정하는 방식으로 연동합니다.
+
+### 사전 준비
+
+- Airbridge SDK가 설치 및 초기화되어 있어야 합니다.
+- Notifly SDK가 설치 및 초기화되어 있어야 합니다.
+
+<Tabs>
+<Tab title="Android (Kotlin)">
+
+```kotlin title="MainApplication.kt"
+import co.ab180.airbridge.Airbridge
+import co.ab180.airbridge.AirbridgeOptionBuilder
+import co.ab180.airbridge.listener.OnAttributionResultReceiveListener
+import tech.notifly.Notifly
+
+class MainApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+
+        Notifly.initialize(applicationContext, "PROJECT_ID", "USERNAME", "PASSWORD")
+
+        val option = AirbridgeOptionBuilder("YOUR_APP_NAME", "YOUR_APP_SDK_TOKEN")
+            .setOnAttributionReceived(object : OnAttributionResultReceiveListener {
+                override fun onAttributionResultReceived(result: Map<String, String>) {
+                    val properties = mutableMapOf<String, Any>()
+                    result["attributedChannel"]?.let { properties["attributedChannel"] = it }
+                    result["attributedCampaign"]?.let { properties["attributedCampaign"] = it }
+                    result["attributedAdGroup"]?.let { properties["attributedAdGroup"] = it }
+
+                    if (properties.isNotEmpty()) {
+                        Notifly.setUserProperties(applicationContext, properties)
+                    }
+                }
+            })
+            .build()
+
+        Airbridge.initializeSDK(this, option)
+    }
+}
+```
+
+</Tab>
+<Tab title="iOS (Swift)">
+
+```swift
+import notifly_sdk
+import Airbridge
+
+func application(_ application: UIApplication,
+                 didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+  Notifly.initialize(projectId: "PROJECT_ID", username: "USERNAME", password: "PASSWORD")
+
+  let option = AirbridgeOptionBuilder(name: "YOUR_APP_NAME", token: "YOUR_APP_SDK_TOKEN")
+    .setOnAttributionReceived { attribution in
+      var props: [String: Any] = [:]
+      if let v = attribution["attributedChannel"]  { props["attributedChannel"] = v }
+      if let v = attribution["attributedCampaign"] { props["attributedCampaign"] = v }
+      if let v = attribution["attributedAdGroup"]  { props["attributedAdGroup"] = v }
+
+      if !props.isEmpty {
+        Notifly.setUserProperties(userProperties: props)
+      }
+    }
+    .build()
+
+  Airbridge.initializeSDK(option: option)
+  return true
+}
+```
+
+</Tab>
+<Tab title="React Native">
+
+```typescript title="index.js (or App.js)"
+import notifly from 'notifly-sdk';
+import { Airbridge } from 'airbridge-react-native-sdk';
+
+notifly.initialize({
+  projectId: 'PROJECT_ID',
+  username: 'USERNAME',
+  password: 'PASSWORD',
+});
+
+Airbridge.setOnAttributionReceived((attribution) => {
+  const props = {};
+
+  if (attribution?.attributedChannel) props.attributedChannel = attribution.attributedChannel;
+  if (attribution?.attributedCampaign) props.attributedCampaign = attribution.attributedCampaign;
+  if (attribution?.attributedAdGroup) props.attributedAdGroup = attribution.attributedAdGroup;
+
+  if (Object.keys(props).length) {
+    notifly.setUserProperties(props);
+  }
+});
+```
+
+</Tab>
+<Tab title="Flutter">
+
+```dart
+import 'package:notifly_flutter/notifly_flutter.dart';
+import 'package:airbridge_flutter_sdk/airbridge_flutter_sdk.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await NotiflyPlugin.initialize(
+    projectId: 'PROJECT_ID',
+    username: 'USERNAME',
+    password: 'PASSWORD',
+  );
+
+  Airbridge.setOnAttributionReceived((Map<String, String> attribution) async {
+    final props = <String, Object>{};
+
+    final c = attribution['attributedChannel'];
+    final p = attribution['attributedCampaign'];
+    final g = attribution['attributedAdGroup'];
+
+    if (c != null) props['attributedChannel'] = c;
+    if (p != null) props['attributedCampaign'] = p;
+    if (g != null) props['attributedAdGroup'] = g;
+
+    if (props.isNotEmpty) {
+      await NotiflyPlugin.setUserProperties(props);
+    }
+  });
+}
+```
+
+</Tab>
+</Tabs>
+
+## 캠페인 활용 예시
+
+연동 완료 후, 노티플라이 캠페인에서 어트리뷰션 속성을 활용하여 타겟팅할 수 있습니다.
+
+**활용 예시:**
+- `attributedChannel`이 "Facebook"인 유저에게 특별 환영 메시지 발송
+- `attributedCampaign`이 특정 프로모션 캠페인인 유저에게 후속 프로모션 안내
+- 오가닉 유저(어트리뷰션 속성이 없는 유저)와 광고 유입 유저를 구분하여 다른 메시지 발송
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="어트리뷰션 데이터는 언제 수집되나요?">
+    어트리뷰션 데이터는 앱 설치 후 첫 실행 시 Airbridge SDK에서 콜백을 통해 전달됩니다. 해당 콜백이 호출되는 시점에 노티플라이 속성으로 설정됩니다.
+  </Accordion>
+
+  <Accordion title="이미 설치된 유저의 어트리뷰션 데이터도 수집할 수 있나요?">
+    아니요, 어트리뷰션 콜백은 앱 설치 후 최초 실행 시에만 호출됩니다. 이미 설치된 유저의 경우 Airbridge SDK 연동 전에 설치되었다면 어트리뷰션 데이터가 수집되지 않습니다.
+  </Accordion>
+
+  <Accordion title="어트리뷰션 데이터가 null인 경우는 언제인가요?">
+    오가닉 설치(광고를 통하지 않은 자연 유입)의 경우 어트리뷰션 데이터 필드가 null일 수 있습니다. 코드 예시에서 null 체크를 하는 이유입니다.
+  </Accordion>
+
+  <Accordion title="속성 이름을 커스텀할 수 있나요?">
+    네, 코드 예시의 속성 이름(예: `attributedChannel`, `attributedCampaign` 등)은 원하는 대로 변경하실 수 있습니다. 다만, 노티플라이 캠페인에서 해당 속성을 사용할 때 동일한 이름을 사용해야 합니다.
+  </Accordion>
+</AccordionGroup>

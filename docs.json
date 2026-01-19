@@ -152,6 +152,12 @@
                       ]
                     },
                     {
+                      "group": "Airbridge",
+                      "pages": [
+                        "ko/user-guide/integrations/airbridge/airbridge-introduction"
+                      ]
+                    },
+                    {
                       "group": "카페24",
                       "pages": [
                         "ko/user-guide/integrations/cafe24/cafe24-integration",

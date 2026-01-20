@@ -854,7 +854,7 @@ paths:
           schema:
             type: string
             format: date-time
-          description: 조회 시작일자 (yyyy-MM-ddTHH:mm:ss.sssZ 형식, UTC 기준)
+          description: 조회 시작일자 (yyyy-MM-ddTHH:00:00.000Z 형식, UTC 기준, start 시점 포)
           example: "2024-10-27T15:00:00.000Z"
         - name: end
           in: query
@@ -862,7 +862,7 @@ paths:
           schema:
             type: string
             format: date-time
-          description: 조회 종료일자 (yyyy-MM-ddTHH:mm:ss.sssZ 형식, UTC 기준)
+          description: 조회 종료일자 (yyyy-MM-ddTHH:00:00.000Z 형식, UTC 기준, end 시점 미만)
           example: "2024-10-29T15:00:00.000Z"
       responses:
         "200":

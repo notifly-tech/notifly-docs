@@ -983,7 +983,8 @@ paths:
       security:
         - apiKeyAuth: []
       x-mint:
-        content: |
+        content: 
+        description: "조회 당일을 제외한 일자, 캠페인, 채널 별로 발송 성공, 실패, 도달, 클릭, 전환 수를 조회하여 CSV로 추출합니다."|
           <Note>
             **조회 조건**
             

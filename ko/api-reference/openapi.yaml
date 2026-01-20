@@ -969,6 +969,189 @@ paths:
                 data: null
                 error: "Internal Server Error: some-error-message"
 
+
+
+
+
+
+
+  
+/v1/projects/{projectId}/statistics.csv:
+    get:
+      summary: get-campaign-statistics.csv
+      operationId: getCampaignStatistics.csv
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Note>
+            **조회 조건**
+            
+            전일 데이터는 매일 오전 7시(KST)에 집계가 완료됩니다. 정확한 전일 데이터 조회를 위해서는 오전 7시 이후에 API를 호출하시기를 권장합니다.
+          </Note>
+
+          <Info>
+            **집계 표기 일자**
+            
+            일자별 데이터는 발생 일자 기준으로 집계 및 표기됩니다. 예를 들어 7월 23일 발송한 캠페인의 클릭이 24일에 발생했다면, 23일에 발송, 24일에 클릭 이벤트가 집계됩니다.
+          </Info>
+
+  
+        metadata:
+          title: "메시지 통계 조회"
+          description: "일자, 캠페인, 채널 별로 발송 성공, 실패, 도달, 클릭, 전환 수를 조회합니다. (조회 당일 제외)"
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - start
+                - end
+              properties:
+                start:
+                  type: string
+                  format: date
+                  description: 조회 시작일자 (yyyy-MM-dd, KST 기준)
+                end:
+                  type: string
+                  format: date
+                  description: 조회 종료일자 (yyyy-MM-dd, KST 기준, 조회 당일 제외)
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: 필터링 하고자 하는 캠페인 태그 (복수 개의 태그인 경우, 배열 내의 모든 태그를 포함하는 캠페인만 반환, OR 연산)
+            example:
+              start: "2025-06-01"
+              end: "2025-06-07"
+              tags:
+                - "exampleTag"
+      responses:
+        "200":
+          description: 성공적인 통계 조회입니다
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CampaignStatistics"
+              example:
+                - date: "2025-06-01"
+                  resource_type: "campaign"
+                  resource_id: "xyz123"
+                  resource_name: "2025 여름 할인 캠페인"
+                  node_id: 
+                  node_mane: 
+                  variant_id: "xyz123"
+                  variant_name: "할인율 50%"
+                  channel: "push-notification"
+                  channel_sub: "image"
+                  brand_message_target: "M"
+                  tags:
+                    - "summer"
+                    - "discount"
+                    - "mobile"
+                  message_sent: 1500
+                  message_failed: 23
+                  delivered: 1477
+                  click: 234
+                  conversion:
+                    - name: "구매완료"
+                      type: "전체 전환"
+                      count: 45
+                    - name: "구매완료"
+                      type: "전환 매출"
+                      count: 138849
+               - date: "2025-06-01"
+                  resource_type: "user-journey"
+                  resource_id: "xyz123"
+                  resource_name: "신규 회원 온보딩"
+                  node_id: "abc123"
+                  node_mane: "회원가입 d+1 메시지"
+                  variant_id: "xyz123"
+                  variant_name: "환영 메시지"
+                  channel: "kakao-alimtalk"
+                  channel_sub: 
+                  brand_message_target: 
+                  tags: []
+                  message_sent: 892
+                  message_failed: 5
+                  delivered: 887
+                  click: 156
+                  conversion:
+                    - name: "프로필완성"
+                      type: "전체 전환"
+                      count: 5
+
+        "400":
+          description: 요청 파라미터 오류입니다 (날짜 형식, 범위 오류 등)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+              example:
+                error: "InvalidRequest"
+                message: "..."
+        "401":
+          description: 인증 실패입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Unauthorized: Invalid token"
+        "408":
+          description: 타임아웃입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Request timeout. Check the Input Parameters or try again with a shorter date range."
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+              example:
+                error: "InternalServerError"
+                message: "..."
+
+
+
+
+
+
+
+
+
+  
   /projects/{projectId}/campaign-event-data/exports:
     post:
       summary: create-campaign-event-export

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.flarelane.co.kr)",
+      "WebSearch",
+      "Bash(grep:*)",
+      "Bash(xargs:*)",
+      "Bash(tree:*)",
+      "WebFetch(domain:docs.notifly.tech)",
+      "WebFetch(domain:mintlify.com)"
+    ]
+  }
+}

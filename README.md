@@ -36,4 +36,4 @@ Changes are deployed to production automatically after pushing to the main branc
 ## Resources
 
 - [Mintlify Documentation](https://mintlify.com/docs)
-- [Notifly Website](https://notifly.tech)
+- [Notifly Home](https://notifly.tech)

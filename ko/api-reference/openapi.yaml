@@ -974,7 +974,7 @@ paths:
   
 
   
-/v1/projects/{projectId}/statistics.csv:
+  /v1/projects/{projectId}/statistics.csv:
     get:
       summary: get-campaign-statistics-csv
       operationId: getCampaignStatisticsCsv
@@ -1069,7 +1069,7 @@ paths:
                     - name: "구매완료"
                       type: "전환 매출"
                       count: 138849
-               - date: "2025-06-01"
+                - date: "2025-06-01"
                   resource_type: "user-journey"
                   resource_id: "xyz123"
                   resource_name: "신규 회원 온보딩"

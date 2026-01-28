@@ -158,6 +158,12 @@
                       ]
                     },
                     {
+                      "group": "AppsFlyer",
+                      "pages": [
+                        "ko/user-guide/integrations/appsflyer/appsflyer-introduction"
+                      ]
+                    },
+                    {
                       "group": "카페24",
                       "pages": [
                         "ko/user-guide/integrations/cafe24/cafe24-integration",

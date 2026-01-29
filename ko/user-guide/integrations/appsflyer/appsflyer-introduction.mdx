@@ -26,7 +26,20 @@ AppsFlyer postback을 통해 제공되는 어트리뷰션 데이터 필드는 �
 | `appsflyer_id` | AppsFlyer에서 생성한 고유 디바이스 ID |
 | `app_id` | 앱 식별자 |
 | `platform` | 플랫폼 (ios, android) |
-| `country_code` | 국가 코드 |
+| `country_code` | 국가 코드 (ISO 3166 alpha-2) |
+| `media_source` | 어트리뷰션된 미디어 소스 |
+| `pid` | 어트리뷰션된 광고 네트워크 ID |
+| `c` | 캠페인명 |
+| `af_ad` | 광고명 |
+| `af_ad_id` | 광고 ID |
+| `af_adset` | 광고 세트명 |
+| `af_adset_id` | 광고 세트 ID |
+| `af_siteid` | 퍼블리셔/사이트 ID |
+| `install_time` | 설치 시각 |
+| `match_type` | 어트리뷰션 매칭 방식 |
+| `customer_user_id` | 광고주가 설정한 유저 ID |
+| `advertising_id` | Android GAID |
+| `idfa` | iOS IDFA |
 
 ## 연동 가이드
 
@@ -153,11 +166,11 @@ Future<void> setAppsFlyerIdToNotifly(AppsflyerSdk af) async {
 ### 세그먼트 조건 예시
 
 - `$appsflyer_id`가 존재하는 유저: AppsFlyer를 통해 유입된 유저를 식별
-- AppsFlyer 캠페인 정보가 특정 값인 유저: 특정 광고 캠페인을 통해 유입된 유저를 타겟팅
+- `media_source`가 특정 값인 유저: 특정 광고 네트워크를 통해 유입된 유저를 타겟팅 (예: `media_source = "googleadwords_int"`)
 
 ### 메시지 캠페인 예시
 
-- 특정 캠페인 유입 유저에게 온보딩 푸시/인앱 캠페인 실행: 광고 캠페인별로 차별화된 온보딩 메시지 발송
+- 특정 캠페인(`c`) 유입 유저에게 온보딩 푸시/인앱 캠페인 실행: 광고 캠페인별로 차별화된 온보딩 메시지 발송
 
 ## FAQ
 

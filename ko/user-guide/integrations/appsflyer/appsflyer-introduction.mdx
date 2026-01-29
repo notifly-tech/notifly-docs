@@ -1,0 +1,191 @@
+---
+title: "AppsFlyer 어트리뷰션 연동"
+description: "AppsFlyer를 사용하고 계신 고객사들을 위해 AppsFlyer의 어트리뷰션 데이터를 노티플라이에서 연동하여 활용할 수 있는 기능입니다. 어트리뷰션 데이터를 기반으로 유저 세그먼트를 생성하여 타겟팅된 CRM 마케팅 캠페인을 실행할 수 있습니다."
+---
+
+<Check>
+  AppsFlyer 연동 기능은 노티플라이 프로 플랜, 엔터프라이즈 플랜 사용시 제공하는 기능입니다.
+</Check>
+
+<Note>
+  현재 AppsFlyer 연동은 Beta 버전으로 제공됩니다. 연동 신청 후 실제 데이터는 2월 중부터 활용 가능합니다. Beta 기간 동안 연동 데이터는 데이터 포인트 집계에서 제외되며 별도 비용이 발생하지 않습니다.
+</Note>
+
+## 개요
+
+AppsFlyer는 모바일 어트리뷰션 분석 플랫폼입니다. AppsFlyer를 사용 중인 고객은 install 어트리뷰션 데이터를 노티플라이에 연동하여 세그먼트 생성 및 CRM 캠페인 타겟팅에 활용할 수 있습니다.
+
+노티플라이는 AppsFlyer analytics partner postback으로 들어오는 데이터를 유저에 매칭하여 적재합니다. 유저 매칭을 위해 고객 앱에서 AppsFlyer ID를 읽어 노티플라이 유저 속성으로 저장해야 합니다. 저장 키는 유저 속성 `$appsflyer_id`를 사용합니다.
+
+## 어트리뷰션 데이터 필드
+
+AppsFlyer postback을 통해 제공되는 어트리뷰션 데이터 필드는 다음과 같습니다:
+
+| 필드명 | 설명 |
+| --- | --- |
+| `appsflyer_id` | AppsFlyer에서 생성한 고유 디바이스 ID |
+| `app_id` | 앱 식별자 |
+| `platform` | 플랫폼 (ios, android) |
+| `country_code` | 국가 코드 (ISO 3166 alpha-2) |
+| `media_source` | 어트리뷰션된 미디어 소스 |
+| `pid` | 어트리뷰션된 광고 네트워크 ID |
+| `c` | 캠페인명 |
+| `af_ad` | 광고명 |
+| `af_ad_id` | 광고 ID |
+| `af_adset` | 광고 세트명 |
+| `af_adset_id` | 광고 세트 ID |
+| `af_siteid` | 퍼블리셔/사이트 ID |
+| `install_time` | 설치 시각 |
+| `match_type` | 어트리뷰션 매칭 방식 |
+| `customer_user_id` | 광고주가 설정한 유저 ID |
+| `advertising_id` | Android GAID |
+| `idfa` | iOS IDFA |
+
+## 연동 가이드
+
+### 1. AppsFlyer 콘솔에서 Notifly 파트너 활성화
+
+1. AppsFlyer 사이드 메뉴에서 **협업 > 파트너 마켓플레이스**를 엽니다.
+2. 검색창에서 **Notifly**를 검색하고 연동 설정으로 이동합니다.
+3. **파트너 활성화**를 켜고 나머지 연동 섹션을 설정합니다.
+4. 연동 설정 화면에 Postback 관련 섹션이 있는 경우, install postback이 활성화되어 있는지 확인합니다.
+
+<Info>
+AppsFlyer 파트너 연동에 대한 자세한 내용은 [AppsFlyer 파트너 마켓플레이스 가이드](https://support.appsflyer.com/hc/en-us/articles/207033816-Integrated-partner-configuration)를 참고하세요.
+</Info>
+
+### 2. SDK에서 AppsFlyer ID 저장
+
+AppsFlyer ID는 SDK가 앱 설치 시 생성하는 unique device ID입니다. 각 플랫폼에서 `getAppsFlyerUID` API로 조회한 후, 노티플라이 SDK의 `setUserProperties`를 통해 `$appsflyer_id` 유저 속성으로 저장합니다.
+
+### 사전 준비
+
+- AppsFlyer SDK가 설치 및 초기화되어 있어야 합니다.
+- Notifly SDK가 설치 및 초기화되어 있어야 합니다.
+
+<Tabs>
+<Tab title="Android (Kotlin)">
+
+```kotlin title="MainApplication.kt"
+import android.app.Application
+import com.appsflyer.AppsFlyerLib
+import tech.notifly.Notifly
+
+class MainApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+
+        Notifly.initialize(
+            applicationContext,
+            NOTIFLY_PROJECT_ID,
+            NOTIFLY_USERNAME,
+            NOTIFLY_PASSWORD
+        )
+
+        AppsFlyerLib.getInstance().init(AF_DEV_KEY, null, this)
+        AppsFlyerLib.getInstance().start(this)
+
+        val appsflyerId = AppsFlyerLib.getInstance().getAppsFlyerUID(this)
+
+        Notifly.setUserProperties(
+            applicationContext,
+            mapOf("\$appsflyer_id" to appsflyerId)
+        )
+    }
+}
+```
+
+- [AppsFlyer Android getAppsFlyerUID](https://dev.appsflyer.com/hc/docs/android-sdk-reference-appsflyerlib#getappsflyeruid)
+- [Notifly Android setUserProperties](/ko/developer-guide/android-sdk#유저-프로퍼티-등록-notifly-setuserproperties)
+
+</Tab>
+<Tab title="iOS (Swift)">
+
+```swift title="AppDelegate.swift"
+import AppsFlyerLib
+import notifly_sdk
+
+func onAppLaunch() {
+    let appsflyerId = AppsFlyerLib.shared().getAppsFlyerUID()
+
+    let props: [String: Any] = [
+        "$appsflyer_id": appsflyerId
+    ]
+    Notifly.setUserProperties(userProperties: props)
+}
+```
+
+- [AppsFlyer iOS getAppsFlyerUID](https://dev.appsflyer.com/hc/docs/ios-sdk-reference-appsflyerlib#getappsflyeruid)
+- [Notifly iOS setUserProperties](/ko/developer-guide/ios-sdk#2-유저-프로퍼티-등록)
+
+</Tab>
+<Tab title="React Native">
+
+```typescript title="App.tsx"
+import appsFlyer from 'react-native-appsflyer';
+import notifly from 'notifly-sdk';
+
+export function setAppsFlyerIdToNotifly() {
+  appsFlyer.getAppsFlyerUID((err, appsFlyerUID) => {
+    if (err || !appsFlyerUID) return;
+    notifly.setUserProperties({ $appsflyer_id: appsFlyerUID });
+  });
+}
+```
+
+- [AppsFlyer React Native getAppsFlyerUID](https://github.com/AppsFlyerSDK/appsflyer-react-native-plugin/blob/master/Docs/API.md#getappsflyeruid)
+- [Notifly React Native setUserProperties](/ko/developer-guide/react-native-sdk#2-유저-프로퍼티-등록)
+
+</Tab>
+<Tab title="Flutter">
+
+```dart title="main.dart"
+import 'package:appsflyer_sdk/appsflyer_sdk.dart';
+import 'package:notifly_flutter/notifly_flutter.dart';
+
+Future<void> setAppsFlyerIdToNotifly(AppsflyerSdk af) async {
+  final appsflyerId = await af.getAppsFlyerUID();
+  if (appsflyerId == null || appsflyerId.isEmpty) return;
+
+  await NotiflyPlugin.setUserProperties({
+    r'$appsflyer_id': appsflyerId,
+  });
+}
+```
+
+- [AppsFlyer Flutter getAppsFlyerUID](https://github.com/AppsFlyerSDK/appsflyer-flutter-plugin#getappsflyeruid)
+- [Notifly Flutter setUserProperties](/ko/developer-guide/flutter-sdk#2-유저-프로퍼티-등록)
+
+</Tab>
+</Tabs>
+
+## 캠페인 활용 예시
+
+연동 완료 후, 노티플라이 캠페인에서 어트리뷰션 속성을 활용하여 타겟팅할 수 있습니다.
+
+### 세그먼트 조건 예시
+
+- `$appsflyer_id`가 존재하는 유저: AppsFlyer를 통해 유입된 유저를 식별
+- `media_source`가 특정 값인 유저: 특정 광고 네트워크를 통해 유입된 유저를 타겟팅 (예: `media_source = "googleadwords_int"`)
+
+### 메시지 캠페인 예시
+
+- 특정 캠페인(`c`) 유입 유저에게 온보딩 푸시/인앱 캠페인 실행: 광고 캠페인별로 차별화된 온보딩 메시지 발송
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="$appsflyer_id를 설정하지 않으면 어떤 문제가 생기나요?">
+    AppsFlyer postback 데이터가 노티플라이에 도착해도 유저와 매칭할 수 없습니다. 어트리뷰션 데이터가 유저에게 연결되지 않아 세그먼트 및 캠페인에서 활용할 수 없습니다.
+  </Accordion>
+
+  <Accordion title="install postback이 먼저 들어오고 $appsflyer_id 설정이 나중에 되면 어떻게 되나요?">
+    `$appsflyer_id`가 설정되기 전에 도착한 postback 데이터는 유저에게 매칭되지 않습니다. 앱 시작 시점에 가능한 빨리 `$appsflyer_id`를 설정하는 것을 권장합니다.
+  </Accordion>
+
+  <Accordion title="테스트 방법은 무엇인가요?">
+    1. 앱에서 `$appsflyer_id` 설정 코드가 정상 동작하는지 확인합니다.
+    2. 노티플라이 콘솔에서 해당 유저의 속성에 `$appsflyer_id`가 저장되었는지 확인합니다.
+    3. AppsFlyer 콘솔에서 테스트 install을 발생시키고, 노티플라이에서 어트리뷰션 데이터가 수신되는지 확인합니다.
+  </Accordion>
+</AccordionGroup>

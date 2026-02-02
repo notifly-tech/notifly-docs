@@ -22,7 +22,9 @@
                 {
                   "group": "시작하기 전에",
                   "expanded": true,
-                  "pages": ["ko/index"]
+                  "pages": [
+                    "ko/index"
+                  ]
                 },
                 {
                   "group": "캠페인",
@@ -103,23 +105,33 @@
                     },
                     {
                       "group": "이메일",
-                      "pages": ["ko/user-guide/channel/email/guide"]
+                      "pages": [
+                        "ko/user-guide/channel/email/guide"
+                      ]
                     },
                     {
                       "group": "웹 팝업",
-                      "pages": ["ko/user-guide/channel/web-message/guide"]
+                      "pages": [
+                        "ko/user-guide/channel/web-message/guide"
+                      ]
                     },
                     {
                       "group": "인앱 팝업",
-                      "pages": ["ko/user-guide/channel/in-app-message/guide"]
+                      "pages": [
+                        "ko/user-guide/channel/in-app-message/guide"
+                      ]
                     },
                     {
                       "group": "웹훅",
-                      "pages": ["ko/user-guide/channel/webhook/guide"]
+                      "pages": [
+                        "ko/user-guide/channel/webhook/guide"
+                      ]
                     },
                     {
                       "group": "라인",
-                      "pages": ["ko/user-guide/channel/line/guide"]
+                      "pages": [
+                        "ko/user-guide/channel/line/guide"
+                      ]
                     }
                   ]
                 },
@@ -128,7 +140,9 @@
                   "pages": [
                     {
                       "group": "쉐어 링크",
-                      "pages": ["ko/user-guide/analytics/share-link/guide"]
+                      "pages": [
+                        "ko/user-guide/analytics/share-link/guide"
+                      ]
                     }
                   ]
                 },
@@ -174,15 +188,18 @@
                     }
                   ]
                 },
-                 {
-                   "group": "콘솔 메뉴",
-                   "pages": [
-                     "ko/user-guide/console/setting"
-                   ]
+                {
+                  "group": "콘솔 메뉴",
+                  "pages": [
+                    "ko/user-guides/file",
+                    "ko/user-guide/console/setting"
+                  ]
                 },
                 {
                   "group": "Resources",
-                  "pages": ["ko/user-guide/faq"]
+                  "pages": [
+                    "ko/user-guide/faq"
+                  ]
                 }
               ]
             },
@@ -192,7 +209,9 @@
                 {
                   "group": "시작하기",
                   "expanded": true,
-                  "pages": ["ko/developer-guide/index"]
+                  "pages": [
+                    "ko/developer-guide/index"
+                  ]
                 },
                 {
                   "group": "개발자 가이드",
@@ -240,8 +259,9 @@
                 },
                 {
                   "group": "개발자 도구",
-                  "pages": ["ko/devtools/notifly-mcp-server",
-                            "ko/devtools/notifly-agent-skills"
+                  "pages": [
+                    "ko/devtools/notifly-mcp-server",
+                    "ko/devtools/notifly-agent-skills"
                   ]
                 }
               ]
@@ -259,7 +279,9 @@
                 },
                 {
                   "group": "인증",
-                  "pages": ["POST /authenticate"]
+                  "pages": [
+                    "POST /authenticate"
+                  ]
                 },
                 {
                   "group": "이벤트 & 유저",
@@ -318,7 +340,7 @@
                       ]
                     },
                     "POST /v1/projects/{projectId}/statistics",
-                     "GET /v1/projects/{projectId}/statistics.csv",
+                    "GET /v1/projects/{projectId}/statistics.csv",
                     "GET /projects/{projectId}/campaigns/{campaignId}/stats"
                   ]
                 }

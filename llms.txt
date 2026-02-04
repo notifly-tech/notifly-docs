@@ -30,30 +30,30 @@ Base URL: https://docs.notifly.tech
 - [Error Codes (에러 코드)](/ko/api-reference/error): Error handling / 에러 처리
 
 ## Channels (채널)
-- App Push (앱 푸시): iOS, Android push notifications / iOS, Android 푸시 알림
-- Web Push (웹 푸시): Browser push notifications / 브라우저 푸시 알림
-- SMS (문자): Text messaging / 문자 메시지
-- KakaoTalk (카카오톡): Alimtalk, Friendtalk, Brand Message / 알림톡, 친구톡, 브랜드 메시지
-- Email (이메일): Email campaigns / 이메일 캠페인
-- Web Popup (웹 팝업): Website popups / 웹사이트 팝업
-- In-app Popup (인앱 팝업): Mobile app popups / 모바일 앱 팝업
-- Webhook (웹훅): Custom HTTP callbacks / 커스텀 HTTP 콜백
-- LINE (라인): LINE messaging / 라인 메시지
+- [App Push (앱 푸시)](/ko/user-guide/channel/app-push-notification/guide): iOS, Android 모바일 푸시 알림, 앱 알림 설정 및 발송. Mobile push notifications for iOS and Android devices.
+- [Web Push (웹 푸시)](/ko/user-guide/channel/web-push-notification/guide): 브라우저 푸시 알림, 웹 알림, 데스크톱 알림 설정. Browser push notifications for desktop and mobile web.
+- [SMS (문자)](/ko/user-guide/channel/text-message/notifly_guide): 문자 메시지, 텍스트 메시지, MMS 발송. Text messaging and SMS/MMS campaigns.
+- [KakaoTalk (카카오톡)](/ko/user-guide/channel/kakaotalk/setup): 알림톡, 친구톡, 브랜드 메시지 발송 환경 설정. Alimtalk, Friendtalk, Brand Message setup.
+- [Email (이메일)](/ko/user-guide/channel/email/guide): 이메일 캠페인, 뉴스레터, 마케팅 이메일 발송. Email campaigns and newsletter sending.
+- [Web Popup (웹 팝업)](/ko/user-guide/channel/web-message/guide): 웹사이트 팝업, 온사이트 메시지, 배너 표시. Website popups and on-site messaging.
+- [In-app Popup (인앱 팝업)](/ko/user-guide/channel/in-app-message/guide): 모바일 앱 내 팝업, 인앱 메시지, 앱 내 알림. Mobile app popups and in-app messages.
+- [Webhook (웹훅)](/ko/user-guide/channel/webhook/guide): HTTP 콜백, 외부 시스템 연동, API 호출. Custom HTTP callbacks and external system integration.
+- [LINE (라인)](/ko/user-guide/channel/line/guide): 라인 메시지, 일본/아시아 메시징 플랫폼. LINE messaging for Japan and Asia markets.
 
 ## SDKs
-- Android (Kotlin/Java)
-- iOS (Swift/Objective-C)
-- React Native
-- Flutter (Dart)
-- JavaScript (Web)
-- Google Tag Manager
+- [Android SDK](/ko/developer-guide/android-sdk): Kotlin, Java 기반 Android 네이티브 앱 연동. Native Android integration with Kotlin/Java.
+- [iOS SDK](/ko/developer-guide/ios-sdk): Swift, Objective-C 기반 iOS 네이티브 앱 연동. Native iOS integration with Swift/Objective-C.
+- [React Native SDK](/ko/developer-guide/react-native-sdk): React Native 크로스플랫폼 앱 연동, Expo 지원. Cross-platform React Native integration.
+- [Flutter SDK](/ko/developer-guide/flutter-sdk): Dart 기반 Flutter 크로스플랫폼 앱 연동. Cross-platform Flutter integration with Dart.
+- [JavaScript SDK](/ko/developer-guide/javascript-sdk): 웹 브라우저, 웹사이트, SPA 연동. Web browser and website integration.
+- [Google Tag Manager](/ko/developer-guide/google-tag-manager): GTM 템플릿으로 코드 없이 연동. No-code integration via GTM template.
 
 ## Integrations (연동)
-- Mixpanel: Cohort sync, Event export / 코호트 동기화, 이벤트 내보내기
-- Amplitude: Event streaming, Cohort sync / 이벤트 스트리밍, 코호트 동기화
-- Airbridge: Attribution data / 어트리뷰션 데이터
-- AppsFlyer: Attribution data / 어트리뷰션 데이터
-- Cafe24: E-commerce integration / 이커머스 연동
+- [Mixpanel 연동](/ko/user-guide/integrations/mixpanel/mixpanel-introduction): 코호트 동기화, 이벤트 내보내기, 분석 데이터 연동. Cohort sync, event export, analytics integration.
+- [Amplitude 연동](/ko/user-guide/integrations/amplitude/amplitude-introduction): 이벤트 스트리밍, 코호트 동기화, 행동 분석 연동. Event streaming, cohort sync, behavioral analytics.
+- [Airbridge 어트리뷰션](/ko/user-guide/integrations/airbridge/airbridge-introduction): 마케팅 어트리뷰션, 광고 성과 추적, 세그먼트 생성. Marketing attribution and ad performance tracking.
+- [AppsFlyer 어트리뷰션](/ko/user-guide/integrations/appsflyer/appsflyer-introduction): 모바일 어트리뷰션, 설치 추적, 세그먼트 생성. Mobile attribution and install tracking.
+- [Cafe24 (카페24)](/ko/user-guide/integrations/cafe24/cafe24-integration): 카페24 쇼핑몰 연동, 이커머스 마케팅 자동화. Cafe24 e-commerce store integration.
 
 ## Developer Tools (개발자 도구)
 - [Notifly MCP Server (노티플라이 MCP 서버)](/ko/devtools/notifly-mcp-server): AI-powered documentation search / AI 기반 문서 검색

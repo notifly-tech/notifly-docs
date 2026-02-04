@@ -19,7 +19,7 @@ API Base URL: https://api.notifly.tech
 
 ### Campaigns (캠페인)
 
-- [시작하기](/ko/user-guide/campaigns/basic): 캠페인 생성, 발송 타이밍, 채널 선택 등 기본 설정. Campaign creation, scheduling, channel selection basics.
+- [캠페인 시작하기 (Campaign Basics)](/ko/user-guide/campaigns/basic): 캠페인 생성, 발송 타이밍, 채널 선택, 스케줄 설정 등 기본 설정. Campaign creation, scheduling, channel selection basics.
 - [A/B 테스트](/ko/user-guide/campaigns/abtest): 서로 다른 메시지 효과 비교 테스트. Compare different message variations for performance.
 - [캠페인 대시보드](/ko/user-guide/campaigns/campaign-analytics): 발송 현황, 전환율 등 캠페인 성과 분석. Campaign performance metrics and conversion tracking.
 
@@ -36,7 +36,7 @@ API Base URL: https://api.notifly.tech
 
 ### User Journey (유저 여정)
 
-- [시작하기](/ko/user-guide/user-journey/index): 유저 여정 개념, 기본 설정, 노드, 통계 개요. User journey concepts, basic setup, nodes, statistics overview.
+- [유저 여정 시작하기 (User Journey Basics)](/ko/user-guide/user-journey/index): 유저 여정 개념, 자동화 플로우, 노드, 통계 개요. User journey concepts, automation flows, nodes, statistics overview.
 - [유저 여정이란?](/ko/user-guide/user-journey/basic): 핵심 용어(노드, 진입/이탈 조건, 전환, 세션) 설명. Core concepts: nodes, entry/exit conditions, conversions, sessions.
 - [유저 여정 기본 설정](/ko/user-guide/user-journey/basic-info): 기본 정보, 진입 조건, 재진입/이탈 조건, 전환 성과 설정. Basic info, entry conditions, re-entry/exit conditions, conversion settings.
 - [유저 여정 상태와 수정](/ko/user-guide/user-journey/status): 활성/일시중지/비활성 상태 및 변경 동작. Active/paused/inactive states and transitions.
@@ -57,16 +57,16 @@ API Base URL: https://api.notifly.tech
 
 #### App Push (앱 푸시)
 
-- [앱 푸시 알림 발송](/ko/user-guide/channel/app-push-notification/guide): iOS, Android 앱 푸시 설정 및 발송. iOS and Android push notification setup and sending.
+- [앱 푸시 알림 발송 (App Push Notification)](/ko/user-guide/channel/app-push-notification/guide): iOS, Android 모바일 푸시 알림, 앱 알림, 모바일 알림 설정 및 발송. Mobile push notifications setup and sending for iOS and Android.
 
 #### Web Push (웹 푸시)
 
-- [웹 푸시 알림 발송](/ko/user-guide/channel/web-push-notification/guide): SDK/GTM 설치 확인, 발송 시점/대상/내용 설정. SDK/GTM installation, timing, targeting, content setup.
+- [웹 푸시 알림 발송 (Web Push Notification)](/ko/user-guide/channel/web-push-notification/guide): 브라우저 푸시, 웹 알림, 데스크톱 알림 설정 및 발송. Browser push notifications, web notifications setup and sending.
 - [웹 푸시 구성 요소 및 설정](/ko/user-guide/channel/web-push-notification/web-push-components): 브라우저/기기별 설정 차이. Browser and device-specific configuration.
 
 #### SMS (문자)
 
-- [노티플라이에서 문자 발송하기](/ko/user-guide/channel/text-message/notifly_guide): 문자 발송 사전 설정 및 캠페인 생성. SMS sending prerequisites and campaign creation.
+- [노티플라이에서 문자 발송하기 (SMS/Text Message)](/ko/user-guide/channel/text-message/notifly_guide): 문자 메시지, SMS, MMS 발송 설정 및 캠페인 생성. Text messaging, SMS/MMS sending and campaign creation.
 
 #### KakaoTalk (카카오톡)
 
@@ -77,23 +77,23 @@ API Base URL: https://api.notifly.tech
 
 #### Email (이메일)
 
-- [이메일 발송](/ko/user-guide/channel/email/guide): 이메일 캠페인 발송 정보 등록 및 설정. Email campaign sender info and configuration.
+- [이메일 발송 (Email Campaign)](/ko/user-guide/channel/email/guide): 이메일 캠페인, 뉴스레터, 마케팅 이메일 발송 설정. Email campaigns, newsletters, marketing email configuration.
 
 #### Web Popup (웹 팝업)
 
-- [웹 팝업 띄우기](/ko/user-guide/channel/web-message/guide): 웹 팝업 템플릿 제작, 발송 대상/시점 설정. Web popup template creation, targeting, timing.
+- [웹 팝업 띄우기 (Web Popup)](/ko/user-guide/channel/web-message/guide): 웹사이트 팝업, 온사이트 메시지, 배너, 모달 템플릿 제작. Website popups, on-site messages, banners, modal creation.
 
 #### In-app Popup (인앱 팝업)
 
-- [인앱 팝업 띄우기](/ko/user-guide/channel/in-app-message/guide): 이벤트 기반 발송, 템플릿 제작, 메시지 설정. Event-based sending, template creation, message settings.
+- [인앱 팝업 띄우기 (In-app Popup)](/ko/user-guide/channel/in-app-message/guide): 인앱 메시지, 앱 내 팝업, 모바일 팝업, 이벤트 기반 발송. In-app messages, mobile popups with event-based triggering.
 
 #### Webhook (웹훅)
 
-- [Webhook](/ko/user-guide/channel/webhook/guide): 웹훅 채널 개념, 사전 준비, 캠페인 생성 및 개인화. Webhook concept, prerequisites, campaign creation, personalization.
+- [Webhook (웹훅)](/ko/user-guide/channel/webhook/guide): HTTP 콜백, 외부 시스템 연동, API 호출, 커스텀 액션 설정. Webhook HTTP callbacks, external system integration, custom actions.
 
 #### LINE (라인)
 
-- [LINE 메시지 발송](/ko/user-guide/channel/line/guide): 일본/아시아 시장 대상 LINE 메시지 발송. LINE messaging for Japan and Asia markets.
+- [LINE 메시지 발송 (LINE Messaging)](/ko/user-guide/channel/line/guide): 라인 메시지, 일본/대만/태국/아시아 시장 메시징. LINE messaging for Japan, Taiwan, Thailand and Asia markets.
 
 ### Analytics (분석)
 

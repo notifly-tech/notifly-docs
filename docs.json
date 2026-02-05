@@ -198,6 +198,7 @@
                 {
                   "group": "Resources",
                   "pages": [
+                    "ko/user-guide/glossary",
                     "ko/user-guide/faq"
                   ]
                 }

@@ -1,0 +1,398 @@
+---
+title: "용어 사전"
+description: "노티플라이 문서에서 사용되는 주요 용어와 개념을 설명합니다."
+---
+
+## SDK & 기술 용어
+
+### SDK (Software Development Kit)
+앱에 노티플라이 기능을 통합하기 위한 클라이언트 라이브러리입니다. Android, iOS, React Native, Flutter, JavaScript 등 다양한 플랫폼을 지원합니다.
+[개발자 가이드 →](/ko/developer-guide/index)
+
+### API (Application Programming Interface)
+노티플라이 서버와 통신하기 위한 HTTP 기반 인터페이스입니다. 이벤트 트래킹, 유저 속성 설정, 메시지 발송 등을 서버에서 직접 수행할 수 있습니다.
+[API 레퍼런스 →](/ko/api-reference/getting-started)
+
+### FCM (Firebase Cloud Messaging)
+Google에서 제공하는 푸시 알림 전송 서비스입니다. Android 및 iOS 앱에 푸시 알림을 전송하기 위해 노티플라이와 연동합니다.
+[Firebase 연동 가이드 →](/ko/developer-guide/firebase-integration)
+
+### APNs (Apple Push Notification service)
+Apple에서 제공하는 iOS 기기 대상 푸시 알림 전송 서비스입니다. iOS 앱에 푸시 알림을 전송하기 위해 사용됩니다.
+[iOS SDK 가이드 →](/ko/developer-guide/ios-sdk)
+
+### 푸시 토큰 (Push Token)
+푸시 알림을 전송하기 위해 사용되는 기기 고유 식별자입니다. SDK 연동 시 자동으로 수집됩니다.
+[세그먼트 설정 →](/ko/user-guide/campaigns/campaign-segments/segment)
+
+### 딥링크 (Deeplink)
+앱 내 특정 화면이나 콘텐츠로 직접 이동할 수 있는 링크입니다. 푸시 알림 클릭 시 원하는 화면으로 유저를 안내할 수 있습니다.
+[앱 푸시 가이드 →](/ko/user-guide/channel/app-push-notification/guide)
+
+### 웹훅 (Webhook)
+특정 이벤트 발생 시 지정된 URL로 HTTP 요청을 자동으로 전송하는 메커니즘입니다. 외부 시스템과의 연동에 활용됩니다.
+[웹훅 가이드 →](/ko/user-guide/channel/webhook/guide)
+
+### JSON (JavaScript Object Notation)
+데이터를 구조화하여 표현하는 텍스트 기반 형식입니다. API 요청 및 응답, 이벤트 파라미터 등에서 사용됩니다.
+[API 레퍼런스 →](/ko/api-reference/getting-started)
+
+---
+
+## 캠페인 & 메시징
+
+### 캠페인 (Campaign)
+유저에게 메시지를 발송하기 위한 마케팅 단위입니다. 발송 대상, 메시지 내용, 발송 시점 등을 설정할 수 있습니다.
+[캠페인 시작하기 →](/ko/user-guide/campaigns/basic)
+
+### 앱 푸시 (App Push Notification)
+모바일 앱에서 수신하는 푸시 알림입니다. 앱이 실행되지 않은 상태에서도 유저에게 메시지를 전달할 수 있습니다.
+[앱 푸시 가이드 →](/ko/user-guide/channel/app-push-notification/guide)
+
+### 웹 푸시 (Web Push Notification)
+웹 브라우저를 통해 수신하는 푸시 알림입니다. 웹사이트 방문자에게 브라우저를 통해 메시지를 전달합니다.
+[웹 푸시 가이드 →](/ko/user-guide/channel/web-push-notification/guide)
+
+### 인앱 팝업 (In-App Popup)
+앱 내에서 표시되는 팝업 메시지입니다. 앱을 사용 중인 유저에게 실시간으로 메시지를 노출할 수 있습니다.
+[인앱 팝업 가이드 →](/ko/user-guide/channel/in-app-message/guide)
+
+### 웹 팝업 (Web Popup)
+웹사이트에서 표시되는 팝업 메시지입니다. 웹 방문자에게 특정 조건에 따라 메시지를 노출할 수 있습니다.
+[웹 팝업 가이드 →](/ko/user-guide/channel/web-message/guide)
+
+### 이메일 (Email)
+이메일 채널을 통해 발송되는 마케팅 메시지입니다. HTML 템플릿을 활용한 다양한 디자인이 가능합니다.
+[이메일 가이드 →](/ko/user-guide/channel/email/guide)
+
+### 문자 메시지 (SMS/LMS/MMS)
+휴대폰 문자 메시지 채널입니다. SMS(단문), LMS(장문), MMS(멀티미디어) 형식을 지원합니다.
+[문자 메시지 가이드 →](/ko/user-guide/channel/text-message/notifly_guide)
+
+### 카카오 알림톡 (Kakao Alimtalk)
+카카오톡을 통해 발송되는 정보성 메시지입니다. 템플릿 승인 후 발송할 수 있으며, 주로 주문/배송 안내 등에 활용됩니다.
+[카카오 알림톡 가이드 →](/ko/user-guide/channel/kakaotalk/alimtalk-guide)
+
+### 카카오 친구톡 (Kakao Friendtalk)
+카카오톡 채널 친구에게 발송하는 광고성 메시지입니다. 이미지, 버튼 등 다양한 형식을 지원합니다.
+[카카오 친구톡 가이드 →](/ko/user-guide/channel/kakaotalk/friendtalk-guide)
+
+### 카카오 브랜드 메시지 (Kakao Brand Message)
+카카오톡 채널을 통해 발송되는 브랜드 홍보 메시지입니다. 브랜드 인지도 향상에 효과적입니다.
+[카카오 브랜드 메시지 가이드 →](/ko/user-guide/channel/kakaotalk/brandmessage-guide)
+
+### 라인 (LINE)
+LINE 메신저를 통해 발송되는 메시지 채널입니다.
+[라인 가이드 →](/ko/user-guide/channel/line/guide)
+
+### 메시지 개인화 (Message Personalization)
+유저별 속성이나 이벤트 정보를 활용하여 메시지 내용을 개인화하는 기능입니다. Liquid 문법을 사용합니다.
+[메시지 개인화 →](/ko/user-guide/campaigns/personalization/basic)
+
+---
+
+## 타겟팅 & 세그먼트
+
+### 세그먼트 (Segment)
+캠페인 발송 대상이 되는 유저 그룹을 정의하는 조건입니다. 유저 속성, 이벤트 이력 등을 기준으로 설정합니다.
+[세그먼트 설정 →](/ko/user-guide/campaigns/campaign-segments/segment)
+
+### 유저 그룹 (User Group)
+특정 조건을 만족하는 유저들의 집합입니다. 여러 조건을 조합하여 정교한 타겟팅이 가능합니다.
+[세그먼트 설정 →](/ko/user-guide/campaigns/campaign-segments/segment)
+
+### 유저 속성 (User Property)
+유저를 식별하고 분류하기 위한 속성 정보입니다. 이름, 이메일, 가입일, 멤버십 등급 등 다양한 정보를 저장할 수 있습니다.
+[세그먼트 설정 →](/ko/user-guide/campaigns/campaign-segments/segment)
+
+### 코호트 (Cohort)
+특정 기간이나 조건을 공유하는 유저 그룹입니다. 외부 분석 도구에서 생성한 코호트를 노티플라이로 동기화할 수 있습니다.
+[Amplitude 코호트 연동 →](/ko/user-guide/integrations/amplitude/amplitude-cohort-sync)
+
+### 랜덤 버킷 넘버 (Random Bucket Number)
+유저에게 무작위로 할당되는 0~99 사이의 숫자입니다. A/B 테스트나 점진적 롤아웃에 활용됩니다.
+[랜덤 버킷 넘버 →](/ko/user-guide/campaigns/campaign-segments/random-bucket-number)
+
+### 개인화 조건 (Personalized User Condition)
+유저별로 다른 조건을 적용하여 발송 대상을 세분화하는 기능입니다.
+[개인화 조건 →](/ko/user-guide/campaigns/campaign-segments/personalized-user-condition)
+
+---
+
+## 유저 여정
+
+### 유저 여정 (User Journey)
+유저의 행동에 따라 자동으로 실행되는 일련의 마케팅 액션 흐름입니다. 시각적 에디터로 복잡한 시나리오를 구성할 수 있습니다.
+[유저 여정 개요 →](/ko/user-guide/user-journey/index)
+
+### 진입 조건 (Entry Condition)
+유저가 여정에 진입하기 위한 트리거 조건입니다. 특정 이벤트 발생이나 세그먼트 조건 충족 시 여정이 시작됩니다.
+[유저 여정 기본 →](/ko/user-guide/user-journey/basic)
+
+### 메시지 노드 (Message Node)
+유저 여정에서 메시지를 발송하는 노드입니다. 다양한 채널로 메시지를 전송할 수 있습니다.
+[메시지 노드 →](/ko/user-guide/user-journey/nodes/message_node)
+
+### 대기 노드 (Delay Node)
+유저 여정에서 다음 액션 실행을 지연시키는 노드입니다. 일정 시간 또는 특정 시점까지 대기할 수 있습니다.
+[대기 노드 →](/ko/user-guide/user-journey/nodes/delay_node)
+
+### 이벤트 분기 노드 (Event Branching Node)
+유저의 이벤트 발생 여부에 따라 여정 경로를 분기하는 노드입니다.
+[이벤트 분기 노드 →](/ko/user-guide/user-journey/nodes/event_branching_node)
+
+### 유저 그룹 분기 노드 (User Group Branching Node)
+유저가 속한 그룹 조건에 따라 여정 경로를 분기하는 노드입니다.
+[유저 그룹 분기 노드 →](/ko/user-guide/user-journey/nodes/user_group_branching_node)
+
+### 유저 업데이트 노드 (User Update Node)
+유저의 속성 값을 업데이트하는 노드입니다. 여정 진행 중 유저 정보를 변경할 수 있습니다.
+[유저 업데이트 노드 →](/ko/user-guide/user-journey/nodes/user_update_node)
+
+### 이벤트 트리거 노드 (Event Trigger Node)
+외부 시스템에 이벤트를 전송하는 노드입니다. 웹훅이나 외부 API 호출에 활용됩니다.
+[이벤트 트리거 노드 →](/ko/user-guide/user-journey/nodes/event_trigger_node)
+
+### A/B 분기 노드 (Variant Branching Node)
+유저를 무작위로 여러 그룹으로 나누어 A/B 테스트를 수행하는 노드입니다.
+[A/B 분기 노드 →](/ko/user-guide/user-journey/nodes/variant_branching_node)
+
+### 여정 상태 (Journey Status)
+유저 여정의 현재 상태입니다. 초안, 진행 중, 일시 중지, 종료 등의 상태가 있습니다.
+[여정 상태 →](/ko/user-guide/user-journey/status)
+
+### 여정 통계 (Journey Statistics)
+유저 여정의 성과를 측정하는 지표입니다. 진입 수, 완료 수, 이탈 수 등을 확인할 수 있습니다.
+[여정 통계 →](/ko/user-guide/user-journey/statistics)
+
+---
+
+## 이벤트 & 트래킹
+
+### 이벤트 (Event)
+유저의 행동이나 시스템 상태 변화를 나타내는 데이터입니다. 회원가입, 구매, 페이지 조회 등 다양한 행동을 트래킹합니다.
+[캠페인 기본 →](/ko/user-guide/campaigns/basic)
+
+### 이벤트 파라미터 (Event Parameter)
+이벤트에 포함되는 추가 정보입니다. 상품명, 금액, 카테고리 등 이벤트의 상세 내용을 저장합니다.
+[메시지 개인화 →](/ko/user-guide/campaigns/personalization/basic)
+
+### 전환 이벤트 (Conversion Event)
+캠페인의 성과를 측정하기 위한 목표 이벤트입니다. 메시지 발송 후 유저가 수행한 특정 행동을 추적합니다.
+[캠페인 분석 →](/ko/user-guide/campaigns/campaign-analytics)
+
+### 이벤트 트래킹 (Event Tracking)
+유저의 행동 데이터를 수집하는 과정입니다. SDK 또는 API를 통해 이벤트를 노티플라이에 전송합니다.
+[개발자 가이드 →](/ko/developer-guide/index)
+
+### 이벤트 스트리밍 (Event Streaming)
+노티플라이의 이벤트 데이터를 실시간으로 외부 시스템에 전송하는 기능입니다.
+[Amplitude 이벤트 스트리밍 →](/ko/user-guide/integrations/amplitude/amplitude-event-streaming)
+
+---
+
+## 캠페인 실행
+
+### 예약 발송 (Scheduled Campaign)
+지정된 일시에 메시지를 발송하는 캠페인 유형입니다. 일회성 또는 반복 발송이 가능합니다.
+[캠페인 기본 →](/ko/user-guide/campaigns/basic)
+
+### 이벤트 기반 발송 (Event-Based Campaign)
+특정 이벤트 발생 시 자동으로 메시지를 발송하는 캠페인 유형입니다. 실시간 마케팅에 효과적입니다.
+[캠페인 기본 →](/ko/user-guide/campaigns/basic)
+
+### API 발송 (API Campaign)
+API 호출을 통해 직접 메시지 발송을 트리거하는 캠페인 유형입니다. 자체 시스템과의 연동에 활용됩니다.
+[API 캠페인 발송 →](/ko/api-reference/getting-started)
+
+### 발송 제한 시간 (Quiet Hours)
+메시지 발송을 제한하는 시간대입니다. 야간 시간 등 유저에게 방해가 될 수 있는 시간대를 설정합니다.
+[캠페인 기본 →](/ko/user-guide/campaigns/basic)
+
+### 발송 지연 (Send Delay)
+이벤트 발생 후 메시지 발송까지의 대기 시간입니다. 즉시 발송 또는 일정 시간 후 발송을 선택할 수 있습니다.
+[캠페인 기본 →](/ko/user-guide/campaigns/basic)
+
+### 빈도 제한 (Frequency Capping)
+일정 기간 내 동일 유저에게 발송되는 메시지 수를 제한하는 기능입니다. 메시지 피로도를 방지합니다.
+[캠페인 기본 →](/ko/user-guide/campaigns/basic)
+
+### 반복 발송 (Recurring Campaign)
+정해진 주기로 자동 반복 발송되는 캠페인입니다. 일간, 주간, 월간 등의 주기를 설정할 수 있습니다.
+[캠페인 기본 →](/ko/user-guide/campaigns/basic)
+
+---
+
+## 분석 & 리포팅
+
+### 캠페인 분석 (Campaign Analytics)
+캠페인의 성과를 측정하고 분석하는 기능입니다. 발송, 도달, 오픈, 클릭, 전환 등의 지표를 제공합니다.
+[캠페인 분석 →](/ko/user-guide/campaigns/campaign-analytics)
+
+### A/B 테스트 (A/B Test)
+두 가지 이상의 메시지 버전을 비교하여 더 효과적인 버전을 찾는 실험입니다.
+[A/B 테스트 →](/ko/user-guide/campaigns/abtest)
+
+### 어트리뷰션 (Attribution)
+메시지 발송과 유저 행동 간의 인과 관계를 분석하는 것입니다. 캠페인이 전환에 기여한 정도를 측정합니다.
+[캠페인 분석 →](/ko/user-guide/campaigns/campaign-analytics)
+
+### p-value (p값)
+A/B 테스트에서 결과가 우연에 의한 것인지 판단하는 통계적 지표입니다. 일반적으로 0.05 미만이면 통계적으로 유의미합니다.
+[A/B 테스트 →](/ko/user-guide/campaigns/abtest)
+
+### 신뢰 구간 (Confidence Interval)
+A/B 테스트 결과의 불확실성 범위를 나타내는 지표입니다. 실제 효과가 존재할 것으로 예상되는 범위를 보여줍니다.
+[A/B 테스트 →](/ko/user-guide/campaigns/abtest)
+
+### CTR (Click-Through Rate)
+메시지를 본 유저 중 클릭한 유저의 비율입니다. 메시지의 매력도와 관련성을 측정하는 지표입니다.
+[캠페인 분석 →](/ko/user-guide/campaigns/campaign-analytics)
+
+### 전환율 (Conversion Rate)
+메시지를 받은 유저 중 원하는 행동(전환)을 수행한 유저의 비율입니다.
+[캠페인 분석 →](/ko/user-guide/campaigns/campaign-analytics)
+
+---
+
+## 연동
+
+### Amplitude
+제품 분석 플랫폼입니다. 노티플라이와 연동하여 이벤트 스트리밍 및 코호트 동기화가 가능합니다.
+[Amplitude 연동 →](/ko/user-guide/integrations/amplitude/amplitude-introduction)
+
+### Mixpanel
+제품 분석 플랫폼입니다. 노티플라이와 연동하여 이벤트 내보내기 및 코호트 동기화가 가능합니다.
+[Mixpanel 연동 →](/ko/user-guide/integrations/mixpanel/mixpanel-introduction)
+
+### Google Tag Manager (GTM)
+웹사이트 태그를 관리하는 도구입니다. GTM을 통해 노티플라이 JavaScript SDK를 설치할 수 있습니다.
+[GTM 연동 →](/ko/developer-guide/google-tag-manager)
+
+### Airbridge
+모바일 어트리뷰션 및 마케팅 분석 플랫폼입니다. 노티플라이와 연동하여 마케팅 성과 측정이 가능합니다.
+[Airbridge 연동 →](/ko/user-guide/integrations/airbridge/airbridge-introduction)
+
+---
+
+## 데이터 & 개인정보
+
+### CSV 업로드
+CSV 파일을 통해 유저 데이터나 발송 대상 목록을 업로드하는 기능입니다.
+[CSV 업로드 →](/ko/user-guides/file)
+
+### 특수 필드 (Special Fields)
+노티플라이에서 특별한 의미를 가지는 예약된 유저 속성 필드입니다. user_id, email, phone_number 등이 있습니다.
+[세그먼트 설정 →](/ko/user-guide/campaigns/campaign-segments/segment)
+
+### SPF (Sender Policy Framework)
+이메일 발신자의 정당성을 검증하는 인증 방식입니다. 이메일 도메인 설정 시 필요합니다.
+[이메일 가이드 →](/ko/user-guide/channel/email/guide)
+
+### DKIM (DomainKeys Identified Mail)
+이메일의 무결성을 검증하는 디지털 서명 방식입니다. 이메일 전송률 향상에 중요합니다.
+[이메일 가이드 →](/ko/user-guide/channel/email/guide)
+
+### DMARC (Domain-based Message Authentication)
+SPF와 DKIM을 기반으로 이메일 인증 정책을 설정하는 표준입니다.
+[이메일 가이드 →](/ko/user-guide/channel/email/guide)
+
+### 수신 동의 (Opt-in)
+유저가 마케팅 메시지 수신에 동의하는 것입니다. 채널별로 별도의 수신 동의를 관리할 수 있습니다.
+[푸시 수신 동의 →](/ko/advanced/push-notification-consent)
+
+### 수신 거부 (Opt-out)
+유저가 마케팅 메시지 수신을 거부하는 것입니다. 080 수신거부 서비스 등을 통해 관리합니다.
+[문자 메시지 가이드 →](/ko/user-guide/channel/text-message/notifly_guide)
+
+---
+
+## 채널별 용어
+
+### 배지 (Badge)
+앱 아이콘에 표시되는 숫자입니다. 미확인 알림 수를 나타내는 데 사용됩니다.
+[앱 푸시 가이드 →](/ko/user-guide/channel/app-push-notification/guide)
+
+### 중요도 (Importance / Priority)
+푸시 알림의 표시 방식을 결정하는 설정입니다. 높은 중요도일수록 더 눈에 띄게 표시됩니다.
+[앱 푸시 가이드 →](/ko/user-guide/channel/app-push-notification/guide)
+
+### 템플릿 (Template)
+재사용 가능한 메시지 형식입니다. 카카오 알림톡 등 일부 채널은 사전 승인된 템플릿을 사용해야 합니다.
+[카카오 알림톡 가이드 →](/ko/user-guide/channel/kakaotalk/alimtalk-guide)
+
+### 발신 도메인 (Sending Domain)
+이메일 발송에 사용되는 도메인입니다. DNS 설정을 통해 인증이 필요합니다.
+[이메일 가이드 →](/ko/user-guide/channel/email/guide)
+
+### 발신 번호 (Sender Number)
+문자 메시지 발송에 사용되는 전화번호입니다. 사전 등록이 필요합니다.
+[문자 메시지 가이드 →](/ko/user-guide/channel/text-message/notifly_guide)
+
+### 카카오톡 채널 (Kakao Channel)
+카카오톡에서 운영하는 공식 비즈니스 채널입니다. 친구톡, 브랜드 메시지 발송에 필요합니다.
+[카카오톡 설정 →](/ko/user-guide/channel/kakaotalk/setup)
+
+### 서비스 워커 (Service Worker)
+웹 푸시를 수신하기 위해 브라우저에서 실행되는 백그라운드 스크립트입니다.
+[웹 푸시 가이드 →](/ko/user-guide/channel/web-push-notification/guide)
+
+---
+
+## 고급 기능
+
+### 리치 푸시 (Rich Push Notification)
+이미지, 비디오 등 미디어가 포함된 푸시 알림입니다. 더 풍부한 사용자 경험을 제공합니다.
+[리치 푸시 →](/ko/advanced/rich-push-notification)
+
+### 인터셉터 (Interceptor)
+푸시 알림을 앱 코드에서 가로채서 처리하는 기능입니다. 커스텀 로직 구현에 활용됩니다.
+[푸시 인터셉터 →](/ko/advanced/push-notification-interceptor)
+
+### 웹뷰 (Webview)
+앱 내에서 웹 콘텐츠를 표시하는 컴포넌트입니다. 웹뷰와 네이티브 앱 간 이벤트 연동이 가능합니다.
+[웹뷰 연동 →](/ko/advanced/webview)
+
+### 이벤트 리스너 (Event Listener)
+인앱 팝업의 이벤트(표시, 클릭, 닫기 등)를 감지하는 콜백 함수입니다.
+[인앱 팝업 이벤트 리스너 →](/ko/advanced/inapp-popup-event-listener)
+
+### 클릭 이벤트 핸들러 (Click Event Handler)
+푸시 알림 클릭 시 실행되는 커스텀 로직입니다. 딥링크 처리나 분석 트래킹에 활용됩니다.
+[푸시 클릭 이벤트 →](/ko/advanced/push-notification-click-events)
+
+### Liquid
+메시지 개인화에 사용되는 템플릿 언어입니다. 변수, 조건문, 필터 등 다양한 문법을 지원합니다.
+[고급 개인화 →](/ko/user-guide/campaigns/personalization/advanced)
+
+---
+
+## 콘솔 & 관리
+
+### 노티플라이 콘솔 (Notifly Console)
+노티플라이의 웹 기반 관리 도구입니다. 캠페인 생성, 유저 관리, 분석 등 모든 기능을 제공합니다.
+[콘솔 설정 →](/ko/user-guide/console/setting)
+
+### 프로젝트 (Project)
+노티플라이에서 서비스를 구분하는 단위입니다. 각 프로젝트별로 독립적인 데이터와 설정을 관리합니다.
+[콘솔 설정 →](/ko/user-guide/console/setting)
+
+### Access Key
+API 인증에 사용되는 키입니다. 프로젝트별로 발급되며, API 호출 시 필요합니다.
+[API 시작하기 →](/ko/api-reference/getting-started)
+
+---
+
+## 기타 기술 용어
+
+### MCP 서버 (MCP Server)
+Model Context Protocol 기반 서버로, AI 도구가 노티플라이와 연동할 수 있게 해줍니다.
+[MCP 서버 →](/ko/devtools/notifly-mcp-server)
+
+### Agent Skills
+AI 에이전트가 노티플라이 기능을 활용할 수 있도록 하는 스킬 세트입니다.
+[Agent Skills →](/ko/devtools/notifly-agent-skills)
+
+### 통합 테스트 (Integration Test)
+SDK 연동이 올바르게 완료되었는지 확인하는 테스트입니다. 이벤트 수신, 푸시 토큰 등록 등을 검증합니다.
+[통합 테스트 →](/ko/integration-test)

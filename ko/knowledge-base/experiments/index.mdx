@@ -1,0 +1,125 @@
+---
+hidden: true
+title: "A/B Testing (Experiments) (A/B 테스트)"
+description: "Notifly가 다양한 메시지 변형을 테스트하여 가장 효과적인 것을 찾는 방법입니다."
+---
+
+## 개요
+
+A/B 테스트 (실험이라고도 함)는 어떤 버전의 메시지가 더 나은 성과를 내는지 확인하기 위해 다양한 버전을 발송할 수 있게 해줍니다. 사용자의 절반은 메시지 A를, 나머지 절반은 메시지 B를 받을 수 있습니다. 그런 다음 결과를 비교합니다.
+
+## A/B 테스트를 하는 이유
+
+- **효과적인 것 찾기** - 제목, 이미지, 타이밍 테스트
+- **데이터 기반 결정** - 숫자는 거짓말하지 않음
+- **시간이 지남에 따라 개선** - 승자를 유지하고 패자에서 배우기
+
+## 핵심 개념
+
+### Variant (변형)
+
+메시지의 다양한 버전. 각 variant는 다음이 다를 수 있습니다:
+- 제목
+- 콘텐츠
+- 이미지
+- CTA (콜투액션 버튼)
+
+### Control vs. Treatment
+
+| 용어 | 의미 |
+|------|------|
+| Control | 원래/기준 메시지 (variant A) |
+| Treatment | 테스트하는 새 버전 (variant B, C 등) |
+
+### 통계적 유의성
+
+차이가 우연이 아니라 실제라고 얼마나 확신할 수 있는지. 일반적으로:
+- p-value < 0.05 = 95% 확신 = "통계적으로 유의함"
+- p-value > 0.05 = 우연일 수 있음
+
+## 실험 작동 방식
+
+### 1. 설정
+
+여러 variant로 campaign 생성:
+- Variant A: 사용자의 50%
+- Variant B: 사용자의 50%
+
+### 2. 발송
+
+각 그룹에 메시지 발송:
+- 일부 사용자는 Variant A 받음
+- 다른 사용자는 Variant B 받음
+- 무작위 할당
+
+### 3. 측정
+
+각 variant의 결과 추적:
+- 오픈, 클릭, 전환
+- 성과 비교
+
+### 4. 분석
+
+[Scorecard 계산](/ko/knowledge-base/experiments/scorecard-calculation)이 실행되어 결정:
+- 어떤 variant가 더 나은 성과를 냈는지
+- 차이가 통계적으로 유의한지
+- 신뢰 수준
+
+## 실험 지표
+
+### 표준 지표
+
+일반 campaign과 동일:
+- `send_success` - 전달됨
+- `push_click` - 클릭됨
+- `email_open` - 열림
+- 전환
+
+### 비교 지표
+
+variant별로 계산:
+- 전환율
+- 클릭율
+- 사용자당 수익
+
+## Scorecard
+
+scorecard는 variant를 비교하고 알려줍니다:
+- 실제 차이가 있는가?
+- 차이가 얼마나 큰가?
+- 얼마나 확신하는가?
+
+자세한 계산은 [Scorecard 계산](/ko/knowledge-base/experiments/scorecard-calculation)을 참조하세요.
+
+## 모범 사례
+
+### 한 가지만 테스트
+
+한 번에 하나의 요소만 변경:
+- 좋음: 두 가지 다른 제목 테스트
+- 나쁨: 제목, 이미지, CTA 모두 다르게 테스트
+
+### 충분한 샘플 크기
+
+차이를 감지하려면 충분한 사용자 필요:
+- 사용자가 너무 적으면 = 작은 차이 감지 불가
+- 경험 법칙: 대부분의 테스트에서 variant당 최소 1,000명
+
+### 시간 여유
+
+너무 일찍 판단하지 않기:
+- 통계적 유의성 대기
+- 전환은 며칠이 걸릴 수 있음
+
+### 학습 기록
+
+배운 것 기록:
+- 무엇이 효과적이었나? 왜?
+- 무엇이 효과적이지 않았나? 왜?
+
+## 관련 문서
+
+- [Scorecard 계산](/ko/knowledge-base/experiments/scorecard-calculation) - 통계 분석 상세
+- [캠페인 통계](/ko/knowledge-base/campaigns/statistics) - 지표 추적 방법
+- [캠페인](/ko/knowledge-base/concepts/campaigns) - Campaign 기본
+- [집계 개요](/ko/knowledge-base/campaigns/aggregation/index) - 데이터 처리 방법

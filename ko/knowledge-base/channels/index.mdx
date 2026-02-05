@@ -1,0 +1,108 @@
+---
+hidden: true
+title: "채널 (Channels)"
+description: "Channel (채널)은 사용자에게 메시지를 보내는 다양한 방법입니다."
+---
+
+## 개요
+
+채널은 메시지의 전달 방법입니다. Notifly는 푸시 알림부터 웹훅까지 11가지 다른 채널을 지원합니다. 각 채널에는 고유한 요구 사항과 최적의 사용 사례가 있습니다.
+
+## 채널 비교
+
+| 채널 | 도달 대상 | 요구 사항 | 개인화 | 최적 용도 |
+|---------|---------|--------------|-----------------|----------|
+| [푸시 알림](/ko/knowledge-base/channels/push-notification) | 모바일 앱 사용자 | 앱 설치, 기기 토큰, 알림 권한 | 전체 | 긴급 알림, 참여 유도 |
+| [웹 푸시](/ko/knowledge-base/channels/web-push) | 웹사이트 방문자 | 브라우저 권한 | 전체 | 웹사이트 재참여 |
+| [이메일](/ko/knowledge-base/channels/email) | 이메일 보유자 | 이메일 주소 | 전체 | 긴 콘텐츠, 영수증 |
+| [SMS](/ko/knowledge-base/channels/sms) | 전화번호 보유자 | 전화번호 | 전체 | 중요 알림, OTP 코드 |
+| [카카오 알림톡](/ko/knowledge-base/channels/kakao-alimtalk) | 카카오 사용자 | 전화번호, 승인된 템플릿 | 전체 | 트랜잭션 메시지 |
+| [카카오 친구톡](/ko/knowledge-base/channels/kakao-friendtalk) | 카카오 친구 | 친구 상태 | 전체 | 마케팅 메시지 |
+| [카카오 브랜드 메시지](/ko/knowledge-base/channels/kakao-brand-message) | 카카오 사용자 | 브랜드 채널 설정 | 전체 | 브랜드 마케팅 |
+| [LINE](/ko/knowledge-base/channels/line) | LINE 사용자 | LINE User ID, 팔로잉 | 없음 | 일본/대만/태국 메시지 |
+| [인앱 메시지](/ko/knowledge-base/channels/in-app-message) | 앱 내 사용자 | 앱 열림, SDK | 없음 | 팝업, 프로모션 |
+| [인웹 메시지](/ko/knowledge-base/channels/in-web-message) | 웹사이트 내 사용자 | 페이지 로드, SDK | 없음 | 팝업, 공지사항 |
+| [Webhook](/ko/knowledge-base/channels/webhook) | 서버 | 엔드포인트 URL | 전체 | 커스텀 연동 |
+
+## 채널 카테고리
+
+### 푸시 채널
+사용자 기기에 팝업으로 나타나는 메시지:
+- 푸시 알림 (모바일)
+- 웹 푸시 (브라우저)
+
+### 메시징 앱
+외부 메시징 플랫폼을 통해 발송:
+- 카카오 알림톡
+- 카카오 친구톡
+- 카카오 브랜드 메시지
+- LINE
+
+### 직접 채널
+전통적인 연락 방법:
+- 이메일
+- SMS (문자 메시지)
+
+### 온사이트 채널
+사용자가 활동 중일 때 메시지 표시:
+- 인앱 메시지
+- 인웹 메시지
+
+### 기술 채널
+연동 및 자동화용:
+- Webhook
+
+## 채널 선택하기
+
+다음 요소를 고려하세요:
+
+| 요소 | 질문 |
+|--------|----------|
+| 긴급성 | 사용자가 얼마나 빨리 봐야 하나요? |
+| 콘텐츠 길이 | 짧은 알림인가요, 상세 정보인가요? |
+| 사용자 위치 | 지금 앱/웹에 있나요, 아니면 떠났나요? |
+| 지역 | 사용자가 어느 나라에 있나요? |
+| 비용 | 무료(푸시) vs 유료(SMS)? |
+| 권한 | 사용자가 무엇에 동의했나요? |
+
+## 채널별 규칙
+
+각 채널은 고유한 규칙이 있습니다:
+- 필수 사용자 데이터 (이메일, 전화번호, 기기 토큰 등)
+- 콘텐츠 제한 (문자 수, 이미지 크기)
+- 발송 정책 ([피로도 관리](/ko/knowledge-base/rules/fatigue-management) 적용)
+- 수신 거부 처리 ([제외 사용자](/ko/knowledge-base/rules/excluded-users) 통해)
+
+## 개인화 지원
+
+개인화는 [Liquid 템플릿](/ko/knowledge-base/concepts/liquid-templates)을 사용하여 사용자 이름, 이벤트 데이터, 외부 API 응답과 같은 동적 콘텐츠를 메시지에 삽입합니다.
+
+| 지원 수준 | 의미 | 채널 |
+|---------------|---------------|----------|
+| **전체** | 모든 Liquid 기능 작동 | 푸시, 웹 푸시, 이메일, SMS, 카카오 (전체), Webhook |
+| **없음** | Liquid 구문 처리 안 됨 | LINE, 인앱 메시지, 인웹 메시지 |
+
+### 채널별 참고사항
+
+- **이메일**: HTML 콘텐츠는 보안을 위해 자동으로 이스케이프됨
+- **SMS**: 이모지가 개인화 콘텐츠에서 제거됨 (통신사 호환성)
+- **LINE**: Liquid 지원 아직 미구현
+- **인앱/인웹**: 대신 사전 렌더링된 HTML 템플릿 사용
+
+## 대체 발송 옵션
+
+일부 채널은 발송 실패 시 다른 채널로 대체 발송을 지원합니다:
+
+| 기본 | 대체 가능 채널 |
+|---------|------------------|
+| 카카오 알림톡 | SMS |
+| 카카오 친구톡 | SMS |
+| 카카오 브랜드 메시지 | SMS (상황에 따라 다름) |
+
+## 관련 문서
+
+- [Campaign](/ko/knowledge-base/concepts/campaigns) - Campaign에서 채널 사용
+- [User Journey](/ko/knowledge-base/concepts/user-journeys) - Journey에서 채널 사용
+- [Liquid 템플릿](/ko/knowledge-base/concepts/liquid-templates) - 개인화 기능
+- [피로도 관리](/ko/knowledge-base/rules/fatigue-management) - 채널 제한
+- [제외 사용자](/ko/knowledge-base/rules/excluded-users) - 채널별 수신 거부

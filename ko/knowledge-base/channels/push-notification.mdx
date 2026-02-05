@@ -1,0 +1,125 @@
+---
+hidden: true
+title: "푸시 알림 (Push Notification)"
+description: "푸시 알림은 앱이 닫혀 있어도 모바일 폰에 나타나는 알림입니다."
+---
+
+## 개요
+
+푸시 알림은 사용자의 휴대폰 화면에 팝업으로 나타나는 메시지입니다. 앱이 열려 있지 않아도 표시될 수 있습니다. 사용자가 탭하면 앱이 열리고 더 많은 내용을 볼 수 있습니다.
+
+## 작동 방식
+
+1. 사용자가 앱을 설치하고 알림 권한을 부여합니다
+2. 기기가 고유한 토큰을 받습니다
+3. Notifly가 토큰을 사용해 Apple(iOS) 또는 Google(Android)을 통해 메시지를 보냅니다
+4. 메시지가 사용자의 잠금 화면이나 알림 센터에 나타납니다
+
+## 요구 사항
+
+푸시 알림을 보내려면 다음이 필요합니다:
+- 사용자가 앱을 설치함
+- 사용자가 알림 권한을 부여함
+- 유효한 기기 토큰이 Notifly에 등록됨
+
+## 메시지 콘텐츠
+
+| 필드 | 설명 | 필수 |
+|-------|-------------|----------|
+| Title | 상단의 굵은 텍스트 | 예 |
+| Body | 본문 메시지 텍스트 | 예 |
+| Image URL | 표시할 이미지 | 아니오 |
+| Action URL | 탭했을 때 이동할 위치 | 아니오 |
+| Custom data | 앱이 읽을 수 있는 추가 데이터 | 아니오 |
+
+## 메시지 우선순위
+
+| 우선순위 | 사용 시점 |
+|----------|-------------|
+| Low | 긴급하지 않음, 지연 가능 |
+| Normal | 일반 메시지 (기본값) |
+| High | 중요, 빠르게 전달 |
+
+## 특수 옵션
+
+### Disable Badge
+활성화하면 알림을 탭해도 앱의 배지 수가 지워지지 않습니다.
+
+### Custom Data
+앱에 추가 데이터를 전달합니다:
+```
+{
+  "screen": "product",
+  "product_id": "12345"
+}
+```
+앱이 이를 읽고 적절한 화면으로 이동할 수 있습니다.
+
+## 플랫폼 차이점
+
+| iOS | Android |
+|-----|---------|
+| 명시적 권한 필요 | 대부분 자동 허용 |
+| 리치 알림 지원 | 확장 알림 지원 |
+| 사운드 커스터마이징 가능 | 사운드 및 진동 커스터마이징 가능 |
+| 배지 번호 | 배지 번호 |
+
+## 개인화
+
+푸시 알림은 [Liquid 템플릿](/ko/knowledge-base/concepts/liquid-templates) 개인화를 전체 지원합니다.
+
+**지원되는 필드:**
+- Title
+- Body
+- Action URL
+- Custom data 값
+
+**예시:**
+```liquid
+Title: 안녕하세요 {{user.$name | default: "고객"}}님!
+Body: 주문 #{{event.order_id}} 픽업 준비가 완료되었습니다.
+```
+
+## 규칙
+
+- 사용자가 알림을 허용해야 합니다 (또는 iOS에서 provisional)
+- 토큰이 무효화될 수 있습니다 (사용자가 앱 삭제, 토큰 갱신 실패)
+- [피로도 관리](/ko/knowledge-base/rules/fatigue-management) 적용
+- [제외 사용자](/ko/knowledge-base/rules/excluded-users)에서 비활성화 가능
+- [발송 금지 시간](/ko/knowledge-base/rules/forbidden-timing) 준수
+
+## 예외 사항
+
+- 기기 토큰이 유효하지 않으면 발송 실패
+- 사용자가 권한을 거부하면 메시지 건너뜀
+- 앱이 삭제되면 토큰이 무효화됨
+
+## 문제 해결
+
+### 일반적인 발송 문제
+
+| 증상 | 원인 | 해결책 |
+|---------|-------|----------|
+| 메시지 수신 안 됨 | 무효/만료된 토큰 | 기기 토큰 유효성 확인 |
+| "Invalid token" 오류 | 앱 삭제 또는 토큰 오래됨 | 토큰 제거 후 재등록 |
+| Android에서는 작동, iOS에서는 안 됨 | APNs 인증서 문제 | iOS 인증서 확인 |
+| iOS에서는 작동, Android에서는 안 됨 | FCM 구성 문제 | FCM 서버 키 확인 |
+
+### 디버깅 체크리스트
+
+- [ ] 사용자 프로필에 기기 토큰이 있나요?
+- [ ] 토큰이 올바른 플랫폼용인가요?
+- [ ] 프로젝트에 푸시 자격 증명이 구성되어 있나요?
+- [ ] 사용자가 알림 권한을 부여했나요?
+- [ ] 기기에 앱이 설치되어 있나요?
+
+**전체 문제 해결 가이드:** [푸시 알림 실패](/ko/knowledge-base/troubleshooting/channel-failures/push-notification)
+
+## 관련 문서
+
+- [웹 푸시](/ko/knowledge-base/channels/web-push) - 브라우저 알림
+- [인앱 메시지](/ko/knowledge-base/channels/in-app-message) - 앱 내부에 표시
+- [사용자와 기기](/ko/knowledge-base/concepts/users-and-devices) - 기기 토큰
+- [Liquid 템플릿](/ko/knowledge-base/concepts/liquid-templates) - 개인화 기능
+- [채널](/ko/knowledge-base/channels/index) - 모든 채널
+- [푸시 문제 해결](/ko/knowledge-base/troubleshooting/channel-failures/push-notification) - 발송 문제

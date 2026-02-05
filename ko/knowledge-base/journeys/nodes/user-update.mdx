@@ -1,0 +1,107 @@
+---
+hidden: true
+title: "사용자 업데이트 (User Update)"
+description: "사용자 업데이트 노드는 Journey를 흐르면서 사용자 속성을 변경합니다."
+---
+
+## 개요
+
+사용자 업데이트 노드는 사용자가 도달할 때 사용자 속성을 수정합니다. Journey 진행 상황을 추적하고, 플래그를 설정하거나, Journey 단계에 따라 사용자 데이터를 업데이트할 수 있습니다. 예를 들어, 온보딩 Journey를 완료한 후 사용자를 "onboarding_complete"로 표시합니다.
+
+## 작동 방식
+
+1. 사용자가 사용자 업데이트 노드에 도달함
+2. 시스템이 지정된 사용자 속성을 업데이트함
+3. 사용자가 다음 노드로 계속 진행함
+
+## 노드 구조
+
+| 필드 | 설명 |
+|------|------|
+| `type` | 항상 "user-update" |
+| `details.userProperties` | 설정할 속성 |
+| `details.next` | 다음 노드 ID |
+
+## 사용자 속성
+
+업데이트할 속성의 키-값 객체:
+
+```
+{
+  "onboarding_completed": true,
+  "journey_stage": "activated",
+  "last_journey_date": "2024-01-15"
+}
+```
+
+## 속성 유형
+
+다양한 유형을 설정할 수 있습니다:
+
+| 유형 | 예시 |
+|------|------|
+| String | `"status": "active"` |
+| Number | `"points": 100` |
+| Boolean | `"is_vip": true` |
+| Array | `"tags": ["new", "engaged"]` |
+| Date | `"enrolled_at": "2024-01-15"` |
+
+## 사용 사례
+
+| 사용 사례 | 설정되는 속성 |
+|----------|---------------|
+| Journey 진행 상황 추적 | `journey_stage: "step_2"` |
+| 완료 표시 | `onboarding_done: true` |
+| 선호도 설정 | `notification_preference: "daily"` |
+| 포인트 부여 | `points: currentPoints + 10` |
+| 사용자 태그 | `segment_tags: ["engaged"]` |
+
+## 즉시 업데이트
+
+속성은 즉시 업데이트됩니다:
+- 변경 사항이 사용자 프로필에 저장됨
+- 향후 Segment 쿼리에서 사용 가능
+- 다른 실행 중인 Journey에 영향을 줄 수 있음
+
+## 규칙
+
+- 속성은 기존 데이터와 병합됨
+- 기존 속성은 덮어쓸 수 있음
+- 새 속성이 추가됨
+- 다음 노드로 이동하기 전에 업데이트 발생
+
+## 예외 사항
+
+- 유효하지 않은 속성 값은 조용히 실패할 수 있음
+- 예약된 속성 이름은 거부될 수 있음
+- 빠른 업데이트에 속도 제한이 적용될 수 있음
+
+## Segment와 결합
+
+속성을 업데이트한 후 다음을 할 수 있습니다:
+- Segment 분기를 사용하여 새 값에 따라 라우팅
+- 다른 Campaign에서 이 속성을 가진 사용자 타겟팅
+- 분석용 Segment 구축
+
+## 예시 흐름
+
+```
+[메시지: 환영 이메일]
+    ↓
+[사용자 업데이트: onboarding_step = 1]
+    ↓
+[대기: 1일]
+    ↓
+[메시지: 후속 이메일]
+    ↓
+[사용자 업데이트: onboarding_step = 2]
+    ↓
+[완료]
+```
+
+## 관련 문서
+
+- [Segment](/ko/knowledge-base/concepts/segments) - Segment에서 속성 사용
+- [사용자와 디바이스](/ko/knowledge-base/concepts/users-and-devices) - 사용자 속성
+- [Segment 분기](/ko/knowledge-base/journeys/nodes/segment-branching) - 속성별 라우팅
+- [User Journey](/ko/knowledge-base/journeys/index) - Journey 개요

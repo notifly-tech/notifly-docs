@@ -1,0 +1,88 @@
+---
+hidden: true
+title: "Campaign 라이프사이클 (Campaign Lifecycle)"
+description: "Campaign은 생성부터 완료까지 다양한 상태를 거칩니다."
+---
+
+## 개요
+
+모든 Campaign에는 현재 무엇을 하고 있는지 알려주는 상태가 있습니다. 상태는 Campaign을 생성, 시작, 일시 중지 또는 완료할 때 변경됩니다.
+
+## Campaign 상태
+
+| 상태 | 코드 | 의미 |
+|------|------|------|
+| **Deleted** | -1 | Campaign이 삭제됨. 보거나 복구할 수 없음. |
+| **Draft** | 0 | Campaign이 저장되었지만 실행 중이 아님. 아직 수정 가능. |
+| **Active** | 1 | Campaign이 라이브이며 사용자에게 메시지를 보내고 있음. |
+| **Inactive** | 2 | Campaign이 일시 중지됨. 메시지가 발송되지 않지만 다시 시작 가능. |
+| **Terminated** | 3 | Campaign이 완료됨. 작업을 마쳤으며 더 이상 메시지를 보내지 않음. |
+
+## 상태 전환
+
+Campaign이 상태 간 이동하는 방식:
+
+```
+                    ┌─────────┐
+                    │  Draft  │
+                    └────┬────┘
+                         │ 시작
+                         ▼
+┌──────────┐       ┌─────────┐       ┌────────────┐
+│ Inactive │◄─────►│  Active │──────►│ Terminated │
+└──────────┘ 일시  │         │ 완료  └────────────┘
+           중지/   └────┬────┘
+           재개         │
+                        ▼
+                   ┌─────────┐
+                   │ Deleted │
+                   └─────────┘
+```
+
+### 유효한 전환
+
+| 시작 | 종료 | 발생 조건 |
+|------|------|-----------|
+| Draft | Active | Campaign을 시작함 |
+| Draft | Deleted | Campaign을 삭제함 |
+| Active | Inactive | Campaign을 일시 중지함 |
+| Active | Terminated | Campaign이 완료됨 (즉시 실행 Campaign은 자동 종료) |
+| Active | Deleted | Campaign을 삭제함 |
+| Inactive | Active | Campaign을 재개함 |
+| Inactive | Deleted | Campaign을 삭제함 |
+
+## 수정 제한
+
+Campaign 상태에 따라 수정 가능한 항목이 다릅니다:
+
+| 상태 | 수정 가능? | 변경 가능한 항목 |
+|------|------------|------------------|
+| Draft | 예 | 모든 것 - Campaign이 아직 시작되지 않음 |
+| Active | 제한적 | 설명 등 일부 설정, 채널이나 Segment 같은 핵심 설정은 불가 |
+| Inactive | 제한적 | Active와 동일 - 일시 중지해도 수정이 잠금 해제되지 않음 |
+| Terminated | 아니오 | 없음 - Campaign이 완료됨 |
+| Deleted | 아니오 | 없음 - Campaign이 삭제됨 |
+
+## 타이밍 유형별 동작
+
+Campaign 유형에 따라 종료 방식이 다릅니다:
+
+| 타이밍 유형 | 종료 시점 |
+|-------------|-----------|
+| **Immediate** | 매칭되는 모든 사용자에게 발송 직후 |
+| **Scheduled** | 예약된 시간이 지나고 메시지가 발송된 후 |
+| **Recurring** | 수동으로 중지하거나 종료 날짜에 도달했을 때 |
+| **Event-triggered** | 수동으로 중지했을 때 |
+| **API-triggered** | 수동으로 중지했을 때 |
+
+## 규칙
+
+- 라이프사이클에서 뒤로 갈 수 없음 (예: Terminated → Active는 불가)
+- Campaign 삭제는 영구적 - "삭제 취소"가 없음
+- Active Campaign만 메시지를 보냄
+- Immediate Campaign은 발송 후 자동으로 Terminated가 됨
+
+## 관련 문서
+
+- [Campaign 생성](/ko/knowledge-base/campaigns/creation) - 새 Campaign을 만드는 방법
+- [오류 처리](/ko/knowledge-base/campaigns/errors) - 상태 변경 시 발생할 수 있는 오류

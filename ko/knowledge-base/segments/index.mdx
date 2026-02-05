@@ -1,0 +1,80 @@
+---
+hidden: true
+title: "Segment (세그먼트)"
+description: "Segment (세그먼트)는 규칙에 따라 정의된 사용자 그룹입니다."
+---
+
+## 개요
+
+Segment는 메시지를 받을 사용자를 선택하는 방법입니다. 모든 사용자에게 발송하는 대신, 규칙을 정의하여 사용자를 필터링합니다. 규칙에 맞는 사용자가 segment에 포함됩니다.
+
+## 작동 방식
+
+1. 조건(규칙)을 정의
+2. 조건에 따라 사용자를 평가
+3. 일치하는 사용자가 segment에 포함
+4. Campaign/Journey 타겟팅에 segment 사용
+
+## Segment 유형
+
+| 유형 | 설명 |
+|------|------|
+| Condition | 규칙에 따라 필터링된 사용자 (동적) |
+| Cohort | 특정 시점의 사용자 스냅샷 (정적) |
+| CSV | 파일에서 가져온 사용자 목록 |
+
+### Condition Segment
+- 포함 대상을 정의하는 규칙
+- 조건 일치 여부에 따라 자동으로 사용자가 추가/제외됨
+- 실시간 또는 준실시간으로 평가
+
+### Cohort Segment
+- 특정 시점에 저장된 그룹
+- 생성 후 변경되지 않음
+- 시간 기반 분석에 유용
+
+### CSV Segment
+- 파일에서 업로드한 사용자 목록
+- 정적 리스트
+- 특정 사용자 목록이 필요할 때 적합
+
+## Condition Segment 작성
+
+Segment는 **그룹**과 **조건**을 사용합니다:
+
+### Condition Group
+```
+Group 1: (조건 AND 조건 AND 조건)
+OR
+Group 2: (조건 AND 조건)
+```
+
+- 그룹 내: 조건들은 AND로 결합 (모두 참이어야 함)
+- 그룹 간: 그룹들은 OR로 결합 (어느 그룹이든 일치하면 됨)
+
+### Group Operator
+- `AND` - 모든 그룹이 일치해야 함
+- `OR` - 어느 그룹이든 일치하면 됨
+
+### Condition Operator (그룹 내)
+- 그룹 내 조건들은 항상 AND
+
+## Segment Info 구조
+
+| 필드 | 설명 |
+|------|------|
+| `groups` | condition group 배열 |
+| `group_operator` | 그룹 결합 방식 (AND/OR) |
+| `additional_conditions` | 모든 그룹에 적용되는 추가 조건 |
+| `allow_duplicate_user` | 동일 사용자 중복 허용 여부 |
+| `user_id_based` | 특정 user ID로 타겟팅 |
+| `user_id_list` | 특정 user ID 목록 |
+| `csv_file_name` | CSV segment용 파일명 |
+
+## 관련 문서
+
+- [조건 유형](/ko/knowledge-base/segments/condition-types) - 모든 조건 유형
+- [연산자](/ko/knowledge-base/segments/operators) - 비교 연산자
+- [이벤트 필터](/ko/knowledge-base/segments/event-filters) - 이벤트 속성 기반 필터링
+- [캠페인](/ko/knowledge-base/concepts/campaigns) - Segment 활용
+- [유저 여정](/ko/knowledge-base/concepts/user-journeys) - Segment 타겟팅

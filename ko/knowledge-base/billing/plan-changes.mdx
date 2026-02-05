@@ -1,0 +1,77 @@
+---
+hidden: true
+title: "Plan Change (플랜 변경)"
+description: "요금제 업그레이드 또는 다운그레이드 방법입니다."
+---
+
+## 개요
+
+Plan change (플랜 변경)를 통해 다른 요금제로 전환할 수 있습니다. 상위 플랜으로 업그레이드하거나 하위 플랜으로 다운그레이드할 수 있습니다.
+
+## 업그레이드 작동 방식
+
+더 비싼 플랜으로 업그레이드할 때:
+
+1. **즉시 적용** - 새 플랜이 바로 시작됨
+2. **일할 계산** - 청구 주기의 남은 일수에 대해서만 요금 지불
+3. **계산 공식**: `(가격 차이 × 남은 일수) / 청구 주기 일수`
+
+### 업그레이드 예시
+
+- 현재 플랜: Standard (150,000원/월)
+- 새 플랜: Pro (800,000원/월)
+- 가격 차이: 650,000원
+- 주기 내 남은 일수: 15일
+- 청구 주기: 30일
+- 청구 금액: (650,000 × 15) / 30 = 325,000원
+
+## 다운그레이드 작동 방식
+
+더 저렴한 플랜으로 다운그레이드할 때:
+
+1. **예약 변경** - 다음 청구 주기에 새 플랜 시작
+2. **환불 없음** - 주기 종료까지 현재 플랜 유지
+3. **즉시 청구 없음** - 다음 달부터 낮은 가격 적용
+
+### 다운그레이드 예시
+
+- 현재 플랜: Pro (800,000원/월)
+- 새 플랜: Standard (150,000원/월)
+- 주기 내 남은 일수: 15일
+- 결과: 15일 더 Pro 사용 후 Standard로 전환
+
+## 규칙
+
+### 최소 대기 기간
+- 플랜 변경 사이에 **7일** 대기 필요
+- 일할 계산 악용 방지를 위함
+
+### Enterprise 플랜
+- 온라인으로 Enterprise로 업그레이드 불가 (영업팀 문의)
+- 온라인으로 Enterprise에서 다운그레이드 불가 (영업팀 문의)
+
+### 동일 플랜
+- 이미 사용 중인 플랜으로 전환 불가
+
+## 플랜 순서 (최저 → 최고)
+
+1. Commerce Solution Free (`commerce-solution-free`) - 커머스 연동 전용
+2. Standard (`standard`)
+3. Plus (`plus`)
+4. Pro (`pro`)
+5. Enterprise (`enterprise`)
+
+## 오류 메시지
+
+| 오류 | 의미 |
+|------|------|
+| "Unsupported plan" | 유효하지 않은 플랜명 |
+| "Custom plan cannot be updated" | Enterprise는 영업팀 문의 필요 |
+| "Current plan is already X" | 이미 해당 플랜 사용 중 |
+| "Plan can be updated after 7 days" | 대기 기간 미충족 |
+
+## 관련 문서
+
+- [요금제](/ko/knowledge-base/billing/pricing-plans) - 제공 플랜
+- [결제 수단](/ko/knowledge-base/billing/payment-methods) - 결제 방법
+- [결제 개요](/ko/knowledge-base/billing/index) - 결제 기본 사항

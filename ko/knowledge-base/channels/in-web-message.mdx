@@ -1,0 +1,150 @@
+---
+hidden: true
+title: "인웹 메시지 (In-Web Message)"
+description: "인웹 메시지는 사용자가 웹사이트를 브라우징하는 동안 나타나는 팝업입니다."
+---
+
+## 개요
+
+인웹 메시지는 사용자가 웹사이트를 브라우징하는 동안 화면에 나타나는 알림입니다. 인앱 메시지와 비슷하지만 웹용입니다. 프로모션, 공지사항, 뉴스레터 가입, 이탈 방지 오퍼에 적합합니다.
+
+## 작동 방식
+
+1. 사용자가 Notifly SDK가 설치된 웹사이트를 방문합니다
+2. SDK가 대기 중인 인웹 메시지를 확인합니다
+3. 트리거 조건이 충족되면 메시지가 나타납니다
+4. 사용자가 팝업 오버레이를 봅니다
+5. 사용자가 닫거나 액션을 취합니다
+
+## 요구 사항
+
+- 사용자가 웹사이트에 있음
+- Notifly Web SDK 설치
+- 트리거 조건 충족 (User Journey의 경우)
+
+## 메시지 콘텐츠
+
+| 필드 | 설명 | 필수 |
+|-------|-------------|----------|
+| HTML URL | 호스팅된 HTML 콘텐츠 | 예 |
+| Template name | 템플릿 식별자 | 예 |
+| Modal properties | 표시 설정 | 예 |
+
+## Modal 속성
+
+메시지가 어떻게 나타나는지 제어:
+
+### 위치 설정
+| 속성 | 설명 |
+|----------|-------------|
+| Position | CSS position (fixed 또는 absolute) |
+| Center | 화면 중앙 |
+| Top/Bottom/Left/Right | 가장자리에서의 거리 (픽셀) |
+
+### 크기 설정
+| 속성 | 설명 |
+|----------|-------------|
+| Width | CSS width 값 |
+| Height | CSS height 값 |
+
+### 배경 설정
+| 속성 | 설명 |
+|----------|-------------|
+| Background | 팝업 뒤에 오버레이 표시 |
+| Background opacity | 오버레이 어두움 정도 |
+
+## 반응형 디자인
+
+인웹 메시지는 화면 크기별로 다른 레이아웃을 지원합니다:
+
+| 설정 | 설명 |
+|---------|-------------|
+| modal_props_wide | 데스크톱/태블릿 설정 |
+| modal_props_narrow | 모바일 설정 |
+
+## 애니메이션 옵션
+
+메시지가 나타나고 사라질 때 애니메이션:
+
+| 애니메이션 | 설명 |
+|-----------|-------------|
+| Fade | 페이드 인/아웃 |
+| Slide to top | 아래에서 위로 슬라이드 |
+| Slide to bottom | 위에서 아래로 슬라이드 |
+| Slide to left | 오른쪽에서 슬라이드 |
+| Slide to right | 왼쪽에서 슬라이드 |
+| Rotate | 회전 효과 |
+
+애니메이션 설정:
+- Duration (지속 시간)
+- Timing function (이징)
+
+## 템플릿 요소
+
+템플릿에 포함될 수 있는 것:
+- 이미지 (크기 요구 사항 및 선택적 링크)
+- 버튼 (선택적 링크)
+- 텍스트 요소
+- 커스텀 스타일링
+
+## 개인화
+
+**인웹 메시지는 Liquid 템플릿 개인화를 지원하지 않습니다.**
+
+인웹 메시지는 SDK에 전달되는 사전 렌더링된 HTML 템플릿을 사용합니다. Liquid 구문은 발송 시점에 처리되지 않습니다.
+
+개인화된 인웹 경험을 위해 다음을 사용할 수 있습니다:
+- Notifly 콘솔에서 정의된 템플릿 파라미터 사용
+- User Journey 컨텍스트를 통해 데이터 전달
+- HTML 템플릿에서 JavaScript로 클라이언트 측 사용자 데이터 가져오기
+
+## 특수 기능
+
+### 자동 닫기
+X초 후 자동으로 닫기.
+
+### 위치 제어
+사용자가 요소를 배치할 수 있는 범위 정의.
+
+## 트리거 (User Journey에서)
+
+User Journey의 인웹 메시지는 특별한 트리거 옵션이 있습니다:
+
+| 설정 | 설명 |
+|---------|-------------|
+| Delay seconds | 표시 전 대기 |
+| Trigger duration | 트리거 대기 시간 |
+| Triggering conditions | 메시지를 표시하는 이벤트 |
+
+## 규칙
+
+- 사용자가 웹사이트에 있을 때만 표시
+- 한 번에 하나의 메시지만 표시
+- [피로도 관리](/ko/knowledge-base/rules/fatigue-management) 적용
+- [제외 사용자](/ko/knowledge-base/rules/excluded-users)에서 비활성화 가능
+- [발송 금지 시간](/ko/knowledge-base/rules/forbidden-timing) 준수
+
+## 예외 사항
+
+- 사용자가 이동하면 메시지 손실 가능
+- 템플릿 오류가 있으면 표시되지 않음
+- 모바일 vs 데스크톱이 다르게 보일 수 있음
+
+## 사용 사례
+
+| 사용 사례 | 예시 |
+|----------|---------|
+| 환영 | 처음 방문자 인사 |
+| 뉴스레터 | 이메일 가입 수집 |
+| 이탈 방지 | 떠나기 전 할인 제안 |
+| 프로모션 | 세일 또는 딜 공지 |
+| 쿠키 동의 | 개인정보 선호도 수집 |
+| 기능 공지 | 새 기능 강조 |
+
+## 관련 문서
+
+- [인앱 메시지](/ko/knowledge-base/channels/in-app-message) - 모바일 앱용 팝업
+- [웹 푸시](/ko/knowledge-base/channels/web-push) - 브라우저 알림
+- [User Journey](/ko/knowledge-base/concepts/user-journeys) - 인웹 메시지 트리거
+- [Liquid 템플릿](/ko/knowledge-base/concepts/liquid-templates) - 개인화 (인웹에서 미지원)
+- [채널](/ko/knowledge-base/channels/index) - 모든 채널

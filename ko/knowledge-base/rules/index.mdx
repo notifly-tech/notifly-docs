@@ -1,0 +1,92 @@
+---
+hidden: true
+title: "규칙 (Rules)"
+description: "규칙은 메시지가 발송되거나 건너뛰어지는 시점을 제어합니다."
+---
+
+## 개요
+
+Notifly에는 사용자를 과도한 메시지로부터 보호하고 사용자 선호도를 존중하는 규칙이 있습니다. 이러한 규칙으로 인해 메시지가 "건너뛰기"될 수 있습니다 - 사용자가 타겟팅 기준에 맞더라도 발송되지 않습니다.
+
+## 규칙이 존재하는 이유
+
+- **사용자 선호도 존중** - 수신 거부한 사용자에게 메시지를 보내지 않음
+- **피로도 방지** - 너무 많은 메시지로 사용자를 압도하지 않음
+- **발송 금지 시간 존중** - 불편한 시간에 사용자를 방해하지 않음
+- **참여도 향상** - 적절한 시점에 적은 빈도로 보내는 메시지가 더 효과적임
+
+## 규칙 유형
+
+| 규칙 | 역할 | 수준 |
+|------|------|------|
+| [피로도 관리](/ko/knowledge-base/rules/fatigue-management) | Campaign별 메시지 제한 | Campaign |
+| [글로벌 발송 빈도 제한](/ko/knowledge-base/rules/global-frequency-limit) | 전체 메시지 제한 | 계정 |
+| [발송 금지 시간](/ko/knowledge-base/rules/forbidden-timing) | 방해 금지 시간 | Campaign |
+| [제외 사용자](/ko/knowledge-base/rules/excluded-users) | 수신 거부 관리 | 사용자 |
+| [발송 필터링](/ko/knowledge-base/rules/delivery-filtering) | 모든 건너뛰기 사유 | 시스템 |
+
+## 규칙 적용 방식
+
+메시지가 발송되려 할 때:
+
+```
+1. 제외 사용자 확인 (수신 거부 여부)
+   → 제외되었으면 건너뛰기
+
+2. 발송 금지 시간 확인
+   → 발송 금지 시간이면 건너뛰기 또는 보류
+
+3. 피로도 관리 확인
+   → Campaign 제한 초과 시 건너뛰기
+
+4. 글로벌 발송 빈도 제한 확인
+   → 계정 제한 초과 시 건너뛰기
+
+5. 모든 확인 통과
+   → 메시지 발송
+```
+
+## 건너뛰기 유형
+
+메시지가 건너뛰어지면 Notifly가 사유를 기록합니다:
+
+| 건너뛰기 유형 | 의미 |
+|---------------|------|
+| `excluded_user_filter` | 사용자가 이 채널을 수신 거부함 |
+| `forbidden_timing_filter` | 발송 금지 시간에 메시지 발송 시도 |
+| `fatigue_management` | Campaign 제한 도달 |
+| `global_frequency_limit_filter` | 계정 제한 도달 |
+| `noisy_filter` | 중복 또는 불필요한 메시지 |
+| `connected_content_abort` | 템플릿 로직에 의해 메시지 중단 ([Liquid 템플릿](/ko/knowledge-base/concepts/liquid-templates) 참조) |
+
+## 재정의 옵션
+
+일부 규칙은 재정의할 수 있습니다:
+
+| 규칙 | 재정의 가능? | 방법 |
+|------|--------------|------|
+| 제외 사용자 | 아니오 | 사용자가 다시 수신 동의해야 함 |
+| 발송 금지 시간 | 부분적으로 | 건너뛰기 대신 보류(지연) 허용 |
+| 피로도 관리 | 아니오 | Campaign을 재설계해야 함 |
+| 글로벌 발송 빈도 | 예 | "글로벌 발송 빈도 제한 무시" 활성화 |
+
+## 건너뛰기 데이터 조회
+
+메시지가 건너뛰어지면:
+- 건너뛰기 유형이 기록됨
+- 추가 데이터에 세부 사항 포함 가능 (예: 어떤 제한에 도달했는지)
+- 발송 로그 및 분석에서 확인 가능
+
+## 모범 사례
+
+1. **합리적인 제한 설정** - 참여도와 사용자 경험의 균형 유지
+2. **발송 금지 시간 사용** - 시간대와 수면 시간 존중
+3. **수신 거부 존중** - 제외 사용자를 우회하려 하지 않음
+4. **건너뛰기 비율 모니터링** - 높은 건너뛰기 비율은 과도한 메시지 발송을 나타냄
+
+## 관련 문서
+
+- [Campaign](/ko/knowledge-base/concepts/campaigns) - 규칙이 설정되는 곳
+- [User Journey](/ko/knowledge-base/concepts/user-journeys) - Journey에도 규칙 적용
+- [사용자와 디바이스](/ko/knowledge-base/concepts/users-and-devices) - 사용자 수신 거부 설정
+- [Liquid 템플릿](/ko/knowledge-base/concepts/liquid-templates) - 템플릿 기반 건너뛰기 (abort_message)

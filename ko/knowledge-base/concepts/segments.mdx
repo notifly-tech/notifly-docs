@@ -1,0 +1,93 @@
+---
+hidden: true
+title: "Segment (세그먼트)"
+description: "Segment (세그먼트)는 규칙으로 정의된 사용자 그룹입니다."
+---
+
+## 개요
+
+Segment는 공통점을 기반으로 사용자를 그룹화하는 방법입니다. 예를 들어, "최근 7일 내 구매한 사용자" 또는 "서울에 사는 사용자". Segment를 사용해 campaign과 journey의 수신 대상을 선택합니다.
+
+## 작동 방식
+
+1. **Segment 생성** - 사용자와 매칭되는 규칙 정의
+2. **Campaign에서 사용** - 메시지로 segment 타겟팅
+3. **동적 업데이트** - 사용자가 규칙에 맞게 자동으로 진입/이탈
+
+## Segment 유형
+
+| 유형 | 의미 |
+|------|---------------|
+| Condition | 규칙을 기반으로 사용자 선택 (가장 일반적) |
+| Cohort | 특정 시점의 저장된 사용자 스냅샷 |
+| CSV | 파일에서 업로드된 사용자 |
+
+## Segment 구성
+
+Segment는 **조건 그룹**으로 구성됩니다:
+
+```
+그룹 1: (조건 AND 조건)
+OR
+그룹 2: (조건 AND 조건)
+```
+
+- 그룹 내 조건은 AND 사용 (모두 참이어야 함)
+- 그룹 간에는 OR로 결합 (어느 그룹이든 매칭 가능)
+
+## 조건 유형 (Units)
+
+| Unit | 확인 대상 |
+|------|---------------|
+| User | 사용자 속성 (이름, 이메일 등) |
+| User Metadata | 추가 사용자 데이터 |
+| Event | 사용자가 한 행동 |
+| Device | 기기 속성 (플랫폼, 앱 버전 등) |
+| Campaign Exposure | 과거 campaign 인터랙션 |
+| File Based | 업로드된 파일과 매칭 |
+
+## Event 조건
+
+Event를 사용할 때 확인할 수 있는 항목:
+
+| 유형 | 예시 |
+|------|---------|
+| Count X | "Event를 최소 3회 수행 (전체 기간)" |
+| Count X in Y days | "최근 7일 내 event를 최소 3회 수행" |
+
+## 추가 기능
+
+### Allow Duplicate User
+활성화하면 같은 사용자가 segment에 여러 번 나타날 수 있습니다 (일부 타겟팅 시나리오에 유용).
+
+### User ID Based
+사용자 ID로 직접 특정 사용자를 타겟팅합니다.
+
+## 규칙
+
+- 조건이 없는 segment는 모든 사용자와 매칭됩니다
+- Campaign 실행 시 사용자가 실시간으로 평가됩니다
+- CSV segment는 정적입니다 (사용자가 자동 업데이트되지 않음)
+- Cohort는 스냅샷입니다 (생성 시점에 고정됨)
+
+## 타임존 제한 사항
+
+**중요:** [로컬 타임존 발송](/ko/knowledge-base/concepts/local-timezone-delivery)은 조건 기반 segment에서만 작동합니다.
+
+| Segment 유형 | 로컬 타임존 작동 여부 |
+|--------------|----------------------|
+| 조건 기반 | ✅ 예 |
+| CSV 업로드 | ❌ 아니오 |
+| Cohort | ❌ 아니오 |
+
+CSV와 Cohort segment는 발송 시점에 타임존별로 동적 필터링이 불가능한 정적 사용자 목록입니다.
+
+## 관련 문서
+
+- [조건 유형](/ko/knowledge-base/segments/condition-types) - 모든 조건 옵션
+- [연산자](/ko/knowledge-base/segments/operators) - 비교 옵션
+- [Campaign](/ko/knowledge-base/concepts/campaigns) - Campaign에서 segment 사용
+- [User Journey](/ko/knowledge-base/concepts/user-journeys) - Journey에서 segment 사용
+- [Event](/ko/knowledge-base/concepts/events) - Event 기반 조건
+- [사용자와 기기](/ko/knowledge-base/concepts/users-and-devices) - 사용자 및 기기 속성
+- [로컬 타임존 발송](/ko/knowledge-base/concepts/local-timezone-delivery) - Segment 유형별 타임존 제한 사항

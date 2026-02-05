@@ -1,0 +1,187 @@
+---
+hidden: true
+title: "Operator (연산자)"
+description: "Operator (연산자)는 조건에서 값을 비교하는 방법을 정의합니다."
+---
+
+## 개요
+
+Operator는 조건에서의 비교 유형입니다. 예를 들어, "age > 25"에서 operator는 ">" (초과)입니다. 데이터 타입에 따라 다른 operator를 사용합니다.
+
+## 기본 Operator
+
+### 동등 비교
+| Operator | 기호 | 의미 |
+|----------|------|------|
+| Equals | `=` | 값이 정확히 일치 |
+| Not equals | `<>` | 값이 일치하지 않음 |
+
+### Null 확인
+| Operator | 기호 | 의미 |
+|----------|------|------|
+| Is null | `IS_NULL` | 값이 비어있거나 없음 |
+| Is not null | `IS_NOT_NULL` | 값이 존재함 |
+
+## 비교 Operator
+
+숫자와 날짜용:
+
+| Operator | 기호 | 의미 |
+|----------|------|------|
+| Greater than | `>` | 값이 더 큼 |
+| Greater than or equal | `>=` | 값이 더 크거나 같음 |
+| Less than | `<` | 값이 더 작음 |
+| Less than or equal | `<=` | 값이 더 작거나 같음 |
+
+## 문자열 Operator
+
+텍스트 값용:
+
+| Operator | 기호 | 의미 |
+|----------|------|------|
+| Starts with | `starts_with` | 텍스트가 값으로 시작 |
+| Does not start with | `does_not_start_with` | 텍스트가 값으로 시작하지 않음 |
+| Ends with | `ends_with` | 텍스트가 값으로 끝남 |
+| Does not end with | `does_not_end_with` | 텍스트가 값으로 끝나지 않음 |
+| Contains | `contains` | 텍스트가 값을 포함 |
+| Does not contain | `does_not_contain` | 텍스트가 값을 포함하지 않음 |
+
+## 패턴 매칭
+
+| Operator | 기호 | 의미 |
+|----------|------|------|
+| Matches regex | `matches_regex` | 정규표현식과 일치 |
+| Does not match regex | `does_not_match_regex` | 패턴과 일치하지 않음 |
+
+## 배열 Operator
+
+리스트/배열 값용:
+
+| Operator | 기호 | 의미 |
+|----------|------|------|
+| Includes | `@>` | 배열이 값을 포함 |
+| Not includes | `NOT_INCLUDE` | 배열이 값을 포함하지 않음 |
+| Any element contains | `CONTAINS_ANY_OF` | 배열의 어떤 항목이 부분 문자열을 가짐 |
+
+## Event 조건 Operator
+
+이벤트 매칭을 위한 특수 operator:
+
+| Operator | 기호 | 의미 |
+|----------|------|------|
+| Equals | `=` | 이벤트 이름이 일치 |
+| Does not equal | `!=` | 이벤트 이름이 일치하지 않음 |
+| Starts with | `starts_with` | 이벤트 이름이 값으로 시작 |
+| Does not start with | `does_not_start_with` | 값으로 시작하지 않음 |
+| Ends with | `ends_with` | 이벤트 이름이 값으로 끝남 |
+| Does not end with | `does_not_end_with` | 값으로 끝나지 않음 |
+| Contains | `contains` | 이벤트 이름이 값을 포함 |
+| Does not contain | `does_not_contain` | 값을 포함하지 않음 |
+| Matches regex | `matches_regex` | 패턴과 일치 |
+| Does not match regex | `does_not_match_regex` | 패턴과 일치하지 않음 |
+
+## Value Type
+
+Operator는 다양한 값 타입과 함께 동작합니다:
+
+| 타입 | 기호 | 예시 값 |
+|------|------|--------|
+| Text | `TEXT` | "hello", "user@email.com" |
+| Integer | `INT` | 25, 100, -5 |
+| Boolean | `BOOL` | true, false |
+
+### 타입 처리
+
+값은 지정된 타입에 맞게 자동 변환됩니다:
+
+**TEXT 변환**:
+- 모든 값이 `.toString()`을 사용하여 문자열로 변환
+- 숫자는 "25"로, 불리언은 "true"/"false"로 변환
+
+**INT 변환**:
+- 문자열이 숫자로 파싱: "25" → 25
+- 잘못된 문자열은 비교 실패를 유발할 수 있음
+
+**BOOL 변환**:
+- True 값: `TRUE`, `true`, `T`, `t`, `1`
+- False 값: `FALSE`, `false`, `F`, `f`, `0`
+- 숫자: 0 = false, 그 외 = true
+
+## Null과 빈 값 처리
+
+정확한 필터링을 위해 null과 빈 값이 어떻게 동작하는지 이해하는 것이 중요합니다.
+
+### IS_NULL vs IS_NOT_NULL
+
+| Operator | Undefined | Null | 빈 문자열 ("") | 값 있음 |
+|----------|-----------|------|----------------|---------|
+| IS_NULL | ✓ true | ✓ true | ✗ false | ✗ false |
+| IS_NOT_NULL | ✗ false | ✗ false | ✓ true | ✓ true |
+
+**핵심 포인트**: 빈 문자열 `""`은 null이 아닙니다. 존재하지만 문자가 없을 뿐입니다.
+
+### 예시
+
+| 조건 | 사용자 데이터 | 결과 |
+|------|--------------|------|
+| `email IS_NULL` | email: undefined | ✓ 일치 |
+| `email IS_NULL` | email: null | ✓ 일치 |
+| `email IS_NULL` | email: "" | ✗ 불일치 |
+| `email IS_NOT_NULL` | email: "" | ✓ 일치 |
+| `email IS_NOT_NULL` | email: "user@test.com" | ✓ 일치 |
+
+## 버전 비교
+
+앱 버전, OS 버전, SDK 버전 필드의 경우, Notifly는 시맨틱 버전 비교를 사용합니다.
+
+### 작동 방식
+
+1. 두 버전이 시맨틱 버전으로 검증됨 (예: "1.2.3")
+2. 둘 다 유효하면 시맨틱하게 비교: 1.10.0 > 1.9.0
+3. 하나라도 유효하지 않으면 텍스트 비교로 대체
+
+### 유효한 버전 예시
+
+| Source | Target | Operator | 시맨틱 결과 |
+|--------|--------|----------|------------|
+| "2.0.0" | "1.9.9" | `>` | ✓ true |
+| "1.10.0" | "1.9.0" | `>` | ✓ true |
+| "1.2.3" | "1.2.3" | `=` | ✓ true |
+
+### 유효하지 않은 버전 대체
+
+시맨틱 버전이 유효하지 않으면 텍스트로 비교됩니다:
+
+| Source | Target | Operator | 텍스트 결과 |
+|--------|--------|----------|------------|
+| "v2.0" | "v1.9" | `>` | ✓ true (텍스트 비교) |
+| "beta" | "alpha" | `>` | ✓ true (알파벳 순) |
+
+## Operator 선택 가이드
+
+| 데이터 타입 | 적합한 Operator |
+|------------|----------------|
+| 이름/텍스트 | Equals, contains, starts with |
+| 이메일 | Equals, contains, ends with |
+| 나이/횟수 | Greater than, less than, equals |
+| 날짜 | Greater than (이후), less than (이전) |
+| 상태 플래그 | Equals, is null |
+| 태그 (배열) | Includes, not includes |
+
+## 예시
+
+| 조건 | 의미 |
+|------|------|
+| `email ends_with "@company.com"` | 회사 이메일 사용자 |
+| `age >= 18` | 성인만 |
+| `tags @> "vip"` | VIP 태그된 사용자 |
+| `purchase_count > 0` | 구매한 사용자 |
+| `last_seen IS_NOT_NULL` | 활성 사용자 |
+| `name starts_with "Kim"` | 성이 Kim인 사용자 |
+
+## 관련 문서
+
+- [조건 유형](/ko/knowledge-base/segments/condition-types) - 무엇을 확인할지
+- [세그먼트](/ko/knowledge-base/segments/index) - Segment 작성
+- [이벤트](/ko/knowledge-base/concepts/events) - Event 조건
+- [이벤트 필터](/ko/knowledge-base/segments/event-filters) - 이벤트 속성으로 필터링

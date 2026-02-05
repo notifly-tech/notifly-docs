@@ -1,0 +1,93 @@
+---
+hidden: true
+title: "User Journey (유저 여정)"
+description: "User Journey (유저 여정)는 사용자를 여러 단계를 통해 안내하는 자동화 워크플로우입니다."
+---
+
+## 개요
+
+User Journey는 메시지를 위한 흐름도와 같습니다. 하나의 메시지를 보내는 대신, 일련의 단계를 만듭니다. 사용자는 자신의 행동에 따라 journey를 통해 이동합니다. 예: 환영 이메일 발송, 3일 대기, 구매하지 않은 경우 후속 메시지 발송.
+
+## 작동 방식
+
+1. **Journey 생성** - 노드(단계)로 워크플로우 구축
+2. **진입 조건 설정** - 사용자가 journey에 어떻게 진입하는지 정의
+3. **노드 추가** - 대기, 메시지, 결정 포인트 생성
+4. **종료 조건 설정** - 사용자가 언제 조기에 이탈하는지 정의
+5. **시작** - 사용자가 journey를 통해 흐르기 시작
+
+## Journey 상태
+
+| 상태 | 의미 |
+|--------|---------------|
+| Draft | 아직 구축 중, 활성화되지 않음 |
+| Active | 실행 중이며 새 사용자 수용 중 |
+| Paused | 일시적으로 중지됨, 사용자는 현재 위치에 머무름 |
+| Inactive | 중지됨, 새 사용자 진입 안 함 |
+| Completed | 실행 완료됨 |
+
+## 진입 조건 유형
+
+사용자가 journey를 시작하는 방법:
+
+| 유형 | 의미 |
+|------|---------------|
+| Scheduled | 특정 시간에 사용자 진입 (일회성 또는 반복) |
+| Event-driven | 특정 행동을 할 때 사용자 진입 ("가입함" 등) |
+| API-triggered | 서버가 Notifly에 사용자 시작을 알림 |
+
+## 재진입 정책 (Re-entry Policy)
+
+사용자가 다시 진입 자격이 될 때:
+
+| 정책 | 의미 |
+|--------|---------------|
+| Always | 이미 journey에 있어도 재진입 가능 |
+| On Completion | Journey를 완료한 후에만 재진입 가능 |
+| Forbidden | 한 번 참여하면 절대 재진입 불가 |
+
+## 종료 조건 (Exit Conditions)
+
+사용자가 journey를 조기에 이탈하는 경우:
+- 종료 event 조건에 맞을 때 (예: "구매 완료")
+- Journey가 종료 날짜에 도달했을 때
+- 비정상 종료에 도달했을 때 (오류 또는 타임아웃)
+
+## 노드 (Nodes, 단계)
+
+Journey는 다양한 유형의 노드로 구성됩니다:
+
+| 노드 | 기능 |
+|------|--------------|
+| [Start](/ko/knowledge-base/journeys/nodes/delay-node) | 사용자가 진입하는 곳 |
+| [Delay](/ko/knowledge-base/journeys/nodes/delay-node) | 다음 단계 전 대기 |
+| [Message](/ko/knowledge-base/journeys/nodes/message-node) | 메시지 발송 |
+| [Event Branching](/ko/knowledge-base/journeys/nodes/event-branching) | 사용자 행동에 따라 분기 |
+| [Segment Branching](/ko/knowledge-base/journeys/nodes/segment-branching) | 사용자 속성에 따라 분기 |
+| [User Update](/ko/knowledge-base/journeys/nodes/user-update) | 사용자 속성 변경 |
+| Complete | Journey 성공적으로 완료 |
+| Conditional Exit | 사용자가 종료 조건에 맞음 |
+| Abnormal Exit | 문제 발생 |
+
+## 전환 추적 (Conversion Tracking)
+
+사용자가 목표를 완료했는지 추적할 수 있습니다:
+- 전환 event 설정 (예: "구매 완료")
+- 전환 기간 설정 (예: 진입 후 7일 이내)
+- Journey를 통과한 후 몇 명이 전환했는지 확인
+
+## 타임존 처리
+
+Journey에서 메시지가 발송되는 시점을 제어할 수 있습니다:
+- **Default timezone** - 모든 사용자가 하나의 타임존 기준으로 메시지 수신
+- **Local timezone** - 각 사용자가 자신의 타임존 기준으로 메시지 수신
+- **Specific timezone** - 커스텀 타임존으로 오버라이드
+
+타임존 우선순위, 설정, 제한 사항에 대한 자세한 문서는 [로컬 타임존 발송](/ko/knowledge-base/concepts/local-timezone-delivery)을 참조하세요.
+
+## 관련 문서
+
+- [진입과 종료](/ko/knowledge-base/journeys/entry-and-exit) - 상세한 진입/종료 규칙
+- [Campaign](/ko/knowledge-base/concepts/campaigns) - 단일 메시지 발송
+- [Event](/ko/knowledge-base/concepts/events) - Journey 트리거
+- [Segment](/ko/knowledge-base/concepts/segments) - 사용자 타겟팅

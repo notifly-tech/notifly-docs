@@ -1,0 +1,79 @@
+---
+hidden: true
+title: "웹 푸시 (Web Push)"
+description: "웹 푸시 알림은 웹사이트가 닫혀 있어도 브라우저에 나타나는 알림입니다."
+---
+
+## 개요
+
+웹 푸시는 모바일 푸시 알림과 비슷하지만 웹 브라우저용입니다. 사용자가 웹사이트를 방문하고 알림을 허용하면, 사이트를 떠난 후에도 알림을 보낼 수 있습니다.
+
+## 작동 방식
+
+1. 사용자가 웹사이트를 방문합니다
+2. 브라우저가 알림 권한을 요청합니다
+3. 허용되면 구독이 생성됩니다
+4. Notifly가 브라우저의 푸시 서비스를 통해 메시지를 보낼 수 있습니다
+5. 사용자가 사이트에 있지 않아도 알림이 나타납니다
+
+## 요구 사항
+
+- 사용자가 웹사이트를 방문함
+- 사용자가 브라우저에서 알림 권한을 부여함
+- 지원되는 브라우저 (Chrome, Firefox, Safari, Edge)
+
+## 메시지 콘텐츠
+
+| 필드 | 설명 | 필수 |
+|-------|-------------|----------|
+| Title | 상단의 굵은 텍스트 | 예 |
+| Body | 본문 메시지 텍스트 | 예 |
+| Image URL | 표시할 이미지 | 아니오 |
+| Action URL | 클릭했을 때 이동할 위치 | 아니오 |
+| Custom data | 웹사이트용 추가 데이터 | 아니오 |
+
+## 브라우저 지원
+
+| 브라우저 | 지원 |
+|---------|---------|
+| Chrome | 예 (데스크톱 및 Android) |
+| Firefox | 예 |
+| Safari | 예 (macOS 및 iOS 16.4+) |
+| Edge | 예 |
+
+## 개인화
+
+웹 푸시 알림은 [Liquid 템플릿](/ko/knowledge-base/concepts/liquid-templates) 개인화를 전체 지원합니다.
+
+**지원되는 필드:**
+- Title
+- Body
+- Action URL
+- Custom data 값
+
+**예시:**
+```liquid
+Title: {{user.store_name | default: "스토어"}}에서 새 메시지가 왔습니다
+Body: {{event.notification_text}}
+```
+
+## 규칙
+
+- Push API를 지원하는 브라우저에서만 작동
+- 사용자가 명시적으로 권한을 부여해야 함
+- 웹사이트에 HTTPS 필요
+- [피로도 관리](/ko/knowledge-base/rules/fatigue-management) 적용
+- [제외 사용자](/ko/knowledge-base/rules/excluded-users)에서 비활성화 가능
+
+## 예외 사항
+
+- 사용자가 알림을 차단하면 메시지 건너뜀
+- 구독이 만료되면 발송 실패
+- 일부 브라우저는 알림 빈도를 제한함
+
+## 관련 문서
+
+- [푸시 알림](/ko/knowledge-base/channels/push-notification) - 모바일 푸시
+- [인웹 메시지](/ko/knowledge-base/channels/in-web-message) - 사이트 내 팝업
+- [Liquid 템플릿](/ko/knowledge-base/concepts/liquid-templates) - 개인화 기능
+- [채널](/ko/knowledge-base/channels/index) - 모든 채널

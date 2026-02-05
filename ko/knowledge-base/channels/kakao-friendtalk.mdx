@@ -1,0 +1,127 @@
+---
+hidden: true
+title: "카카오 친구톡 (Kakao Friendtalk)"
+description: "친구톡은 카카오 채널과 친구인 사용자에게 마케팅 메시지를 보냅니다."
+---
+
+## 개요
+
+친구톡은 프로모션 및 마케팅 메시지를 보내는 카카오 채널입니다. 알림톡과 달리, 사용자가 먼저 카카오 비즈니스 채널을 친구로 추가해야 합니다. 광고, 프로모션, 리치 미디어 콘텐츠를 보낼 수 있습니다.
+
+## 작동 방식
+
+1. 사용자가 카카오 비즈니스 채널을 친구로 추가합니다
+2. 메시지를 작성합니다 (템플릿 승인 불필요)
+3. 카카오 친구에게 메시지가 발송됩니다
+4. 발송 실패 시 SMS로 대체 발송 가능
+
+## 요구 사항
+
+- 사용자가 카카오 비즈니스 채널과 친구 상태
+- 등록된 카카오 비즈니스 채널 보유
+- 사용자가 채널을 차단하지 않음
+
+## 메시지 유형
+
+| 유형 | 설명 |
+|------|-------------|
+| Text | 단순 텍스트 메시지 |
+| Image | 이미지 하나가 포함된 메시지 |
+| Wide image | 전체 너비 이미지 |
+| Wide item list | 클릭 가능한 목록이 있는 이미지 |
+| Carousel | 스와이프 가능한 여러 카드 |
+| Commerce | 상품 쇼케이스 |
+| Carousel commerce | 여러 상품 |
+| Premium video | 비디오 콘텐츠 |
+
+## 메시지 콘텐츠
+
+| 필드 | 설명 | 필수 |
+|-------|-------------|----------|
+| Type | 메시지 유형 (위 참조) | 예 |
+| Content | 텍스트, 이미지, 버튼 | 예 |
+| Is ad | 광고로 표시 | 아니오 |
+| Failover SMS | 백업 메시지 | 아니오 |
+
+## 버튼
+
+각 메시지에 버튼 포함 가능:
+
+| 유형 | 기능 |
+|------|--------------|
+| Web link | URL 열기 (모바일/PC/앱) |
+| App link | 앱으로 딥 링크 |
+
+## Carousel 기능
+
+Carousel 메시지 지원:
+- 2-10개 카드
+- 카드당 이미지
+- 카드당 텍스트
+- 카드당 버튼
+- 테일 링크 (마지막 CTA)
+
+## Commerce 기능
+
+상품 홍보용:
+- 상품 이미지
+- 제목
+- 정가
+- 할인가
+- 할인 유형 (퍼센트 또는 금액)
+- CTA 버튼
+
+## 쿠폰 지원
+
+쿠폰 첨부 가능:
+- 쿠폰 제목
+- 쿠폰 설명
+- 쿠폰 링크
+
+## 개인화
+
+카카오 친구톡은 [Liquid 템플릿](/ko/knowledge-base/concepts/liquid-templates) 개인화를 전체 지원합니다.
+
+**지원되는 필드:**
+- 헤더 텍스트
+- 본문 텍스트
+- 버튼 라벨 및 링크
+- Carousel 콘텐츠
+- Commerce 상품 상세
+- 대체 발송 SMS 텍스트
+
+**예시:**
+```liquid
+Header: {{user.$name | default: "고객"}}님을 위한 특별 혜택
+Body: {{event.product_name}} {{event.discount_percent}}% 할인 중!
+Button link: https://shop.example.com/product/{{event.product_id}}
+```
+
+## SMS 대체 발송
+
+카카오 발송이 실패하면:
+- 사용자가 채널과 친구가 아님
+- 사용자가 채널을 차단함
+- 자동으로 백업 SMS 발송
+
+## 규칙
+
+- 사용자가 카카오 채널과 친구여야 함
+- 광고 메시지는 적절히 표시해야 함
+- 리치 콘텐츠는 형식 요구 사항이 있음
+- [피로도 관리](/ko/knowledge-base/rules/fatigue-management) 적용
+- [제외 사용자](/ko/knowledge-base/rules/excluded-users)에서 비활성화 가능
+
+## 예외 사항
+
+- 친구가 아닌 사용자는 친구톡 수신 불가
+- 차단된 채널은 해당 사용자에게 발송 불가
+- 이미지/비디오 크기 제한 있음
+
+## 관련 문서
+
+- [카카오 알림톡](/ko/knowledge-base/channels/kakao-alimtalk) - 정보성 메시지용
+- [카카오 브랜드 메시지](/ko/knowledge-base/channels/kakao-brand-message) - 브랜드 마케팅
+- [SMS](/ko/knowledge-base/channels/sms) - 대체 발송 옵션
+- [Liquid 템플릿](/ko/knowledge-base/concepts/liquid-templates) - 개인화 기능
+- [채널](/ko/knowledge-base/channels/index) - 모든 채널

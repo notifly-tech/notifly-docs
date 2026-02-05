@@ -1,0 +1,81 @@
+---
+hidden: true
+title: "Cafe24 Integration (Cafe24 연동)"
+description: "Cafe24는 Notifly와 연동되는 한국 이커머스 플랫폼입니다."
+---
+
+## 개요
+
+Cafe24는 한국 최대 이커머스 플랫폼 중 하나입니다. Cafe24를 Notifly에 연결하면 고객 데이터를 자동으로 동기화하고 쇼핑 행동에 기반한 타겟 메시지를 발송할 수 있습니다.
+
+## 작동 방식
+
+1. Cafe24 스토어를 Notifly에 연결
+2. 고객 데이터 자동 동기화
+3. 쇼핑 이벤트 (구매, 장바구니 업데이트) 추적
+4. 이 데이터를 segment와 campaign에 활용
+
+## 동기화되는 데이터
+
+### 고객 정보
+- 고객 ID
+- 이메일 주소
+- 전화번호
+- 이름
+- 가입일
+
+### 쇼핑 데이터
+- 구매 이력
+- 장바구니 내용
+- 상품 조회
+- 주문 상태
+
+## 사용 가능한 이벤트
+
+| 이벤트 | 발생 시점 |
+|--------|----------|
+| Purchase completed | 고객이 주문 완료 |
+| Cart updated | 장바구니에 상품 추가/제거 |
+| Product viewed | 고객이 상품 조회 |
+| Cart abandoned | 구매 없이 고객 이탈 |
+
+## 활용 사례
+
+| 활용 사례 | 방법 |
+|----------|------|
+| 웰컴 시리즈 | 고객 가입 시 트리거 |
+| 장바구니 이탈 | Segment: cart_updated 했지만 구매 없음 |
+| 구매 후 | purchase_completed 시 트리거 |
+| 윈백 | Segment: 30일 내 구매 없음 |
+| 상품 추천 | 조회/구매 이력 기반 |
+
+## 특수 채널
+
+### Cafe24 App Push
+Cafe24 모바일 앱을 위한 특수 푸시 알림 채널:
+- 채널 유형: `cafe24_app_push_notification`
+- Cafe24 쇼핑 앱 사용 고객에게 발송
+- 일반 푸시와 별도로 제외 가능
+
+## Segment
+
+다음을 사용하여 segment 구성 가능:
+- 구매 횟수와 최근성
+- 장바구니 가치
+- 구매한 상품 카테고리
+- 고객 생애 가치
+- 마지막 주문일
+
+## 규칙
+
+- Cafe24 스토어 연결 필요
+- 데이터 동기화에 약간의 지연 있을 수 있음
+- 일부 메시지는 고객의 마케팅 동의 필요
+- 한국 개인정보보호법 적용
+
+## 관련 문서
+
+- [Naver Commerce](/ko/knowledge-base/integrations/naver-commerce) - 유사한 한국 플랫폼
+- [푸시 알림](/ko/knowledge-base/channels/push-notification) - 모바일 알림
+- [세그먼트](/ko/knowledge-base/concepts/segments) - 사용자 타겟팅
+- [이벤트](/ko/knowledge-base/concepts/events) - 행동 추적

@@ -1,0 +1,83 @@
+---
+hidden: true
+title: "Campaign (캠페인)"
+description: "Campaign (캠페인)은 사용자 그룹에게 보내는 메시지입니다."
+---
+
+## 개요
+
+Campaign은 Notifly에서 메시지를 보내는 방법입니다. 메시지를 받을 대상, 사용할 채널(푸시나 이메일 등), 발송 시점을 선택합니다. Campaign은 일회성 메시지일 수도 있고 반복되는 메시지일 수도 있습니다.
+
+## 작동 방식
+
+1. **Campaign 생성** - 채널을 선택하고 메시지를 작성합니다
+2. **대상 선택** - 메시지를 받을 segment (사용자 그룹)를 선택합니다
+3. **발송 시점 설정** - 언제, 얼마나 자주 보낼지 결정합니다
+4. **시작** - 규칙에 맞는 사용자에게 campaign이 발송되기 시작합니다
+
+## Campaign 유형
+
+| 유형 | 설명 |
+|------|--------------|
+| Standard | 매칭되는 모든 사용자에게 발송하는 일반 캠페인 |
+| Experiment | 사용자를 그룹으로 나누어 메시지를 비교하는 A/B 테스트 |
+
+## 발송 시점 유형
+
+Campaign은 다양한 시점에 발송될 수 있습니다:
+
+- **Immediate (즉시)** - 지금 바로 매칭되는 모든 사용자에게 발송
+- **Scheduled (예약)** - 특정 날짜와 시간에 발송
+- **Recurring (반복)** - 반복 스케줄(매일, 매주 등)에 따라 발송
+- **Event-triggered (이벤트 트리거)** - 사용자가 특정 행동을 할 때 발송
+
+## 규칙
+
+- Campaign은 하나의 채널로만 발송됩니다 (하나의 campaign에서 푸시와 이메일을 동시에 보낼 수 없음)
+- 사용자가 메시지를 받으려면 segment 조건에 맞아야 합니다
+- [피로도 관리](/ko/knowledge-base/rules/fatigue-management)나 [글로벌 발송 빈도 제한](/ko/knowledge-base/rules/global-frequency-limit)으로 인해 메시지가 건너뛰어질 수 있습니다
+- [발송 금지 시간](/ko/knowledge-base/rules/forbidden-timing)을 설정해 특정 시간대에 발송을 피할 수 있습니다
+
+## 재수신 조건 (Re-eligibility)
+
+Campaign이 이벤트 트리거인 경우, 사용자가 언제 다시 받을 수 있는지 제어할 수 있습니다:
+
+| 설정 | 의미 |
+|---------|---------------|
+| Never | 사용자는 캠페인을 단 한 번만 받음 |
+| After X hours/days/weeks | 대기 기간 후에 다시 받을 수 있음 |
+| Max count | 사용자가 받을 수 있는 총 횟수 제한 (예: 최대 5회) |
+
+## 특수 기능
+
+### Testing Mode (테스트 모드)
+- 활성화하면 campaign이 화이트리스트에 있는 사용자에게만 발송됩니다
+- 실제 운영 전 테스트에 유용합니다
+
+### Throttling (쓰로틀링)
+- 배치 크기와 간격을 설정해 발송 속도를 늦춥니다
+- 시스템 과부하를 방지하는 데 도움이 됩니다
+- 자세한 내용은 [Campaign Throttling](/ko/knowledge-base/campaigns/throttling) 참조
+
+### Ignore Global Frequency Capping (글로벌 빈도 제한 무시)
+- 활성화하면 이 campaign이 계정 레벨 발송 빈도 제한을 무시합니다
+- 신중하게 사용해야 합니다 - 메시지 과다 발송으로 이어질 수 있습니다
+
+## 더 알아보기
+
+Campaign에 대한 자세한 정보:
+
+- [Campaign 생명주기](/ko/knowledge-base/campaigns/lifecycle) - Campaign이 상태를 어떻게 전환하는지
+- [Campaign 생성](/ko/knowledge-base/campaigns/creation) - 단계별 생성 가이드
+- [Campaign Throttling](/ko/knowledge-base/campaigns/throttling) - 시간에 걸쳐 발송 분산
+- [유효성 검사 규칙](/ko/knowledge-base/campaigns/validation) - Campaign이 따라야 할 규칙
+- [API 실행](/ko/knowledge-base/campaigns/api-execution) - 코드에서 campaign 트리거
+- [오류 처리](/ko/knowledge-base/campaigns/errors) - Campaign 오류 이해하기
+
+## 관련 문서
+
+- [채널](/ko/knowledge-base/channels/index) - 메시지 전달 방법
+- [Segment](/ko/knowledge-base/concepts/segments) - 사용자 타겟팅 방법
+- [Event](/ko/knowledge-base/concepts/events) - 이벤트 기반 campaign의 트리거
+- [피로도 관리](/ko/knowledge-base/rules/fatigue-management) - Campaign 레벨 제한
+- [User Journey](/ko/knowledge-base/concepts/user-journeys) - 다단계 자동화 워크플로우

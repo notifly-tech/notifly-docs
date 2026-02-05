@@ -1,0 +1,161 @@
+---
+hidden: true
+title: "Campaign 오류 (Campaign Errors)"
+description: "발생할 수 있는 오류와 의미."
+---
+
+## 개요
+
+Campaign에서 문제가 발생하면 Notifly가 오류를 표시합니다. 이 페이지에서는 볼 수 있는 모든 오류와 의미를 설명합니다.
+
+## 오류 카테고리
+
+오류는 두 곳에서 발생할 수 있습니다:
+1. **UI 유효성 검사** - 콘솔에서 Campaign을 생성하거나 수정할 때
+2. **서버 오류** - 서버가 요청을 처리할 때
+
+## UI 유효성 검사 오류
+
+Campaign 양식을 작성하는 동안 인라인 메시지로 나타납니다.
+
+### Campaign 설정
+
+| 오류 | 의미 |
+|------|------|
+| "Campaign name required" | 이름을 입력해야 함 |
+| "Name cannot exceed 50 characters" | 이름을 더 짧게 해야 함 |
+| "Description cannot exceed 150 characters" | 설명을 더 짧게 해야 함 |
+
+### 전환 이벤트
+
+| 오류 | 의미 |
+|------|------|
+| "Event name required" | 이벤트 이름을 입력해야 함 |
+| "Cannot use notifly__ prefix" | 해당 접두사는 내부 이벤트용으로 예약됨 |
+| "Maximum 4 conversion events" | 전환 이벤트가 너무 많음 |
+| "Duplicate events not allowed" | 같은 이벤트 이름을 두 번 사용함 |
+
+### 분석 차원
+
+| 오류 | 의미 |
+|------|------|
+| "Value required" | 차원 키를 입력해야 함 |
+| "Maximum 6 dimensions" | 분석 차원이 너무 많음 |
+| "Duplicate dimensions not allowed" | 같은 차원을 두 번 사용함 |
+
+### A/B 테스트 그룹
+
+| 오류 | 의미 |
+|------|------|
+| "At least 2 groups required" | 더 많은 그룹이 필요함 |
+| "Maximum 5 groups" | 그룹이 너무 많음 |
+| "Maximum 1 control group" | 한 그룹만 대조군이 될 수 있음 |
+| "Percentages must equal 100%" | 분할이 합산되지 않음 |
+| "Group name required" | 각 그룹에 이름이 필요함 |
+| "Duplicate group names not allowed" | 그룹 이름은 고유해야 함 |
+| "Percentage must be 1 or more" | 0% 그룹은 불가 |
+
+### Experiment Campaign
+
+| 오류 | 의미 |
+|------|------|
+| "At least 1 conversion event required" | A/B 테스트는 결과를 측정하기 위해 전환 이벤트가 필요함 |
+| "AI segment mode not allowed" | Experiment에서는 AI Assistant를 사용할 수 없음 |
+
+### 타이밍
+
+| 오류 | 의미 |
+|------|------|
+| "No schedulable time exists" | 스케줄 설정으로 유효한 발송 시간이 없음 |
+| "Conversion window must be 1-14 days" | 1과 14 사이의 윈도우를 선택해야 함 |
+
+### Segment
+
+| 오류 | 의미 |
+|------|------|
+| "Personalization variables not allowed in segment conditions" | 인앱/인웹 Campaign은 Segment 규칙에 개인화를 사용할 수 없음 |
+| "Only csv variables allowed" | 사용자 ID 없이 CSV Segment 사용 시 csv.* 변수만 사용 가능 |
+
+## 서버 오류
+
+서버가 요청을 처리할 때 발생합니다.
+
+### HTTP 상태 코드
+
+| 코드 | 유형 | 설명 |
+|------|------|------|
+| 400 | Bad Request | 요청에 문제가 있음 |
+| 401 | Unauthorized | 유효하지 않거나 누락된 인증 |
+| 405 | Method Not Allowed | 잘못된 HTTP 메서드 사용 |
+| 413 | Payload Too Large | 수신자가 너무 많음 (1,000명 초과) |
+| 500 | Internal Server Error | 서버 측에서 문제 발생 |
+| 501 | Not Implemented | 해당 기능은 아직 제공되지 않음 |
+| 503 | Service Unavailable | 시스템이 일시적으로 다운됨 |
+
+### Campaign 상태 오류
+
+| 오류 메시지 | 의미 |
+|-------------|------|
+| "Campaign is not active" | 먼저 Campaign을 활성화해야 함 |
+| "Campaign is not configured as API triggered" | 이 Campaign은 API 호출용으로 설정되지 않음 |
+| "Phony campaign cannot be invoked with API" | 테스트 Campaign은 API를 통해 트리거할 수 없음 |
+| "Channel is not defined" | Campaign에 채널 설정이 누락됨 |
+
+### 수신자 오류
+
+| 오류 메시지 | 의미 |
+|-------------|------|
+| "Invalid recipients list" | 수신자 데이터 형식이 잘못됨 |
+| "Too many recipients" | 1,000명 이상의 수신자를 보냄 |
+| "Invalid recipient type for [channel]" | 해당 수신자 형식은 이 채널에서 작동하지 않음 |
+| "User ID should be defined" | user-id 유형 수신자에 사용자 ID가 누락됨 |
+| "Phone number should be defined" | phone-number 유형 수신자에 전화번호가 누락됨 |
+| "Email should be defined" | email 유형 수신자에 이메일이 누락됨 |
+| "LINE user id should be defined" | line-user-id 유형 수신자에 LINE 사용자 ID가 누락됨 |
+
+### 발신자 정보 오류
+
+| 오류 메시지 | 의미 |
+|-------------|------|
+| "Missing required sender information" | 프로젝트에 이 채널에 대한 발신자 구성이 필요함 |
+| "Sender platform not defined" | Campaign에 sender_platform 설정이 누락됨 |
+| "Sender platform [X] is not integrated" | 해당 발신자가 프로젝트에 설정되지 않음 |
+| "Channel Id should be specified" | 특정 발신자 채널을 선택해야 함 |
+| "Cannot find sender profile for channel id [X]" | 해당 발신자 채널 ID가 존재하지 않음 |
+| "Text message sender information required when failover enabled" | 카카오 대체 발송을 위해 문자 메시지 발신자를 활성화해야 함 |
+
+### 채널 지원 오류
+
+| 오류 메시지 | 의미 |
+|-------------|------|
+| "API triggered campaign is not supported for [channel]" | 해당 채널은 API 트리거를 지원하지 않음 |
+
+## 동시성 오류
+
+| 오류 | 의미 |
+|------|------|
+| "Campaign was updated by another user" | 수정하는 동안 다른 사람이 Campaign을 수정함. 새로고침하고 다시 시도하세요. |
+
+## 일반적인 오류 해결 방법
+
+### "Campaign is not active"
+
+Campaign 목록으로 이동하여 Campaign을 찾아 활성화합니다. Active Campaign만 메시지를 보낼 수 있습니다.
+
+### "Too many recipients"
+
+수신자를 1,000명 이하의 배치로 분할합니다. 여러 API 호출을 합니다.
+
+### "Missing required sender information"
+
+프로젝트 설정으로 이동하여 사용 중인 채널에 대한 발신자 정보를 구성합니다.
+
+### "Percentages must equal 100%"
+
+A/B 테스트 그룹 비율을 정확히 100이 되도록 조정합니다.
+
+## 관련 문서
+
+- [Campaign 라이프사이클](/ko/knowledge-base/campaigns/lifecycle) - Campaign 상태 이해하기
+- [API 실행](/ko/knowledge-base/campaigns/api-execution) - API 특정 요구 사항
+- [유효성 검사 규칙](/ko/knowledge-base/campaigns/validation) - 모든 유효성 검사 규칙

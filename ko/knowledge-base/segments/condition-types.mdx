@@ -1,0 +1,135 @@
+---
+hidden: true
+title: "Condition Types (조건 유형)"
+description: "Segment에서 사용자를 필터링하는 다양한 방법입니다."
+---
+
+## 개요
+
+Segment를 만들 때, 다양한 유형의 데이터를 기반으로 사용자를 필터링할 수 있습니다. 각 조건 유형(unit)은 사용자에 대한 서로 다른 정보를 확인합니다.
+
+## Condition Unit
+
+| Unit | 확인 대상 |
+|------|----------|
+| User | 사용자 속성 |
+| User Metadata | 추가 사용자 데이터 |
+| Event | 사용자의 이벤트 이력 |
+| Device | 디바이스 정보 |
+| Campaign Exposure | 과거 campaign 상호작용 |
+| File Based | 업로드된 파일과 매칭 |
+
+## User 조건
+
+사용자 속성으로 필터링:
+
+| 속성 | 예시 |
+|------|------|
+| Email | `email contains "@gmail.com"` |
+| Phone | `phone_number starts with "+82"` |
+| Custom properties | `membership_level = "premium"` |
+| Signup date | `created_at > 2024-01-01` |
+
+## User Metadata 조건
+
+표준 속성이 아닌 추가 사용자 데이터 필드로 필터링합니다.
+
+## Event 조건
+
+사용자의 행동을 기반으로 필터링:
+
+### Count X
+"사용자가 이벤트를 최소 X회 수행 (전체 기간)"
+- 이벤트 이름
+- 연산자 (≥, =, < 등)
+- 횟수 값
+
+### Count X in Y Days
+"사용자가 지난 Y일 동안 이벤트를 X회 수행"
+- 이벤트 이름
+- 연산자
+- 횟수 값
+- 일수
+
+### With Event Parameters
+이벤트 데이터로 추가 필터링:
+- Comparison parameter (어떤 이벤트 필드)
+- Comparison operator
+- Comparison value
+
+## Device 조건
+
+디바이스 정보로 필터링:
+
+| 속성 | 예시 |
+|------|------|
+| Platform | `platform = "ios"` |
+| App version | `app_version >= "2.0.0"` |
+| OS version | `os_version starts with "14"` |
+| SDK version | `sdk_version = "1.5.0"` |
+| Custom device properties | `device_model = "iPhone 15"` |
+
+## Campaign Exposure 조건
+
+과거 campaign 상호작용으로 필터링:
+
+### Count X
+"사용자가 campaign을 X회 수신 (전체 기간)"
+- Campaign ID
+- 횟수 비교
+
+### Count X in Y Days
+"사용자가 지난 Y일 동안 campaign을 X회 수신"
+- Campaign ID
+- 횟수 비교
+- 일수 범위
+
+## File Based 조건
+
+업로드된 파일과 사용자 매칭:
+
+| 유형 | 의미 |
+|------|------|
+| Contains | 사용자가 파일에 있음 |
+| Not contains | 사용자가 파일에 없음 |
+
+파일 구조:
+- `original_filename` - 원본 파일명
+- `uploaded_filename` - 시스템 파일명
+
+## Condition 구조
+
+각 조건의 구성:
+
+| 필드 | 설명 |
+|------|------|
+| `attribute` | 확인할 항목 |
+| `operator` | 비교 방법 |
+| `value` | 비교 대상 값 |
+| `valueType` | 데이터 타입 (TEXT, INT, BOOL) |
+| `unit` | 조건 유형 |
+
+## 특수 옵션
+
+### Custom Attribute Input
+`useCustomAttributeInput`이 true일 때, 커스텀 attribute 이름을 허용합니다.
+
+### Event Params as Value
+`useEventParamsAsConditionValue`가 true일 때, 이벤트 데이터와 비교합니다.
+
+### Secondary Value
+시간 기반 조건에서 `secondary_value`는 일수를 나타냅니다.
+
+## 규칙
+
+- 각 조건은 하나의 attribute를 확인
+- 여러 조건은 그룹 규칙에 따라 결합
+- Event 조건은 이벤트 이력이 필요할 수 있음
+- Device 조건은 SDK 연동이 필요
+
+## 관련 문서
+
+- [연산자](/ko/knowledge-base/segments/operators) - 비교 옵션
+- [세그먼트](/ko/knowledge-base/segments/index) - Segment 작성
+- [이벤트](/ko/knowledge-base/concepts/events) - 이벤트 데이터
+- [사용자와 디바이스](/ko/knowledge-base/concepts/users-and-devices) - 사용자 데이터

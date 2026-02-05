@@ -1,0 +1,115 @@
+---
+hidden: true
+title: "Event Filter (이벤트 필터)"
+description: "Campaign과 journey를 이벤트 세부 정보에 따라 필터링합니다."
+---
+
+## 개요
+
+Event filter를 사용하면 이벤트의 특정 세부 정보에 따라 campaign이나 journey가 언제 트리거될지 제어할 수 있습니다. 모든 이벤트에 트리거되는 대신, "이런 속성을 가진 이벤트일 때만 트리거"라고 지정할 수 있습니다.
+
+## Event Filter 유형
+
+### Triggering Event Filter
+- Campaign/journey를 시작할 조건 정의
+- 이벤트가 모든 filter 조건에 일치해야 트리거됨
+- 예: amount > 100인 "purchase" 이벤트에서만 트리거
+
+### Cancellation Event Filter
+- Journey를 중단/취소할 조건 정의
+- 사용자가 이 filter와 일치하는 이벤트를 수행하면 journey에서 이탈
+- 예: 사용자가 "unsubscribe" 이벤트를 수행하면 journey 취소
+
+## Filter 구조
+
+각 filter의 구성:
+
+| 필드 | 설명 | 예시 |
+|------|------|------|
+| `key` | 확인할 이벤트 속성 | `product_name` |
+| `operator` | 비교 방법 | `=`, `>`, `contains` |
+| `value` | 비교 대상 값 | `"shoes"` |
+| `value_type` | 값의 타입 | `TEXT`, `INT`, `BOOL` |
+
+## Filter Group
+
+Filter는 그룹으로 구성됩니다:
+
+```
+Group 1: (filter AND filter AND filter)
+OR
+Group 2: (filter AND filter)
+```
+
+- **그룹 내**: 모든 filter가 일치해야 함 (AND 로직)
+- **그룹 간**: 어느 그룹이든 일치하면 됨 (OR 로직)
+
+### 예시
+
+"신발 구매 또는 10만원 이상 구매에 트리거"
+
+```
+Group 1: event_name = "purchase" AND product = "shoes"
+OR
+Group 2: event_name = "purchase" AND amount > 100000
+```
+
+## Event 조건 Operator
+
+이벤트 필터링을 위한 특수 operator:
+
+| Operator | 기호 | 예시 |
+|----------|------|------|
+| Equals | `=` | `event_name = "purchase"` |
+| Does not equal | `!=` | `event_name != "page_view"` |
+| Starts with | `starts_with` | `event_name starts_with "user_"` |
+| Does not start with | `does_not_start_with` | 해당 값으로 시작하는 이벤트 제외 |
+| Ends with | `ends_with` | `event_name ends_with "_click"` |
+| Does not end with | `does_not_end_with` | 해당 값으로 끝나는 이벤트 제외 |
+| Contains | `contains` | `event_name contains "purchase"` |
+| Does not contain | `does_not_contain` | 해당 값을 포함하는 이벤트 제외 |
+| Matches regex | `matches_regex` | 패턴 매칭 |
+| Does not match regex | `does_not_match_regex` | 패턴 제외 |
+
+## 일반적인 사용 사례
+
+### 상품 카테고리로 필터링
+```
+key: category
+operator: =
+value: "electronics"
+value_type: TEXT
+```
+
+### 구매 금액으로 필터링
+```
+key: amount
+operator: >=
+value: 50000
+value_type: INT
+```
+
+### 여러 조건으로 필터링
+```
+Group 1:
+  - key: category, operator: =, value: "clothing"
+  - key: amount, operator: >, value: 30000
+
+Group 2:
+  - key: is_first_purchase, operator: =, value: true
+```
+이것은 3만원 이상의 의류 구매 또는 첫 구매에 일치합니다.
+
+## 규칙
+
+1. 이벤트가 통과하려면 최소 하나의 filter 그룹이 일치해야 함
+2. 그룹 내에서는 모든 filter가 일치해야 함
+3. Null/누락된 값은 대부분의 비교에서 실패
+4. 비교가 올바르게 작동하려면 value type이 일치해야 함
+
+## 관련 문서
+
+- [연산자](/ko/knowledge-base/segments/operators) - 모든 비교 연산자
+- [이벤트](/ko/knowledge-base/concepts/events) - 이벤트란 무엇인가
+- [세그먼트](/ko/knowledge-base/segments/index) - 사용자 타겟팅
+- [조건 유형](/ko/knowledge-base/segments/condition-types) - Segment 조건 유형

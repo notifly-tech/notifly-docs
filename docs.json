@@ -30,7 +30,6 @@
                   "group": "캠페인",
                   "pages": [
                     "ko/user-guide/campaigns/basic",
-                    "ko/user-guide/campaigns/fatigue-management",
                     {
                       "group": "메시지 개인화",
                       "pages": [
@@ -47,6 +46,7 @@
                       ]
                     },
                     "ko/user-guide/campaigns/abtest",
+                    "ko/user-guide/campaigns/fatigue-management",
                     "ko/user-guide/campaigns/campaign-analytics"
                   ]
                 },

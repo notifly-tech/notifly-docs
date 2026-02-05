@@ -1,0 +1,263 @@
+# Notifly Documentation - Full Index (노티플라이 문서 전체 색인)
+
+> Notifly is a comprehensive marketing automation platform that enables businesses to send personalized messages across multiple channels. Supporting App Push, Web Push, SMS, KakaoTalk (Alimtalk, Friendtalk, Brand Message), Email, In-app Popups, Web Popups, Webhooks, and LINE, Notifly provides event-based automation, user segmentation, campaign orchestration (User Journey), and real-time analytics.
+>
+> 노티플라이는 앱 푸시, 웹 푸시, 문자(SMS), 카카오톡(알림톡, 친구톡, 브랜드 메시지), 이메일, 인앱 팝업, 웹 팝업, 웹훅, 라인 등 다양한 채널로 개인화된 메시지를 발송하고 자동화할 수 있는 종합 마케팅 자동화 플랫폼입니다. 이벤트 기반 자동화, 유저 세그먼테이션, 캠페인 오케스트레이션(유저 여정), 실시간 분석 기능을 제공합니다.
+
+Base URL: https://docs.notifly.tech
+API Base URL: https://api.notifly.tech
+
+---
+
+## Overview (개요)
+
+- [노티플라이 문서 알아보기](/ko/index): Main landing page with quick links to guides, SDK setup, and API reference. 메인 문서 페이지로 가이드, SDK 설정, API 레퍼런스 바로가기 제공.
+
+---
+
+## User Guides (사용자 가이드)
+
+### Campaigns (캠페인)
+
+- [캠페인 시작하기 (Campaign Basics)](/ko/user-guide/campaigns/basic): 캠페인 생성, 발송 타이밍, 채널 선택, 스케줄 설정 등 기본 설정. Campaign creation, scheduling, channel selection basics.
+- [A/B 테스트](/ko/user-guide/campaigns/abtest): 서로 다른 메시지 효과 비교 테스트. Compare different message variations for performance.
+- [캠페인 대시보드](/ko/user-guide/campaigns/campaign-analytics): 발송 현황, 전환율 등 캠페인 성과 분석. Campaign performance metrics and conversion tracking.
+
+#### Message Personalization (메시지 개인화)
+
+- [기본 사용법](/ko/user-guide/campaigns/personalization/basic): Liquid 템플릿 문법으로 유저 속성/이벤트 기반 개인화. Liquid template syntax for user property and event-based personalization.
+- [고급 사용법](/ko/user-guide/campaigns/personalization/advanced): Connected Content로 외부 API 데이터 연동. External API data integration with Connected Content.
+
+#### Campaign Segments (캠페인 발송대상 설정)
+
+- [발송 대상 설정](/ko/user-guide/campaigns/campaign-segments/segment): 유저 그룹, CSV 업로드, 조건 기반 타겟팅. User groups, CSV upload, condition-based targeting.
+- [랜덤 버킷 넘버](/ko/user-guide/campaigns/campaign-segments/random-bucket-number): 일부 유저에게만 캠페인 실행. Run campaigns on subset of users.
+- [개인화 유저 조건 설정](/ko/user-guide/campaigns/campaign-segments/personalized-user-condition): 유저 속성 조건에 개인화 적용. Apply personalization to user property conditions.
+
+### User Journey (유저 여정)
+
+- [유저 여정 시작하기 (User Journey Basics)](/ko/user-guide/user-journey/index): 유저 여정 개념, 자동화 플로우, 노드, 통계 개요. User journey concepts, automation flows, nodes, statistics overview.
+- [유저 여정이란?](/ko/user-guide/user-journey/basic): 핵심 용어(노드, 진입/이탈 조건, 전환, 세션) 설명. Core concepts: nodes, entry/exit conditions, conversions, sessions.
+- [유저 여정 기본 설정](/ko/user-guide/user-journey/basic-info): 기본 정보, 진입 조건, 재진입/이탈 조건, 전환 성과 설정. Basic info, entry conditions, re-entry/exit conditions, conversion settings.
+- [유저 여정 상태와 수정](/ko/user-guide/user-journey/status): 활성/일시중지/비활성 상태 및 변경 동작. Active/paused/inactive states and transitions.
+- [유저 여정 통계](/ko/user-guide/user-journey/statistics): 세션, 이탈, 전환, 노드별 성과 지표. Session, drop-off, conversion, node-level metrics.
+- [유저 여정 활용](/ko/user-guide/user-journey/examples): 다양한 시나리오 예시. Various scenario examples.
+
+#### User Journey Nodes (유저 여정 노드)
+
+- [딜레이 노드](/ko/user-guide/user-journey/nodes/delay_node): 설정된 시간만큼 대기. Wait for specified duration.
+- [메시지 노드](/ko/user-guide/user-journey/nodes/message_node): 모든 채널 메시지 발송. Send messages on all channels.
+- [이벤트 분기 노드](/ko/user-guide/user-journey/nodes/event_branching_node): 일정 시간 내 이벤트 조건으로 분기. Branch based on event conditions within time window.
+- [유저 그룹 분기 노드](/ko/user-guide/user-journey/nodes/user_group_branching_node): 속성/이벤트 조건으로 그룹 분기. Branch by user property or event conditions.
+- [유저 업데이트 노드](/ko/user-guide/user-journey/nodes/user_update_node): 유저 속성 업데이트. Update user properties.
+- [이벤트 트리거 노드](/ko/user-guide/user-journey/nodes/event_trigger_node): 지정한 이벤트 발생. Trigger specified events.
+- [랜덤 분기 노드](/ko/user-guide/user-journey/nodes/variant_branching_node): 비율 기반 랜덤 분기. Random branching by percentage.
+
+### Channels (채널)
+
+#### App Push (앱 푸시)
+
+- [앱 푸시 알림 발송 (App Push Notification)](/ko/user-guide/channel/app-push-notification/guide): iOS, Android 모바일 푸시 알림, 앱 알림, 모바일 알림 설정 및 발송. Mobile push notifications setup and sending for iOS and Android.
+
+#### Web Push (웹 푸시)
+
+- [웹 푸시 알림 발송 (Web Push Notification)](/ko/user-guide/channel/web-push-notification/guide): 브라우저 푸시, 웹 알림, 데스크톱 알림 설정 및 발송. Browser push notifications, web notifications setup and sending.
+- [웹 푸시 구성 요소 및 설정](/ko/user-guide/channel/web-push-notification/web-push-components): 브라우저/기기별 설정 차이. Browser and device-specific configuration.
+
+#### SMS (문자)
+
+- [노티플라이에서 문자 발송하기 (SMS/Text Message)](/ko/user-guide/channel/text-message/notifly_guide): 문자 메시지, SMS, MMS 발송 설정 및 캠페인 생성. Text messaging, SMS/MMS sending and campaign creation.
+
+#### KakaoTalk (카카오톡)
+
+- [카카오 비즈메시지 발송 환경 셋팅 방법](/ko/user-guide/channel/kakaotalk/setup): 카카오 알림톡, 브랜드 메시지 발송 환경 설정. Kakao Alimtalk and Brand Message environment setup.
+- [카카오 알림톡 발송](/ko/user-guide/channel/kakaotalk/alimtalk-guide): 템플릿 심사, 채널 등록, 발송 대상 설정. Template review, channel registration, targeting.
+- [카카오 브랜드 메시지 발송](/ko/user-guide/channel/kakaotalk/brandmessage-guide): 카카오 기반 메시지형 광고 서비스. Kakao-based advertising message service.
+- [카카오 친구톡 발송 (지원종료)](/ko/user-guide/channel/kakaotalk/friendtalk-guide): 친구톡 발송 가이드 (지원 종료). Friendtalk guide (deprecated).
+
+#### Email (이메일)
+
+- [이메일 발송 (Email Campaign)](/ko/user-guide/channel/email/guide): 이메일 캠페인, 뉴스레터, 마케팅 이메일 발송 설정. Email campaigns, newsletters, marketing email configuration.
+
+#### Web Popup (웹 팝업)
+
+- [웹 팝업 띄우기 (Web Popup)](/ko/user-guide/channel/web-message/guide): 웹사이트 팝업, 온사이트 메시지, 배너, 모달 템플릿 제작. Website popups, on-site messages, banners, modal creation.
+
+#### In-app Popup (인앱 팝업)
+
+- [인앱 팝업 띄우기 (In-app Popup)](/ko/user-guide/channel/in-app-message/guide): 인앱 메시지, 앱 내 팝업, 모바일 팝업, 이벤트 기반 발송. In-app messages, mobile popups with event-based triggering.
+
+#### Webhook (웹훅)
+
+- [Webhook (웹훅)](/ko/user-guide/channel/webhook/guide): HTTP 콜백, 외부 시스템 연동, API 호출, 커스텀 액션 설정. Webhook HTTP callbacks, external system integration, custom actions.
+
+#### LINE (라인)
+
+- [LINE 메시지 발송 (LINE Messaging)](/ko/user-guide/channel/line/guide): 라인 메시지, 일본/대만/태국/아시아 시장 메시징. LINE messaging for Japan, Taiwan, Thailand and Asia markets.
+
+### Analytics (분석)
+
+- [분석](/ko/user-guide/analytics/index): 분석 개요. Analytics overview.
+- [쉐어 링크 가이드](/ko/user-guide/analytics/share-link/guide): Share Link로 캠페인 통계 CSV 조회, Google 스프레드시트 연동. Campaign stats CSV export and Google Sheets integration.
+
+### Integrations (연동)
+
+- [연동](/ko/user-guide/integrations/index): 외부 서비스 연동 개요. Third-party integrations overview.
+
+#### Mixpanel
+
+- [Mixpanel 연동 개요](/ko/user-guide/integrations/mixpanel/mixpanel-introduction): Mixpanel 양방향 데이터 연동, 코호트 동기화, 이벤트 전송. Mixpanel bidirectional integration, cohort sync, event streaming.
+- [Mixpanel 코호트 동기화](/ko/user-guide/integrations/mixpanel/mixpanel-cohort-sync): Mixpanel 코호트를 노티플라이 유저 그룹으로 동기화. Sync Mixpanel cohorts to Notifly user groups.
+- [노티플라이 이벤트 Mixpanel Export](/ko/user-guide/integrations/mixpanel/mixpanel-export-events): 메시지 발송/클릭/오픈 이벤트 Mixpanel 전송. Export message events to Mixpanel.
+
+#### Amplitude
+
+- [Amplitude 연동 개요](/ko/user-guide/integrations/amplitude/amplitude-introduction): Amplitude 데이터 연동, 이벤트 스트리밍, 코호트 동기화. Amplitude data integration, event streaming, cohort sync.
+- [Amplitude 이벤트 스트리밍](/ko/user-guide/integrations/amplitude/amplitude-event-streaming): Amplitude 이벤트/유저 정보 노티플라이 연동. Stream Amplitude events and user data to Notifly.
+- [Amplitude 코호트 동기화](/ko/user-guide/integrations/amplitude/amplitude-cohort-sync): Amplitude 코호트를 노티플라이 유저 그룹으로 동기화. Sync Amplitude cohorts to Notifly user groups.
+
+#### Airbridge
+
+- [Airbridge 어트리뷰션 연동](/ko/user-guide/integrations/airbridge/airbridge-introduction): Airbridge 어트리뷰션 데이터로 세그먼트 생성 및 타겟팅. Airbridge attribution data for segmentation and targeting.
+
+#### AppsFlyer
+
+- [AppsFlyer 어트리뷰션 연동](/ko/user-guide/integrations/appsflyer/appsflyer-introduction): AppsFlyer 어트리뷰션 데이터로 세그먼트 생성 및 타겟팅. AppsFlyer attribution data for segmentation and targeting.
+
+#### Cafe24 (카페24)
+
+- [카페24 연동](/ko/user-guide/integrations/cafe24/cafe24-integration): 카페24 쇼핑몰 개발 없이 노티플라이 설치. Install Notifly on Cafe24 stores without development.
+- [GTM을 이용한 커스텀 이벤트](/ko/user-guide/integrations/cafe24/cafe24-gtm): 카페24에 GTM 설치, 커스텀 이벤트 생성. GTM installation on Cafe24, custom event creation.
+- [카페24 데이터 설명](/ko/user-guide/integrations/cafe24/cafe24-spec): 카페24 유저 정보 적재 방식 및 이벤트 명세. Cafe24 user data structure and event specifications.
+- [캠페인 예제](/ko/user-guide/integrations/cafe24/campaign-examples): 카페24 쇼핑몰 마케팅 시나리오 예제. Cafe24 marketing scenario examples.
+
+### Console (콘솔)
+
+- [콘솔 메뉴 및 페이지 구조](/ko/user-guides/file): 콘솔 기본 구조와 고정 요소. Console structure and fixed elements.
+- [제품 및 프로젝트 정보 설정](/ko/user-guide/console/setting): 제품/프로젝트 정보, 보안, 글로벌 발송 제한 설정. Product/project info, security, global sending limits.
+
+### Resources
+
+- [FAQ](/ko/user-guide/faq): 메시지 형식, 유저/이벤트, CSV 업로드, 발송 설정 등 자주 묻는 질문. Frequently asked questions on messages, users, events, CSV, sending.
+
+---
+
+## Developer Guides (개발자 가이드)
+
+### Getting Started (시작하기)
+
+- [노티플라이 개발자 가이드](/ko/developer-guide/index): Firebase 연동과 플랫폼별 SDK 설치/설정 개요. Firebase integration and platform SDK setup overview.
+- [Firebase 연동하기](/ko/developer-guide/firebase-integration): Firebase 프로젝트 생성, FCM 설정, APNs 등록. Firebase project creation, FCM setup, APNs registration.
+
+### Mobile SDKs (모바일 SDK)
+
+- [Android](/ko/developer-guide/android-sdk): Android SDK 설치, 초기화, 푸시/인앱 팝업 연동. Android SDK installation, initialization, push/in-app integration.
+- [iOS](/ko/developer-guide/ios-sdk): iOS SDK 설치, AppDelegate 설정, 푸시 알림 연동. iOS SDK installation, AppDelegate setup, push notification integration.
+- [React Native](/ko/developer-guide/react-native-sdk): React Native SDK 설치, iOS/Android 설정, 푸시 연동. React Native SDK installation, iOS/Android setup, push integration.
+- [Flutter](/ko/developer-guide/flutter-sdk): Flutter SDK 설치, iOS/Android 설정, 푸시/인앱 팝업 연동. Flutter SDK installation, iOS/Android setup, push/in-app integration.
+
+### Web SDKs (웹 SDK)
+
+- [JavaScript 연동하기](/ko/developer-guide/javascript-sdk): JavaScript SDK로 웹 푸시, 웹 팝업, 이벤트 연동. JavaScript SDK for web push, web popup, event integration.
+- [구글 태그 매니저 설정하기](/ko/developer-guide/google-tag-manager): GTM에서 노티플라이 템플릿으로 SDK 초기화, 유저/이벤트 연동. GTM template for SDK initialization, user/event integration.
+
+### Advanced Mobile Integration (심화 연동하기)
+
+- [심화 기능별 플랫폼 지원 여부 리스트](/ko/advanced/index): 푸시 아이콘, 사전 동의, 클릭 이벤트 등 플랫폼별 지원 현황. Platform support matrix for advanced features.
+- [푸시 알림 아이콘 설정](/ko/advanced/push-notification-icon): Android/Flutter 푸시 알림 아이콘 커스터마이징. Android/Flutter push notification icon customization.
+- [푸시 알림 사전 동의](/ko/advanced/push-notification-consent): 앱에서 푸시 알림 권한 요청 로직 구현. Implement push notification permission request in app.
+- [푸시 알림 클릭 이벤트 구독](/ko/advanced/push-notification-click-events): 푸시 클릭 시 앱 내 특정 동작 수행. Handle push notification click events in app.
+- [푸시 알림 인터셉터](/ko/advanced/push-notification-interceptor): Android 푸시 알림 설정 커스터마이즈. Customize Android push notification settings.
+- [리치 푸시 알림](/ko/advanced/rich-push-notification): iOS 리치 푸시 알림 설정 (Notification Service Extension, App Groups). iOS rich push notification setup.
+- [인앱 팝업 이벤트 리스너](/ko/advanced/inapp-popup-event-listener): 인앱 팝업 이벤트 감지 및 처리. Detect and handle in-app popup events.
+- [웹뷰](/ko/advanced/webview): Android 인앱 팝업 WebView 타이머 제어. Android in-app popup WebView timer control.
+
+### Integration Testing (연동 테스트)
+
+- [연동 테스트하기](/ko/integration-test): 유저 등록, 이벤트 전송, 앱 푸시 및 인앱 팝업 테스트. User registration, event tracking, push and in-app popup testing.
+
+### Developer Tools (개발자 도구)
+
+- [노티플라이 MCP 서버](/ko/devtools/notifly-mcp-server): MCP 서버 설치, 설정, 문서/SDK 검색 기능. MCP server installation, configuration, documentation search.
+- [노티플라이 에이전트 스킬](/ko/devtools/notifly-agent-skills): 에이전트 스킬 패키지 구성, 설치, 지원 클라이언트. Agent skill packages, installation, supported clients.
+
+---
+
+## API Reference (API 레퍼런스)
+
+Base URL: https://api.notifly.tech
+
+### Getting Started (시작하기)
+
+- [API 개요](/ko/api-reference/getting-started): HTTP API 개요, 인증 방식, 요청/응답 패턴. HTTP API overview, authentication, request/response patterns.
+- [API 에러 코드 및 응답 형식](/ko/api-reference/error): 표준 에러 응답 구조, HTTP 상태코드별 처리. Error response structure, HTTP status code handling.
+
+### Authentication (인증)
+
+- `POST /authenticate`: API 인증 토큰 발급. Access Key와 Secret Key로 1시간 유효한 토큰 발급. Generate API authentication token (1-hour validity).
+
+### Events & Users (이벤트 & 유저)
+
+- `POST /track-event`: 이벤트 트래킹. 유저 행동/전역 이벤트를 노티플라이로 전송. 최대 500개/1회 호출. Track user/global events (max 500 per call).
+- `POST /set-user-properties`: 유저 속성 설정. 세그먼트 분류 및 개인화에 활용. 최대 1,000명/1회 호출. Set user properties for segmentation and personalization (max 1000 per call).
+- `DELETE /users`: 유저 삭제. Delete users.
+
+### Campaigns (캠페인)
+
+- `POST /projects/{projectId}/campaigns/{campaignId}/send`: 캠페인 발송 트리거. Trigger campaign send.
+- `POST /projects/{projectId}/user-journeys/{userJourneyId}/enter`: 유저 여정 진입. Enter user into journey.
+
+### Messaging (메시징)
+
+- `POST /messages/text-message`: 문자 메시지 발송. Send SMS/text message.
+- `POST /messages/kakao-alimtalk`: 카카오 알림톡 발송. Send Kakao Alimtalk.
+- `POST /messages/kakao-friendtalk`: 카카오 친구톡 발송. Send Kakao Friendtalk.
+- `POST /messages/kakao-brand-message`: 카카오 브랜드 메시지 발송. Send Kakao Brand Message.
+
+### Messaging Management (메시징 관리)
+
+#### Kakao Alimtalk Templates (카카오 알림톡 템플릿)
+
+- `GET /projects/{projectId}/messages/kakao-alimtalk/templates`: 알림톡 템플릿 목록 조회. List Alimtalk templates.
+- `POST /projects/{projectId}/messages/kakao-alimtalk/templates`: 알림톡 템플릿 생성. Create Alimtalk template.
+- `PUT /projects/{projectId}/messages/kakao-alimtalk/templates/{templateCode}`: 알림톡 템플릿 수정. Update Alimtalk template.
+- `DELETE /projects/{projectId}/messages/kakao-alimtalk/templates/{templateCode}`: 알림톡 템플릿 삭제. Delete Alimtalk template.
+
+#### 080 Unsubscribe Service (080 수신 거부 서비스)
+
+- `GET /projects/{projectId}/messages/text-message/blockservice/recipients`: 수신 거부 목록 조회. Get unsubscribe list.
+- `POST /projects/{projectId}/messages/text-message/blockservice/recipients`: 수신 거부 추가. Add to unsubscribe list.
+- `DELETE /projects/{projectId}/messages/text-message/blockservice/recipients/removes`: 수신 거부 해제. Remove from unsubscribe list.
+
+### Export & Analytics (내보내기 & 분석)
+
+- `POST /projects/{projectId}/campaign-event-data/exports`: 메시지 이벤트 데이터 내보내기 요청. Request message event data export.
+- `GET /projects/{projectId}/campaign-event-data/exports/{exportId}/result`: 내보내기 결과 조회. Get export result.
+- `POST /v1/projects/{projectId}/statistics`: 캠페인 통계 조회. Get campaign statistics.
+- `GET /v1/projects/{projectId}/statistics.csv`: 캠페인 통계 CSV 다운로드. Download campaign statistics CSV.
+- `GET /projects/{projectId}/campaigns/{campaignId}/stats`: 개별 캠페인 통계. Get individual campaign stats.
+
+---
+
+## Keywords (키워드)
+
+### Korean Keywords (한글 키워드)
+노티플라이, 푸시 알림, 앱 푸시, 웹 푸시, 인앱 팝업, 웹 팝업, 카카오톡, 알림톡, 친구톡, 브랜드 메시지, 이메일, 문자, SMS, 라인, LINE, 웹훅, 마케팅 자동화, 캠페인, 유저 여정, 세그먼트, 타겟팅, 개인화, 메시지 개인화, Liquid 템플릿, A/B 테스트, 전환율, 분석, 통계, SDK, Android SDK, iOS SDK, React Native, Flutter, JavaScript SDK, GTM, 구글 태그 매니저, Firebase, FCM, APNs, API, 이벤트 트래킹, 유저 속성, 코호트 동기화, Mixpanel, Amplitude, Airbridge, AppsFlyer, 카페24, 연동, 리치 푸시, 딥링크, MCP 서버
+
+### English Keywords
+Notifly, push notification, app push, web push, in-app popup, in-app message, web popup, KakaoTalk, Alimtalk, Friendtalk, Brand Message, email, SMS, text message, LINE, webhook, marketing automation, campaign, user journey, segment, targeting, personalization, message personalization, Liquid template, A/B testing, conversion rate, analytics, statistics, SDK, Android SDK, iOS SDK, React Native, Flutter, JavaScript SDK, GTM, Google Tag Manager, Firebase, FCM, APNs, API, event tracking, user properties, cohort sync, Mixpanel, Amplitude, Airbridge, AppsFlyer, Cafe24, integration, rich push, deep link, MCP server
+
+### Technical Terms (기술 용어)
+REST API, HTTP API, JSON, Authentication, Bearer Token, Access Key, Secret Key, Webhook, Event Streaming, Cohort Sync, Attribution, Deep Linking, Push Notification Service, Notification Service Extension, App Groups, WebView, Event Listener, Interceptor, GTM Template, SDK Initialization, User Registration, Event Logging
+
+---
+
+## File Count Summary
+
+- Total MDX Files: 75
+- User Guide Files: 53
+- Developer Guide Files: 8
+- Advanced Features Files: 8
+- API Reference Files: 2
+- DevTools Files: 2
+- Root Level Files: 2

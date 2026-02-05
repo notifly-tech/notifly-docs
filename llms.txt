@@ -1,0 +1,78 @@
+# Notifly Documentation (노티플라이 문서)
+
+> Notifly is a marketing automation platform that helps businesses send personalized messages across multiple channels including App Push, Web Push, SMS, KakaoTalk, Email, In-app Popups, Web Popups, Webhooks, and LINE. It enables event-based automation, user segmentation, and real-time campaign analytics.
+>
+> 노티플라이는 앱 푸시, 웹 푸시, 문자, 카카오톡, 이메일, 인앱 팝업, 웹 팝업, 웹훅, 라인 등 다양한 채널로 개인화된 메시지를 발송하고 자동화할 수 있는 마케팅 자동화 플랫폼입니다.
+
+Base URL: https://docs.notifly.tech
+
+## Docs
+
+### User Guides (사용자 가이드)
+- [Overview (시작하기)](/ko/index): Main documentation landing page / 메인 문서 페이지
+- [Campaign Basics (캠페인 시작하기)](/ko/user-guide/campaigns/basic): Campaign creation and scheduling / 캠페인 생성 및 스케줄 설정
+- [User Journey (유저 여정)](/ko/user-guide/user-journey/index): Event-based automation journeys / 이벤트 기반 자동화 여정
+- [Channel Guide (채널 가이드)](/ko/user-guide/channel/app-push-notification/guide): Multi-channel messaging setup / 멀티채널 메시지 설정
+- [Integrations (연동)](/ko/user-guide/integrations/index): Third-party integrations / 외부 서비스 연동
+
+### Developer Guides (개발자 가이드)
+- [Developer Guide Overview (개발자 가이드)](/ko/developer-guide/index): SDK integration overview / SDK 연동 개요
+- [Firebase Integration (Firebase 연동)](/ko/developer-guide/firebase-integration): FCM and APNs setup / FCM 및 APNs 설정
+- [Android SDK](/ko/developer-guide/android-sdk): Android native integration / Android 네이티브 연동
+- [iOS SDK](/ko/developer-guide/ios-sdk): iOS native integration / iOS 네이티브 연동
+- [React Native SDK](/ko/developer-guide/react-native-sdk): React Native integration / React Native 연동
+- [Flutter SDK](/ko/developer-guide/flutter-sdk): Flutter integration / Flutter 연동
+- [JavaScript SDK](/ko/developer-guide/javascript-sdk): Web SDK integration / 웹 SDK 연동
+- [Google Tag Manager](/ko/developer-guide/google-tag-manager): GTM template setup / GTM 템플릿 설정
+
+### API Reference (API 레퍼런스)
+- [API Overview (API 개요)](/ko/api-reference/getting-started): Authentication and usage / 인증 및 사용법
+- [Error Codes (에러 코드)](/ko/api-reference/error): Error handling / 에러 처리
+
+## Channels (채널)
+- [App Push (앱 푸시)](/ko/user-guide/channel/app-push-notification/guide): iOS, Android 모바일 푸시 알림, 앱 알림 설정 및 발송. Mobile push notifications for iOS and Android devices.
+- [Web Push (웹 푸시)](/ko/user-guide/channel/web-push-notification/guide): 브라우저 푸시 알림, 웹 알림, 데스크톱 알림 설정. Browser push notifications for desktop and mobile web.
+- [SMS (문자)](/ko/user-guide/channel/text-message/notifly_guide): 문자 메시지, 텍스트 메시지, MMS 발송. Text messaging and SMS/MMS campaigns.
+- [KakaoTalk (카카오톡)](/ko/user-guide/channel/kakaotalk/setup): 알림톡, 친구톡, 브랜드 메시지 발송 환경 설정. Alimtalk, Friendtalk, Brand Message setup.
+- [Email (이메일)](/ko/user-guide/channel/email/guide): 이메일 캠페인, 뉴스레터, 마케팅 이메일 발송. Email campaigns and newsletter sending.
+- [Web Popup (웹 팝업)](/ko/user-guide/channel/web-message/guide): 웹사이트 팝업, 온사이트 메시지, 배너 표시. Website popups and on-site messaging.
+- [In-app Popup (인앱 팝업)](/ko/user-guide/channel/in-app-message/guide): 모바일 앱 내 팝업, 인앱 메시지, 앱 내 알림. Mobile app popups and in-app messages.
+- [Webhook (웹훅)](/ko/user-guide/channel/webhook/guide): HTTP 콜백, 외부 시스템 연동, API 호출. Custom HTTP callbacks and external system integration.
+- [LINE (라인)](/ko/user-guide/channel/line/guide): 라인 메시지, 일본/아시아 메시징 플랫폼. LINE messaging for Japan and Asia markets.
+
+## SDKs
+- [Android SDK](/ko/developer-guide/android-sdk): Kotlin, Java 기반 Android 네이티브 앱 연동. Native Android integration with Kotlin/Java.
+- [iOS SDK](/ko/developer-guide/ios-sdk): Swift, Objective-C 기반 iOS 네이티브 앱 연동. Native iOS integration with Swift/Objective-C.
+- [React Native SDK](/ko/developer-guide/react-native-sdk): React Native 크로스플랫폼 앱 연동, Expo 지원. Cross-platform React Native integration.
+- [Flutter SDK](/ko/developer-guide/flutter-sdk): Dart 기반 Flutter 크로스플랫폼 앱 연동. Cross-platform Flutter integration with Dart.
+- [JavaScript SDK](/ko/developer-guide/javascript-sdk): 웹 브라우저, 웹사이트, SPA 연동. Web browser and website integration.
+- [Google Tag Manager](/ko/developer-guide/google-tag-manager): GTM 템플릿으로 코드 없이 연동. No-code integration via GTM template.
+
+## Integrations (연동)
+- [Mixpanel 연동](/ko/user-guide/integrations/mixpanel/mixpanel-introduction): 코호트 동기화, 이벤트 내보내기, 분석 데이터 연동. Cohort sync, event export, analytics integration.
+- [Amplitude 연동](/ko/user-guide/integrations/amplitude/amplitude-introduction): 이벤트 스트리밍, 코호트 동기화, 행동 분석 연동. Event streaming, cohort sync, behavioral analytics.
+- [Airbridge 어트리뷰션](/ko/user-guide/integrations/airbridge/airbridge-introduction): 마케팅 어트리뷰션, 광고 성과 추적, 세그먼트 생성. Marketing attribution and ad performance tracking.
+- [AppsFlyer 어트리뷰션](/ko/user-guide/integrations/appsflyer/appsflyer-introduction): 모바일 어트리뷰션, 설치 추적, 세그먼트 생성. Mobile attribution and install tracking.
+- [Cafe24 (카페24)](/ko/user-guide/integrations/cafe24/cafe24-integration): 카페24 쇼핑몰 연동, 이커머스 마케팅 자동화. Cafe24 e-commerce store integration.
+
+## Developer Tools (개발자 도구)
+- [Notifly MCP Server (노티플라이 MCP 서버)](/ko/devtools/notifly-mcp-server): AI-powered documentation search / AI 기반 문서 검색
+- [Notifly Agent Skills (노티플라이 에이전트 스킬)](/ko/devtools/notifly-agent-skills): Agent skill packages / 에이전트 스킬 패키지
+
+## Optional
+
+### Campaigns (캠페인)
+- [A/B Testing (A/B 테스트)](/ko/user-guide/campaigns/abtest): Campaign performance comparison / 캠페인 성과 비교
+- [Campaign Dashboard (캠페인 대시보드)](/ko/user-guide/campaigns/campaign-analytics): Analytics and metrics / 분석 및 지표
+- [Message Personalization (메시지 개인화)](/ko/user-guide/campaigns/personalization/basic): Liquid templates / Liquid 템플릿
+
+### User Journey Nodes (유저 여정 노드)
+- [Delay Node (딜레이 노드)](/ko/user-guide/user-journey/nodes/delay_node): Time-based delays / 시간 기반 대기
+- [Message Node (메시지 노드)](/ko/user-guide/user-journey/nodes/message_node): Send messages / 메시지 발송
+- [Event Branching (이벤트 분기)](/ko/user-guide/user-journey/nodes/event_branching_node): Event-based routing / 이벤트 기반 분기
+
+### Advanced SDK Features (SDK 심화 기능)
+- [Advanced Features Overview (심화 기능 개요)](/ko/advanced/index): Platform support matrix / 플랫폼 지원 현황
+- [Push Icon Settings (푸시 아이콘 설정)](/ko/advanced/push-notification-icon): Custom push icons / 커스텀 푸시 아이콘
+- [Rich Push (리치 푸시)](/ko/advanced/rich-push-notification): Rich media notifications / 리치 미디어 알림
+- [In-app Event Listener (인앱 이벤트 리스너)](/ko/advanced/inapp-popup-event-listener): Popup event handling / 팝업 이벤트 처리

@@ -46,6 +46,7 @@
                       ]
                     },
                     "ko/user-guide/campaigns/abtest",
+                    "ko/user-guide/campaigns/fatigue-management",
                     "ko/user-guide/campaigns/campaign-analytics"
                   ]
                 },
@@ -198,6 +199,7 @@
                 {
                   "group": "Resources",
                   "pages": [
+                    "ko/user-guide/glossary",
                     "ko/user-guide/faq"
                   ]
                 }

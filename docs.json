@@ -244,7 +244,8 @@
                             "ko/advanced/push-notification-interceptor",
                             "ko/advanced/inapp-popup-event-listener",
                             "ko/advanced/rich-push-notification",
-                            "ko/advanced/webview"
+                            "ko/advanced/webview",
+                            "ko/advanced/webview-external-browser"
                           ]
                         }
                       ]

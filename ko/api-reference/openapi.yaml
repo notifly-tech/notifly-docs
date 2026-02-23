@@ -1843,7 +1843,7 @@ paths:
                   description: 메시지 타입 (현재 text 타입만 지원)
                 isAd:
                   type: boolean
-                  description: 광고 여부
+                  description: 광고 여부 (기본값 true)
                 recipientList:
                   type: array
                   items:

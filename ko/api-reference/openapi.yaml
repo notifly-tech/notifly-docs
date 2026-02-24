@@ -365,6 +365,75 @@ paths:
             - 이메일: 동일한 이메일 주소일 경우, 하나의 이메일 주소에만 메시지를 발송합니다.
             - 라인: 동일한 라인 유저 ID일 경우, 하나의 라인 유저 ID에만 메시지를 발송합니다.
           </Info>
+
+          <Info>
+            **400 Bad Request - invalid recipients 상세**
+
+            수신자 검증 실패 시, 400 응답에 `errorDetails`가 포함됩니다.
+
+            ```json
+            {
+              "code": 400,
+              "success": false,
+              "error": "Bad request: invalid recipients",
+              "errorDetails": {
+                "reasonCode": "INVALID_RECIPIENTS",
+                "channel": "kakao-friendtalk",
+                "invalidRecipientCount": 2,
+                "invalidRecipients": [
+                  {
+                    "index": 0,
+                    "type": "user-id",
+                    "userId": "user_001",
+                    "reasonCode": "MISSING_PHONE_NUMBER",
+                    "source": { "pointer": "/recipients/0/userId" }
+                  },
+                  {
+                    "index": 12,
+                    "type": "user-id",
+                    "userId": "user_013",
+                    "reasonCode": "MISSING_PHONE_NUMBER",
+                    "source": { "pointer": "/recipients/12/userId" }
+                  }
+                ]
+              }
+            }
+            ```
+
+            `errorDetails` 필드 설명:
+
+            | 필드 | 타입 | 설명 |
+            | --- | --- | --- |
+            | `reasonCode` | string | 항상 `INVALID_RECIPIENTS` |
+            | `channel` | string | 캠페인 채널 (`text-message`, `kakao-alimtalk`, `kakao-friendtalk`, `kakao-brand-message`, `email`) |
+            | `invalidRecipientCount` | number | 유효하지 않은 수신자 수 |
+            | `invalidRecipients` | array | 유효하지 않은 수신자 목록 |
+            | `invalidRecipients[].index` | number | 요청 `recipients` 배열에서의 인덱스 (0-based) |
+            | `invalidRecipients[].type` | string | 항상 `user-id` |
+            | `invalidRecipients[].userId` | string | 요청에서 전달한 `userId` 값 |
+            | `invalidRecipients[].reasonCode` | string | `MISSING_PHONE_NUMBER` 또는 `MISSING_EMAIL` |
+            | `invalidRecipients[].source.pointer` | string | JSON Pointer 형식의 요청 필드 위치 |
+
+            채널별 검증 규칙:
+
+            | 채널 | 필수 필드 | reasonCode |
+            | --- | --- | --- |
+            | `text-message` | `phone_number` | `MISSING_PHONE_NUMBER` |
+            | `kakao-alimtalk` | `phone_number` | `MISSING_PHONE_NUMBER` |
+            | `kakao-friendtalk` | `phone_number` | `MISSING_PHONE_NUMBER` |
+            | `kakao-brand-message` | `phone_number` | `MISSING_PHONE_NUMBER` |
+            | `email` | `email` | `MISSING_EMAIL` |
+            | `push-notification` / `web-push-notification` | 검증 없음 | - |
+
+            핵심 동작:
+
+            - `code`, `success`, `error`는 항상 포함되며, `errorDetails`는 수신자 검증 실패 시에만 선택적으로 추가됩니다.
+            - 잘못된 파라미터, 비활성 캠페인 등 다른 400 에러에서는 `errorDetails`가 포함되지 않습니다.
+            - `user-id` 타입 수신자가 Notifly DB에 존재하지만 해당 채널의 필수 연락처(전화번호 또는 이메일)가 누락된 경우 invalid로 판정됩니다.
+            - DB에 존재하지 않는 `userId`는 invalid로 취급하지 않고 무시됩니다.
+            - 1명이라도 invalid 수신자가 있으면 전체 요청이 실패(400)하며, 메시지는 발송되지 않습니다.
+            - 클라이언트는 `errorDetails.invalidRecipients`를 참조하여 문제 수신자를 제거한 뒤 재요청할 수 있습니다.
+          </Info>
         metadata:
           title: "캠페인 트리거"
           description: "특정 캠페인을 API를 통해 직접 트리거하여 지정된 수신자에게 발송합니다."
@@ -444,7 +513,7 @@ paths:
                 success: true
                 error: null
         "400":
-          description: The request is incorrect.
+          description: The request is incorrect. `errorDetails` is included only when recipient validation fails.
           content:
             application/json:
               schema:
@@ -456,10 +525,93 @@ paths:
                     type: boolean
                   error:
                     type: string
-              example:
-                code: 400
-                success: false
-                error: "Bad request: some-error-message"
+                  errorDetails:
+                    type: object
+                    description: "수신자 검증 실패(예: user-id 수신자의 필수 연락처 누락)인 경우에만 포함됩니다."
+                    required:
+                      - reasonCode
+                      - channel
+                      - invalidRecipientCount
+                      - invalidRecipients
+                    properties:
+                      reasonCode:
+                        type: string
+                        enum:
+                          - INVALID_RECIPIENTS
+                        description: 수신자 검증 실패를 나타내는 코드
+                      channel:
+                        type: string
+                        description: 캠페인 채널
+                      invalidRecipientCount:
+                        type: integer
+                        description: 유효하지 않은 수신자 수
+                      invalidRecipients:
+                        type: array
+                        description: 유효하지 않은 수신자 상세 목록
+                        items:
+                          type: object
+                          required:
+                            - index
+                            - type
+                            - userId
+                            - reasonCode
+                            - source
+                          properties:
+                            index:
+                              type: integer
+                              description: 요청 recipients 배열에서의 인덱스 (0-based)
+                            type:
+                              type: string
+                              enum:
+                                - user-id
+                              description: 수신자 타입
+                            userId:
+                              type: string
+                              description: 요청에서 전달한 userId 값
+                            reasonCode:
+                              type: string
+                              enum:
+                                - MISSING_PHONE_NUMBER
+                                - MISSING_EMAIL
+                              description: 누락된 필수 연락처 유형
+                            source:
+                              type: object
+                              required:
+                                - pointer
+                              properties:
+                                pointer:
+                                  type: string
+                                  description: JSON Pointer 형식의 요청 필드 위치
+              examples:
+                generalBadRequest:
+                  summary: General 400 response (without errorDetails)
+                  value:
+                    code: 400
+                    success: false
+                    error: "Bad request: some-error-message"
+                invalidRecipients:
+                  summary: Recipient validation failure (with errorDetails)
+                  value:
+                    code: 400
+                    success: false
+                    error: "Bad request: invalid recipients"
+                    errorDetails:
+                      reasonCode: "INVALID_RECIPIENTS"
+                      channel: "kakao-friendtalk"
+                      invalidRecipientCount: 2
+                      invalidRecipients:
+                        - index: 0
+                          type: "user-id"
+                          userId: "user_001"
+                          reasonCode: "MISSING_PHONE_NUMBER"
+                          source:
+                            pointer: "/recipients/0/userId"
+                        - index: 12
+                          type: "user-id"
+                          userId: "user_013"
+                          reasonCode: "MISSING_PHONE_NUMBER"
+                          source:
+                            pointer: "/recipients/12/userId"
         "401":
           description: The token has expired, or the authentication information is invalid.
           content:

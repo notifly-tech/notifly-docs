@@ -2107,6 +2107,7 @@ paths:
 
                     - 대체 발송 내용은 템플릿에 설정된 대체 발송 정보를 기반으로 발송됩니다.
                     - 대체 발송 템플릿에 변수가 포함된 경우, `failoverTextMessageTemplateParameter`를 통해 변수 값을 전달할 수 있습니다.
+                    - `failoverTextMessageTemplateParameter`에는 최종값을 직접 제공해야 합니다. 유저 속성(`{{ user["name"] }}`) 기반 Liquid 렌더링은 지원되지 않습니다.
                   </Warning>
               metadata:
                   title: '카카오 브랜드 메시지 발송'

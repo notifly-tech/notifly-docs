@@ -1146,7 +1146,6 @@ paths:
             | `send_failure` | 발송 실패 |
             | `push_click` | 푸시 클릭 |
             | `push_delivered` | 푸시 도달 |
-            | `push_not_delivered` | 푸시 미도달 |
             | `in_app_message_show` | 인앱 메시지 노출 |
             | `in_web_message_show` | 인웹 메시지 노출 |
             | `main_button_click` | 메인 버튼 클릭 |

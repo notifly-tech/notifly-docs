@@ -345,7 +345,8 @@
                     },
                     "POST /v1/projects/{projectId}/statistics",
                     "GET /v1/projects/{projectId}/statistics.csv",
-                    "GET /projects/{projectId}/campaigns/{campaignId}/stats"
+                    "GET /projects/{projectId}/campaigns/{campaignId}/stats",
+                    "GET /projects/{projectId}/users/{userId}/message-history"
                   ]
                 }
               ]

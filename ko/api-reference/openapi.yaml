@@ -1123,9 +1123,257 @@ paths:
                 data: null
                 error: "Internal Server Error: some-error-message"
 
-  
+  /projects/{projectId}/users/{userId}/message-history:
+    get:
+      summary: get-user-message-history
+      operationId: getUserMessageHistory
+      security:
+        - apiKeyAuth: []
+      x-mint:
+        content: |
+          <Info>
+            **Cursor 기반 페이지네이션**
 
-  
+            이 API는 cursor 기반 페이지네이션을 사용합니다. 응답의 `next_cursor` 값을 다음 요청의 `cursor` 파라미터로 전달하여 다음 페이지를 조회합니다. `next_cursor`가 `null`이면 마지막 페이지입니다.
+          </Info>
+
+          <Note>
+            **주요 이벤트명**
+
+            | 이벤트명 | 설명 |
+            |---------|------|
+            | `send_success` | 발송 성공 |
+            | `send_failure` | 발송 실패 |
+            | `push_click` | 푸시 클릭 |
+            | `push_delivered` | 푸시 도달 |
+            | `push_not_delivered` | 푸시 미도달 |
+            | `in_app_message_show` | 인앱 메시지 노출 |
+            | `in_web_message_show` | 인웹 메시지 노출 |
+            | `main_button_click` | 메인 버튼 클릭 |
+            | `close_button_click` | 닫기 버튼 클릭 |
+            | `failover_text_message_send_success` | 대체 문자 발송 성공 |
+            | `failover_text_message_send_failure` | 대체 문자 발송 실패 |
+
+            이 외에도 채널별로 추가 이벤트가 존재할 수 있습니다.
+          </Note>
+
+          <Warning>
+            **날짜 필터 사용 시 주의사항**
+
+            `start_date`와 `end_date`를 사용할 경우, `timezone` 파라미터가 반드시 함께 전달되어야 합니다. 또한 `start_date`와 `end_date`는 항상 쌍으로 사용해야 합니다.
+          </Warning>
+        metadata:
+          title: "유저 메시지 히스토리 조회"
+          description: "특정 유저의 캠페인 및 유저여정 발송·수신 기록을 cursor 기반 페이지네이션으로 조회합니다."
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: "^[0-9a-f]{32}$"
+          description: 프로젝트 ID (32자 hex string)
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: 유저의 external_user_id
+        - name: page_size
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          description: 페이지 크기 (1~100, 기본값 20)
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 이전 응답의 next_cursor 값
+        - name: channel
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - push-notification
+              - web-push-notification
+              - email
+              - text-message
+              - kakao-alimtalk
+              - kakao-friendtalk
+              - kakao-brand-message
+              - line
+              - in-app-message
+              - in-web-message
+              - webhook
+          description: 채널 필터
+        - name: resource_type
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - campaign
+              - user_journey
+          description: 리소스 유형 (campaign 또는 user_journey)
+        - name: resource_id
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 리소스 ID (사용 시 resource_type 필수)
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: 조회 시작 날짜 (YYYY-MM-DD, inclusive, end_date 및 timezone과 함께 사용)
+          example: "2026-03-01"
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: 조회 종료 날짜 (YYYY-MM-DD, inclusive, start_date 및 timezone과 함께 사용)
+          example: "2026-03-31"
+        - name: timezone
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 날짜 해석 기준 timezone (IANA 형식, 예&#58; Asia/Seoul)
+          example: "Asia/Seoul"
+      responses:
+        "200":
+          description: 성공적인 메시지 히스토리 조회입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message_history:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: 레코드 ID
+                            event_name:
+                              type: string
+                              description: 이벤트명
+                            channel:
+                              type: string
+                              nullable: true
+                              description: 채널
+                            resource_id:
+                              type: string
+                              nullable: true
+                              description: 캠페인 ID 또는 유저여정 ID
+                            sub_resource_id:
+                              type: string
+                              nullable: true
+                              description: A/B 테스트 variant ID 또는 유저여정 node ID
+                            resource_type:
+                              type: string
+                              nullable: true
+                              enum:
+                                - campaign
+                                - user_journey
+                              description: 리소스 유형
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: 생성 시각 (ISO 8601, UTC)
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: 수정 시각 (ISO 8601, UTC)
+                      next_cursor:
+                        type: string
+                        nullable: true
+                        description: 다음 페이지 cursor (마지막 페이지인 경우 null)
+                  error:
+                    type: string
+                    nullable: true
+              example:
+                data:
+                  message_history:
+                    - id: "abc123"
+                      event_name: "send_success"
+                      channel: "push-notification"
+                      resource_id: "camp_001"
+                      sub_resource_id: "var_001"
+                      resource_type: "campaign"
+                      created_at: "2026-03-30T12:00:00.000Z"
+                      updated_at: "2026-03-30T12:00:00.000Z"
+                    - id: "def456"
+                      event_name: "push_click"
+                      channel: "push-notification"
+                      resource_id: "camp_001"
+                      sub_resource_id: "var_001"
+                      resource_type: "campaign"
+                      created_at: "2026-03-30T12:05:00.000Z"
+                      updated_at: "2026-03-30T12:05:00.000Z"
+                  next_cursor: "eyJjcmVhdGVkX2F0IjoiMjAyNi0wMy0zMFQxMjowNTowMC4wMDBaIn0="
+                error: null
+        "400":
+          description: 요청 파라미터 오류입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    nullable: true
+                  error:
+                    type: string
+              example:
+                data: null
+                error: "Invalid project ID"
+        "401":
+          description: 인증 실패입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    nullable: true
+                  error:
+                    type: string
+              example:
+                data: null
+                error: "Unauthorized: Invalid Authorization Token"
+        "500":
+          description: 서버 내부 오류입니다
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    nullable: true
+                  error:
+                    type: string
+              example:
+                data: null
+                error: "Internal Server Error: some-error-message"
+
   /v1/projects/{projectId}/statistics.csv:
     get:
       summary: get-campaign-statistics-csv

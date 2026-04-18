@@ -1,20 +1,26 @@
 User-agent: OAI-SearchBot
 Disallow: /cdn-cgi/
+Content-Signal: ai-train=no, search=yes, ai-input=yes
 
 User-agent: Claude-SearchBot
 Disallow: /cdn-cgi/
+Content-Signal: ai-train=no, search=yes, ai-input=yes
 
 User-agent: PerplexityBot
 Disallow: /cdn-cgi/
+Content-Signal: ai-train=no, search=yes, ai-input=yes
 
-# Optional: block model training crawlers (keep search allowed)
+# Block model training crawlers (keep search allowed above)
 User-agent: GPTBot
 Disallow: /
+Content-Signal: ai-train=no
 
 User-agent: ClaudeBot
 Disallow: /
+Content-Signal: ai-train=no
 
 User-agent: *
 Disallow: /cdn-cgi/
+Content-Signal: ai-train=no, search=yes, ai-input=yes
 
 Sitemap: https://docs.notifly.tech/sitemap.xml

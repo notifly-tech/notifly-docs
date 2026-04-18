@@ -1,0 +1,18 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://api.notifly.tech",
+      "service-desc": [
+        {
+          "href": "https://raw.githubusercontent.com/notifly-tech/notifly-docs/main/ko/api-reference/openapi.yaml",
+          "type": "application/vnd.oai.openapi;version=3.0"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://docs.notifly.tech/ko/api-reference/getting-started"
+        }
+      ]
+    }
+  ]
+}

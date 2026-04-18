@@ -377,5 +377,22 @@
        "cursor",
        "vscode"
      ]
-   }
+   },
+    "redirects": [
+      {
+        "source": "/.well-known/api-catalog",
+        "destination": "/api-catalog.txt",
+        "permanent": true
+      },
+      {
+        "source": "/.well-known/api-catalog.json",
+        "destination": "/api-catalog.txt",
+        "permanent": true
+      },
+      {
+        "source": "/.well-known/mcp/server-card.json",
+        "destination": "/mcp-server-card.txt",
+        "permanent": true
+      }
+    ]
   }

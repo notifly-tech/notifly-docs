@@ -1,0 +1,19 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://api.notifly.tech",
+      "service-desc": [
+        {
+          "href": "/ko/api-reference/openapi.yaml",
+          "type": "text/yaml"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "/ko/api-reference/getting-started",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}

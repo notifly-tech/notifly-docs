@@ -1,0 +1,31 @@
+{
+  "serverInfo": {
+    "name": "notifly-mcp-server",
+    "title": "Notifly MCP Server",
+    "version": "0.1.1"
+  },
+  "description": "Search Notifly documentation and SDK source code from MCP-compatible clients.",
+  "documentationUrl": "/ko/devtools/notifly-mcp-server",
+  "repository": "https://github.com/notifly-tech/notifly-mcp-server",
+  "packages": [
+    {
+      "registryName": "npm",
+      "name": "notifly-mcp-server",
+      "version": "0.1.1",
+      "packageUrl": "https://www.npmjs.com/package/notifly-mcp-server",
+      "installCommand": "npx -y notifly-mcp-server@latest"
+    }
+  ],
+  "tools": [
+    {
+      "name": "search_docs",
+      "description": "Semantic search across Notifly's official documentation."
+    },
+    {
+      "name": "search_sdk",
+      "description": "Search Notifly SDK source code, native bridges, and GTM templates."
+    }
+  ],
+  "resources": [],
+  "prompts": []
+}

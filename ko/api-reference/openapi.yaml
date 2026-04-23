@@ -477,7 +477,7 @@ paths:
             지원 채널: `kakao-alimtalk`, `kakao-friendtalk`, `kakao-brand-message`, `text-message`, `email`
 
             <Note>
-              `type: "phone-number"` 또는 `type: "email"`로 직접 지정한 수신자는 validation 대상이 아닙니다. `userId` 기반 수신자만 DB 조회 후 검증됩니다.
+              `type: "phone-number"` 또는 `type: "email"`로 직접 지정한 수신자는 validation 대상이 아닙니다.
             </Note>
           </Info>
         metadata:
@@ -555,7 +555,7 @@ paths:
 
       responses:
         "200":
-          description: The campaign was triggered successfully. When `partialSend` is `true` and some recipients are invalid, `errorDetails` is included.
+          description: 캠페인이 성공적으로 트리거되었습니다. `partialSend`가 `true`이고 일부 수신자가 invalid인 경우, `errorDetails`가 포함됩니다.
           content:
             application/json:
               schema:

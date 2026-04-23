@@ -431,8 +431,54 @@ paths:
             - 잘못된 파라미터, 비활성 캠페인 등 다른 400 에러에서는 `errorDetails`가 포함되지 않습니다.
             - `user-id` 타입 수신자가 Notifly DB에 존재하지만 해당 채널의 필수 연락처(전화번호 또는 이메일)가 누락된 경우 invalid로 판정됩니다.
             - DB에 존재하지 않는 `userId`는 invalid로 취급하지 않고 무시됩니다.
-            - 1명이라도 invalid 수신자가 있으면 전체 요청이 실패(400)하며, 메시지는 발송되지 않습니다.
+            - `partialSend`가 `false`이거나 미지정인 경우, 1명이라도 invalid 수신자가 있으면 전체 요청이 실패(400)하며, 메시지는 발송되지 않습니다.
             - 클라이언트는 `errorDetails.invalidRecipients`를 참조하여 문제 수신자를 제거한 뒤 재요청할 수 있습니다.
+          </Info>
+
+          <Info>
+            **부분 발송 (partialSend)**
+
+            `partialSend`를 `true`로 설정하면, 일부 수신자의 전화번호 또는 이메일이 누락되어 있어도 유효한 수신자에게만 발송을 진행합니다.
+
+            - **`partialSend: false` (기본값)**: 1명이라도 invalid 수신자가 있으면 전체 요청이 400 에러로 실패하며, 아무에게도 발송되지 않습니다.
+            - **`partialSend: true`**: 유효한 수신자에게만 발송을 진행하고, 응답에 invalid 수신자 목록을 포함합니다. 전체 수신자가 invalid인 경우에도 200 응답이 반환됩니다.
+
+            `partialSend: true` 응답 예시 (일부 invalid):
+
+            ```json
+            {
+              "code": 200,
+              "success": true,
+              "error": null,
+              "errorDetails": {
+                "reasonCode": "INVALID_RECIPIENTS",
+                "channel": "kakao-alimtalk",
+                "invalidRecipientCount": 2,
+                "invalidRecipients": [
+                  {
+                    "index": 1,
+                    "type": "user-id",
+                    "userId": "user_002",
+                    "reasonCode": "MISSING_PHONE_NUMBER",
+                    "source": { "pointer": "/recipients/1/userId" }
+                  },
+                  {
+                    "index": 3,
+                    "type": "user-id",
+                    "userId": "user_004",
+                    "reasonCode": "MISSING_PHONE_NUMBER",
+                    "source": { "pointer": "/recipients/3/userId" }
+                  }
+                ]
+              }
+            }
+            ```
+
+            지원 채널: `kakao-alimtalk`, `kakao-friendtalk`, `kakao-brand-message`, `text-message`, `email`
+
+            <Note>
+              `type: "phone-number"` 또는 `type: "email"`로 직접 지정한 수신자는 validation 대상이 아닙니다. `userId` 기반 수신자만 DB 조회 후 검증됩니다.
+            </Note>
           </Info>
         metadata:
           title: "캠페인 트리거"
@@ -488,14 +534,28 @@ paths:
                         type: object
                         description: 메시지 개인화를 위한 이벤트 파라미터
                   description: 수신자 목록 (최대 1,000명)
-            example:
-              recipients:
-                - type: "phone-number"
-                  phoneNumber: "010-1234-5678"
+                partialSend:
+                  type: boolean
+                  default: false
+                  description: "`true`로 설정 시, 일부 수신자의 전화번호/이메일이 없어도 유효한 수신자에게만 발송을 진행하고 invalid 수신자 목록을 응답에 포함합니다. `false`이거나 미지정 시 기존 동작(invalid 수신자가 있으면 전체 실패) 유지."
+            examples:
+              basicRequest:
+                summary: 기본 발송 요청
+                value:
+                  recipients:
+                    - type: "phone-number"
+                      phoneNumber: "010-1234-5678"
+              partialSendRequest:
+                summary: 부분 발송 요청
+                value:
+                  recipients:
+                    - userId: "user_001"
+                    - userId: "user_002"
+                  partialSend: true
 
       responses:
         "200":
-          description: The campaign was triggered successfully.
+          description: The campaign was triggered successfully. When `partialSend` is `true` and some recipients are invalid, `errorDetails` is included.
           content:
             application/json:
               schema:
@@ -508,10 +568,72 @@ paths:
                   error:
                     type: string
                     nullable: true
-              example:
-                code: 200
-                success: true
-                error: null
+                  errorDetails:
+                    type: object
+                    description: "`partialSend: true`인 경우, 일부 수신자가 invalid이면 포함됩니다."
+                    properties:
+                      reasonCode:
+                        type: string
+                        enum:
+                          - INVALID_RECIPIENTS
+                      channel:
+                        type: string
+                        description: 캠페인 채널
+                      invalidRecipientCount:
+                        type: integer
+                        description: 유효하지 않은 수신자 수
+                      invalidRecipients:
+                        type: array
+                        description: 유효하지 않은 수신자 상세 목록
+                        items:
+                          type: object
+                          properties:
+                            index:
+                              type: integer
+                            type:
+                              type: string
+                            userId:
+                              type: string
+                            reasonCode:
+                              type: string
+                              enum:
+                                - MISSING_PHONE_NUMBER
+                                - MISSING_EMAIL
+                            source:
+                              type: object
+                              properties:
+                                pointer:
+                                  type: string
+              examples:
+                successNoInvalid:
+                  summary: 전체 유효 (errorDetails 없음)
+                  value:
+                    code: 200
+                    success: true
+                    error: null
+                partialSendWithInvalid:
+                  summary: partialSend 일부 invalid
+                  value:
+                    code: 200
+                    success: true
+                    error: null
+                    errorDetails:
+                      reasonCode: "INVALID_RECIPIENTS"
+                      channel: "kakao-alimtalk"
+                      invalidRecipientCount: 2
+                      invalidRecipients:
+                        - index: 1
+                          type: "user-id"
+                          userId: "user_002"
+                          reasonCode: "MISSING_PHONE_NUMBER"
+                          source:
+                            pointer: "/recipients/1/userId"
+                        - index: 3
+                          type: "user-id"
+                          userId: "user_004"
+                          reasonCode: "MISSING_PHONE_NUMBER"
+                          source:
+                            pointer: "/recipients/3/userId"
         "400":
           description: The request is incorrect. `errorDetails` is included only when recipient validation fails.
           content:

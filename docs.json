@@ -377,13 +377,7 @@
     "metatags": {
       "canonical": "https://docs.notifly.tech",
       "author": "Notifly",
-      "keywords": "노티플라이, Notifly, push notification, 푸시 알림, 인앱 팝업, in-app message, 마케팅 자동화, marketing automation, 유저 참여, user engagement, 모바일 SDK, mobile SDK, web push, 웹 푸시, 카카오톡, 이메일, SMS, campaign, 캠페인, user journey, 유저 여정, personalization, 개인화, analytics, 분석, Firebase, Android SDK, iOS SDK, React Native, Flutter, JavaScript SDK, GTM, API",
-      "og:image": "https://docs.notifly.tech/images/og-default.png",
-      "og:image:width": "1200",
-      "og:image:height": "630",
-      "og:image:type": "image/png",
-      "twitter:image": "https://docs.notifly.tech/images/og-default.png",
-      "twitter:card": "summary_large_image"
+      "keywords": "노티플라이, Notifly, push notification, 푸시 알림, 인앱 팝업, in-app message, 마케팅 자동화, marketing automation, 유저 참여, user engagement, 모바일 SDK, mobile SDK, web push, 웹 푸시, 카카오톡, 이메일, SMS, campaign, 캠페인, user journey, 유저 여정, personalization, 개인화, analytics, 분석, Firebase, Android SDK, iOS SDK, React Native, Flutter, JavaScript SDK, GTM, API"
       }
     },
     "contextual": {

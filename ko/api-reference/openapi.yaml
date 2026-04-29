@@ -2338,7 +2338,7 @@ paths:
             - `resendContent` 필드를 입력하지 않은 경우: 등록된 080 수신 거부 번호를 활용하여 광고 문구를 자동 생성하여 대체 발송됩니다.
           </Warning>
         metadata:
-          title: "카카오 친구톡 발송"
+          title: "카카오 친구톡 발송(~2026.05.31 지원중단)"
           description: "카카오 친구톡 메시지를 발송합니다. 친구톡 메시지는 수신자 목록, 광고 여부, 메시지 유형 등을 설정하여 전송합니다."
       requestBody:
         required: true
